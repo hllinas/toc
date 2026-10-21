@@ -1,0 +1,29 @@
+/* Academic index — visual refinements on the Quarto Cosmo theme */
+:root { --academic-blue: #17365d; --academic-accent: #1767a7; --academic-ink: #263747; }
+body { font-size: 15px; color: var(--academic-ink); line-height: 1.68; }
+#quarto-content { padding-top: 1.15rem; }
+.navbar { box-shadow: 0 2px 12px rgba(11,37,63,.12); }
+.navbar .navbar-brand { font-weight: 650; letter-spacing: .01em; }
+#title-block-header { margin-bottom: 1.15rem; }
+#title-block-header .title { font-weight: 750; color: var(--academic-blue); font-size: clamp(1.65rem, 2.5vw, 2.15rem); line-height: 1.25; }
+#title-block-header .subtitle { color: #60758b; font-size: 1.08rem; }
+#title-block-header .quarto-title-meta { font-size: .88rem; }
+main.content > section.level1 { padding-top: .35rem; padding-bottom: .35rem; border-bottom: 1px solid #e8eef4; }
+main.content > section.level1 > h1 { color: var(--academic-blue); font-size: 1.43rem; font-weight: 700; margin-top: 1.65rem; margin-bottom: .85rem; scroll-margin-top: 5rem; }
+main.content p { margin-bottom: .8rem; }
+a { text-underline-offset: 2px; }
+main.content a:not(.anchorjs-link) { color: #1265a5; }
+main.content a:not(.anchorjs-link):hover { color: #0b416c; }
+.academic-intro { background: #f5f8fc; border: 1px solid #e5ecf5; border-left: 4px solid #3b78aa; border-radius: 9px; padding: 1rem 1.15rem .45rem; min-height: 175px; }
+.profile-photo { width: 150px; max-width: 34vw; height: auto; border-radius: 9px; float: right; margin: 0 0 .5rem 1.25rem; box-shadow: 0 4px 12px rgba(25,50,72,.13); }
+/* Table of contents: readable, clearly numbered, and visible during local file previews. */
+#TOC .nav-link { font-size: .88rem; line-height: 1.42; padding: .22rem .5rem; border-radius: 4px; }
+#TOC .nav-link:hover { background: #edf4fa; }
+#TOC .nav-link.active { color: #145f9c; font-weight: 650; }
+#TOC ul.collapse, #TOC ul.collapse:not(.show) { display: block !important; visibility: visible !important; }
+#toc-title { color: var(--academic-blue); font-weight: 700; }
+@media (max-width: 700px) {
+  .academic-intro { padding: .85rem; }
+  .profile-photo { width: 110px; }
+  main.content > section.level1 > h1 { font-size: 1.3rem; }
+}
