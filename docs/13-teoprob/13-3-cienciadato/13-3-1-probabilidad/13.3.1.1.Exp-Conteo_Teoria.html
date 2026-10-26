@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;rer. nat. Humberto Llinás Solano">
+
+<title>TEORÍA DE PROBABILIDAD (con R) – Humberto Llinás Solano | Teaching and Research</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4055b843e89d92f89939b863a308fe4a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="site_libs/viz-1.8.2/viz.js"></script>
+
+<link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+
+<script src="site_libs/grViz-binding-1.0.12/grViz.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Humberto Llinás Solano | Teaching and Research</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://hllinas.github.io/toc/"> 
+<span class="menu-text">My Publications and Teaching Materials (toc)</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#paquetes" id="toc-paquetes" class="nav-link active" data-scroll-target="#paquetes"><span class="header-section-number">1</span> Paquetes</a></li>
+  <li><a href="#funciones" id="toc-funciones" class="nav-link" data-scroll-target="#funciones"><span class="header-section-number">2</span> Funciones</a>
+  <ul>
+  <li><a href="#función-tosscoinn" id="toc-función-tosscoinn" class="nav-link" data-scroll-target="#función-tosscoinn"><span class="header-section-number">2.0.1</span> Función <code>tosscoin(n)</code></a></li>
+  <li><a href="#función-rolldien" id="toc-función-rolldien" class="nav-link" data-scroll-target="#función-rolldien"><span class="header-section-number">2.0.2</span> Función <code>rolldie(n)</code></a></li>
+  <li><a href="#función-isin" id="toc-función-isin" class="nav-link" data-scroll-target="#función-isin"><span class="header-section-number">2.0.3</span> Función <code>isin()</code></a></li>
+  <li><a href="#función-urnsamples" id="toc-función-urnsamples" class="nav-link" data-scroll-target="#función-urnsamples"><span class="header-section-number">2.0.4</span> Función <code>urnsamples()</code></a></li>
+  <li><a href="#función-nsamp" id="toc-función-nsamp" class="nav-link" data-scroll-target="#función-nsamp"><span class="header-section-number">2.0.5</span> Función <code>nsamp()</code></a></li>
+  </ul></li>
+  <li><a href="#experimentos-y-tipos" id="toc-experimentos-y-tipos" class="nav-link" data-scroll-target="#experimentos-y-tipos"><span class="header-section-number">3</span> Experimentos y tipos</a></li>
+  <li><a href="#espacio-muestral-evento-y-evento-elemental" id="toc-espacio-muestral-evento-y-evento-elemental" class="nav-link" data-scroll-target="#espacio-muestral-evento-y-evento-elemental"><span class="header-section-number">4</span> Espacio muestral, evento y evento elemental</a></li>
+  <li><a href="#ejemplos-sin-r-espacio-muestral-y-eventos" id="toc-ejemplos-sin-r-espacio-muestral-y-eventos" class="nav-link" data-scroll-target="#ejemplos-sin-r-espacio-muestral-y-eventos"><span class="header-section-number">5</span> Ejemplos sin R (espacio muestral y eventos)</a>
+  <ul>
+  <li><a href="#ejemplo-el-lanzamiento-de-una-moneda" id="toc-ejemplo-el-lanzamiento-de-una-moneda" class="nav-link" data-scroll-target="#ejemplo-el-lanzamiento-de-una-moneda"><span class="header-section-number">5.0.1</span> Ejemplo: El lanzamiento de una moneda</a></li>
+  <li><a href="#ejemplo-lanzamiento-de-dos-monedas" id="toc-ejemplo-lanzamiento-de-dos-monedas" class="nav-link" data-scroll-target="#ejemplo-lanzamiento-de-dos-monedas"><span class="header-section-number">5.0.2</span> Ejemplo: Lanzamiento de dos monedas</a></li>
+  <li><a href="#ejemplo-repetir-lanzamiento-de-una-moneda" id="toc-ejemplo-repetir-lanzamiento-de-una-moneda" class="nav-link" data-scroll-target="#ejemplo-repetir-lanzamiento-de-una-moneda"><span class="header-section-number">5.0.3</span> Ejemplo: repetir lanzamiento de una moneda</a></li>
+  <li><a href="#ejemplo-edad-de-fallecimiento" id="toc-ejemplo-edad-de-fallecimiento" class="nav-link" data-scroll-target="#ejemplo-edad-de-fallecimiento"><span class="header-section-number">5.0.4</span> Ejemplo: edad de fallecimiento</a></li>
+  </ul></li>
+  <li><a href="#ejemplos-con-r-espacio-muestral" id="toc-ejemplos-con-r-espacio-muestral" class="nav-link" data-scroll-target="#ejemplos-con-r-espacio-muestral"><span class="header-section-number">6</span> Ejemplos con R (espacio muestral)</a>
+  <ul>
+  <li><a href="#ejemplo-lanzar-monedas" id="toc-ejemplo-lanzar-monedas" class="nav-link" data-scroll-target="#ejemplo-lanzar-monedas"><span class="header-section-number">6.0.1</span> Ejemplo: Lanzar monedas</a></li>
+  <li><a href="#ejemplo-lanzar-dados" id="toc-ejemplo-lanzar-dados" class="nav-link" data-scroll-target="#ejemplo-lanzar-dados"><span class="header-section-number">6.0.2</span> Ejemplo: Lanzar dados</a></li>
+  </ul></li>
+  <li><a href="#ejemplos-con-r-evento" id="toc-ejemplos-con-r-evento" class="nav-link" data-scroll-target="#ejemplos-con-r-evento"><span class="header-section-number">7</span> Ejemplos con R (evento)</a>
+  <ul>
+  <li><a href="#ejemplo-lanzar-monedas-1" id="toc-ejemplo-lanzar-monedas-1" class="nav-link" data-scroll-target="#ejemplo-lanzar-monedas-1"><span class="header-section-number">7.0.1</span> Ejemplo: Lanzar monedas</a></li>
+  <li><a href="#ejemplo-lanzar-dados-1" id="toc-ejemplo-lanzar-dados-1" class="nav-link" data-scroll-target="#ejemplo-lanzar-dados-1"><span class="header-section-number">7.0.2</span> Ejemplo: Lanzar dados</a></li>
+  </ul></li>
+  <li><a href="#funciones-para-encontrar-subconjuntos" id="toc-funciones-para-encontrar-subconjuntos" class="nav-link" data-scroll-target="#funciones-para-encontrar-subconjuntos"><span class="header-section-number">8</span> Funciones para encontrar subconjuntos</a>
+  <ul>
+  <li><a href="#la-función-b-in-a" id="toc-la-función-b-in-a" class="nav-link" data-scroll-target="#la-función-b-in-a"><span class="header-section-number">8.0.1</span> La función (<code>b %in% a</code>)</a></li>
+  <li><a href="#la-función-allb-in-a" id="toc-la-función-allb-in-a" class="nav-link" data-scroll-target="#la-función-allb-in-a"><span class="header-section-number">8.0.2</span> La función <code>all(b %in% a)</code></a></li>
+  <li><a href="#la-función-anyb-in-a" id="toc-la-función-anyb-in-a" class="nav-link" data-scroll-target="#la-función-anyb-in-a"><span class="header-section-number">8.0.3</span> La función <code>any(b %in% a)</code></a></li>
+  <li><a href="#la-función-isinab" id="toc-la-función-isinab" class="nav-link" data-scroll-target="#la-función-isinab"><span class="header-section-number">8.0.4</span> La función <code>isin(a,b)</code></a></li>
+  <li><a href="#la-función-isinab-con-opción-ordered" id="toc-la-función-isinab-con-opción-ordered" class="nav-link" data-scroll-target="#la-función-isinab-con-opción-ordered"><span class="header-section-number">8.1</span> La función <code>isin(a,b)</code> con opción <code>ordered</code></a>
+  <ul class="collapse">
+  <li><a href="#la-función-isinab-para-construir-eventos" id="toc-la-función-isinab-para-construir-eventos" class="nav-link" data-scroll-target="#la-función-isinab-para-construir-eventos"><span class="header-section-number">8.1.1</span> La función <code>isin(a,b)</code> para construir eventos</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conjuntos" id="toc-conjuntos" class="nav-link" data-scroll-target="#conjuntos"><span class="header-section-number">9</span> Conjuntos</a>
+  <ul>
+  <li><a href="#operaciones-con-eventos" id="toc-operaciones-con-eventos" class="nav-link" data-scroll-target="#operaciones-con-eventos"><span class="header-section-number">9.0.1</span> Operaciones con eventos</a></li>
+  <li><a href="#operaciones-con-conjuntos-ejemplo" id="toc-operaciones-con-conjuntos-ejemplo" class="nav-link" data-scroll-target="#operaciones-con-conjuntos-ejemplo"><span class="header-section-number">9.0.2</span> Operaciones con conjuntos: ejemplo</a></li>
+  </ul></li>
+  <li><a href="#modelos-de-urnas" id="toc-modelos-de-urnas" class="nav-link" data-scroll-target="#modelos-de-urnas"><span class="header-section-number">10</span> Modelos de urnas</a></li>
+  <li><a href="#modelos-de-urnas-ejemplo" id="toc-modelos-de-urnas-ejemplo" class="nav-link" data-scroll-target="#modelos-de-urnas-ejemplo"><span class="header-section-number">11</span> Modelos de urnas: ejemplo</a></li>
+  <li><a href="#otros-modelos-de-urnas" id="toc-otros-modelos-de-urnas" class="nav-link" data-scroll-target="#otros-modelos-de-urnas"><span class="header-section-number">12</span> Otros modelos de urnas</a></li>
+  <li><a href="#técnicas-de-conteo" id="toc-técnicas-de-conteo" class="nav-link" data-scroll-target="#técnicas-de-conteo"><span class="header-section-number">13</span> Técnicas de conteo</a>
+  <ul>
+  <li><a href="#enumeración-de-elementos" id="toc-enumeración-de-elementos" class="nav-link" data-scroll-target="#enumeración-de-elementos"><span class="header-section-number">13.0.1</span> Enumeración de elementos</a></li>
+  <li><a href="#diagrama-de-árbol" id="toc-diagrama-de-árbol" class="nav-link" data-scroll-target="#diagrama-de-árbol"><span class="header-section-number">13.0.2</span> Diagrama de árbol</a></li>
+  <li><a href="#principio-de-adición" id="toc-principio-de-adición" class="nav-link" data-scroll-target="#principio-de-adición"><span class="header-section-number">13.0.3</span> Principio de adición</a></li>
+  <li><a href="#teorema-fundamental-del-conteo" id="toc-teorema-fundamental-del-conteo" class="nav-link" data-scroll-target="#teorema-fundamental-del-conteo"><span class="header-section-number">13.0.4</span> Teorema fundamental del conteo</a></li>
+  </ul></li>
+  <li><a href="#conteo-de-permutaciones" id="toc-conteo-de-permutaciones" class="nav-link" data-scroll-target="#conteo-de-permutaciones"><span class="header-section-number">14</span> Conteo de permutaciones</a>
+  <ul>
+  <li><a href="#preliminares" id="toc-preliminares" class="nav-link" data-scroll-target="#preliminares"><span class="header-section-number">14.0.1</span> Preliminares</a></li>
+  <li><a href="#permutaciones-sin-repetición-de-n-objetos-tomados-todos-a-la-vez" id="toc-permutaciones-sin-repetición-de-n-objetos-tomados-todos-a-la-vez" class="nav-link" data-scroll-target="#permutaciones-sin-repetición-de-n-objetos-tomados-todos-a-la-vez"><span class="header-section-number">14.0.2</span> Permutaciones sin repetición de <span class="math inline">\(n\)</span> objetos tomados todos a la vez</a></li>
+  <li><a href="#permutaciones-sin-repetición-de-n-objetos-tomados-de-k-en-k-k-leq-n" id="toc-permutaciones-sin-repetición-de-n-objetos-tomados-de-k-en-k-k-leq-n" class="nav-link" data-scroll-target="#permutaciones-sin-repetición-de-n-objetos-tomados-de-k-en-k-k-leq-n"><span class="header-section-number">14.0.3</span> Permutaciones sin repetición de <span class="math inline">\(n\)</span> objetos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> (<span class="math inline">\(k \leq n\)</span>)</a></li>
+  <li><a href="#permutaciones-con-repetición-de-n-objetos-tomados-de-k-en-k-k-es-cualquier-número-natural" id="toc-permutaciones-con-repetición-de-n-objetos-tomados-de-k-en-k-k-es-cualquier-número-natural" class="nav-link" data-scroll-target="#permutaciones-con-repetición-de-n-objetos-tomados-de-k-en-k-k-es-cualquier-número-natural"><span class="header-section-number">14.0.4</span> Permutaciones con repetición de <span class="math inline">\(n\)</span> objetos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> (<span class="math inline">\(k\)</span> es cualquier número natural)</a></li>
+  <li><a href="#permutaciones-circulares" id="toc-permutaciones-circulares" class="nav-link" data-scroll-target="#permutaciones-circulares"><span class="header-section-number">14.0.5</span> Permutaciones circulares</a></li>
+  <li><a href="#permutaciones-por-tipos" id="toc-permutaciones-por-tipos" class="nav-link" data-scroll-target="#permutaciones-por-tipos"><span class="header-section-number">14.0.6</span> Permutaciones por tipos</a></li>
+  <li><a href="#maneras-de-hacer-una-partición-de-un-conjunto" id="toc-maneras-de-hacer-una-partición-de-un-conjunto" class="nav-link" data-scroll-target="#maneras-de-hacer-una-partición-de-un-conjunto"><span class="header-section-number">14.0.7</span> Maneras de hacer una partición de un conjunto</a></li>
+  </ul></li>
+  <li><a href="#conteo-de-combinaciones" id="toc-conteo-de-combinaciones" class="nav-link" data-scroll-target="#conteo-de-combinaciones"><span class="header-section-number">15</span> Conteo de combinaciones</a></li>
+  <li><a href="#modelos-de-urna-con-r" id="toc-modelos-de-urna-con-r" class="nav-link" data-scroll-target="#modelos-de-urna-con-r"><span class="header-section-number">16</span> Modelos de urna (con R)</a>
+  <ul>
+  <li><a href="#muestreo-con-orden-y-con-reemplazo" id="toc-muestreo-con-orden-y-con-reemplazo" class="nav-link" data-scroll-target="#muestreo-con-orden-y-con-reemplazo"><span class="header-section-number">16.0.1</span> Muestreo con orden y con reemplazo</a></li>
+  <li><a href="#muestreo-con-orden-y-sin-reemplazo" id="toc-muestreo-con-orden-y-sin-reemplazo" class="nav-link" data-scroll-target="#muestreo-con-orden-y-sin-reemplazo"><span class="header-section-number">16.0.2</span> Muestreo con orden y sin reemplazo</a></li>
+  <li><a href="#muestreo-sin-orden-y-con-reemplazo" id="toc-muestreo-sin-orden-y-con-reemplazo" class="nav-link" data-scroll-target="#muestreo-sin-orden-y-con-reemplazo"><span class="header-section-number">16.0.3</span> Muestreo sin orden y con reemplazo</a></li>
+  <li><a href="#muestreo-sin-orden-y-sin-reemplazo" id="toc-muestreo-sin-orden-y-sin-reemplazo" class="nav-link" data-scroll-target="#muestreo-sin-orden-y-sin-reemplazo"><span class="header-section-number">16.0.4</span> Muestreo sin orden y sin reemplazo</a></li>
+  </ul></li>
+  <li><a href="#conteo-con-r" id="toc-conteo-con-r" class="nav-link" data-scroll-target="#conteo-con-r"><span class="header-section-number">17</span> Conteo (con R)</a>
+  <ul>
+  <li><a href="#ejemplo" id="toc-ejemplo" class="nav-link" data-scroll-target="#ejemplo"><span class="header-section-number">17.0.1</span> Ejemplo</a></li>
+  <li><a href="#ejemplo-1" id="toc-ejemplo-1" class="nav-link" data-scroll-target="#ejemplo-1"><span class="header-section-number">17.0.2</span> Ejemplo</a></li>
+  <li><a href="#ejemplo-2" id="toc-ejemplo-2" class="nav-link" data-scroll-target="#ejemplo-2"><span class="header-section-number">17.0.3</span> Ejemplo</a></li>
+  <li><a href="#ejemplo-3" id="toc-ejemplo-3" class="nav-link" data-scroll-target="#ejemplo-3"><span class="header-section-number">17.0.4</span> Ejemplo</a></li>
+  <li><a href="#ejemplo-4" id="toc-ejemplo-4" class="nav-link" data-scroll-target="#ejemplo-4"><span class="header-section-number">17.0.5</span> Ejemplo</a></li>
+  <li><a href="#ejemplo-5" id="toc-ejemplo-5" class="nav-link" data-scroll-target="#ejemplo-5"><span class="header-section-number">17.0.6</span> Ejemplo</a></li>
+  <li><a href="#ejemplo-6" id="toc-ejemplo-6" class="nav-link" data-scroll-target="#ejemplo-6"><span class="header-section-number">17.0.7</span> Ejemplo</a></li>
+  </ul></li>
+  <li><a href="#ejemplos-asociación-de-los-temas-con-la-realidad" id="toc-ejemplos-asociación-de-los-temas-con-la-realidad" class="nav-link" data-scroll-target="#ejemplos-asociación-de-los-temas-con-la-realidad"><span class="header-section-number">18</span> Ejemplos (asociación de los temas con la realidad)</a>
+  <ul>
+  <li><a href="#ejemplo-enunciado-baloto" id="toc-ejemplo-enunciado-baloto" class="nav-link" data-scroll-target="#ejemplo-enunciado-baloto"><span class="header-section-number">18.0.1</span> Ejemplo: enunciado (Baloto)</a></li>
+  <li><a href="#ejemplo-solución-baloto" id="toc-ejemplo-solución-baloto" class="nav-link" data-scroll-target="#ejemplo-solución-baloto"><span class="header-section-number">18.0.2</span> Ejemplo: solución (Baloto)</a></li>
+  </ul></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios"><span class="header-section-number">19</span> Ejercicios</a></li>
+  <li><a href="#otros-ejercicios" id="toc-otros-ejercicios" class="nav-link" data-scroll-target="#otros-ejercicios"><span class="header-section-number">20</span> Otros ejercicios</a></li>
+  <li><a href="#texto-guía" id="toc-texto-guía" class="nav-link" data-scroll-target="#texto-guía">Texto guía</a></li>
+  <li><a href="#bibliografía-complementaria" id="toc-bibliografía-complementaria" class="nav-link" data-scroll-target="#bibliografía-complementaria">Bibliografía complementaria</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">TEORÍA DE PROBABILIDAD (con R)</h1>
+<p class="subtitle lead">Espacio muestral, eventos y técnicas de conteo</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">AUTHOR</div>
+  <div class="quarto-title-meta-heading">AFFILIATION</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Dr.&nbsp;rer. nat. Humberto Llinás Solano <a href="mailto:hllinas@uninorte.edu.co" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Mathematics, Physics and Data Science, Universidad del Norte (Barranquilla, Colombia)
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">LAST UPDATED</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26/10/2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="academic-intro">
+<p><img src="hllinas2023.JPG" class="profile-photo img-fluid" alt="Portrait of the author"></p>
+<p><strong><a href="https://rpubs.com/hllinas/Bio_Sketch">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
+<p><strong>About these lecture notes.</strong> These lecture notes introduce fundamental concepts of probability theory, including sample spaces, events, set operations, urn models, and counting techniques. The material combines theoretical explanations with examples and applications using R.</p>
+</div>
+<hr>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+<section id="paquetes" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Paquetes</h1>
+<p>En R podemos encontrar diversas funciones para ello:</p>
+<ul>
+<li><code>expand.grid</code> en el paquete <code>base</code> de R.</li>
+<li><code>combn</code> en el paquete <code>combinat</code>.</li>
+</ul>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="funciones" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Funciones</h1>
+<p>Para nuestros cálculos, utilizaremos la función <code>expand.grid</code>. En este caso, creamos la siguientes TRES funcione: <code>tosscoin(n)</code>, <code>rolldie(n)</code> y <code>isin()</code>. Se describirán a continuación.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+<section id="función-tosscoinn" class="level3" data-number="2.0.1">
+<h3 data-number="2.0.1" class="anchored" data-anchor-id="función-tosscoinn"><span class="header-section-number">2.0.1</span> Función <code>tosscoin(n)</code></h3>
+<p>La idea de esta función es generar el espacio muestral de lanzar una moneda exactamente <span class="math inline">\(n\)</span> veces, con valores cara (<code>H</code>) y sello (<code>T</code>):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tosscoin <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="fu">replicate</span>(n, <span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>), <span class="at">simplify =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"X"</span>, <span class="fu">seq_len</span>(n))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-rolldien" class="level3" data-number="2.0.2">
+<h3 data-number="2.0.2" class="anchored" data-anchor-id="función-rolldien"><span class="header-section-number">2.0.2</span> Función <code>rolldie(n)</code></h3>
+<p>Con ella se genera el espacio muestral al lanzar un dado exactamente <span class="math inline">\(n\)</span> veces, con valores de 1 a 6 por lanzamiento.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rolldie <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">sides =</span> <span class="dv">6</span>, <span class="at">makespace =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="fu">replicate</span>(n, <span class="dv">1</span><span class="sc">:</span>sides, <span class="at">simplify =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"X"</span>, <span class="fu">seq_len</span>(n))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (makespace) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>prob <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df))  <span class="co"># Agrega la columna de probabilidad</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>NOTA: En esta función, <code>makespace = TRUE</code> agregará una columna de probabilidades (prob = 1/n) al espacio muestral, para convertirlo en un “objeto tipo espacio de probabilidad”.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-isin" class="level3" data-number="2.0.3">
+<h3 data-number="2.0.3" class="anchored" data-anchor-id="función-isin"><span class="header-section-number">2.0.3</span> Función <code>isin()</code></h3>
+<p>Con ella se verifica si ciertos valores están presentes en cada fila de una matriz o data frame. Se puede usar con o sin tener en cuenta el orden.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>isin <span class="ot">&lt;-</span> <span class="cf">function</span>(x, table, <span class="at">ordered =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Si x es un vector, lo convertimos en una matriz con una sola fila</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.vector</span>(x)) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(x, <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Validación</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.data.frame</span>(x) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.matrix</span>(x)) <span class="fu">stop</span>(<span class="st">"x debe ser un vector, data.frame o matriz"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aplicar fila por fila</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">apply</span>(x, <span class="dv">1</span>, <span class="cf">function</span>(row) {</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    row_vals <span class="ot">&lt;-</span> <span class="fu">as.character</span>(row)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    tab_vals <span class="ot">&lt;-</span> <span class="fu">as.character</span>(table)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (ordered) {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Buscar subsecuencia exacta</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      len_row <span class="ot">&lt;-</span> <span class="fu">length</span>(row_vals)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      len_tab <span class="ot">&lt;-</span> <span class="fu">length</span>(tab_vals)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (len_tab <span class="sc">&gt;</span> len_row) <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(len_row <span class="sc">-</span> len_tab <span class="sc">+</span> <span class="dv">1</span>)) {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">all</span>(row_vals[i<span class="sc">:</span>(i <span class="sc">+</span> len_tab <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">==</span> tab_vals)) <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Verificar si todos los valores de 'table' están presentes (sin importar orden)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">all</span>(tab_vals <span class="sc">%in%</span> row_vals)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-urnsamples" class="level3" data-number="2.0.4">
+<h3 data-number="2.0.4" class="anchored" data-anchor-id="función-urnsamples"><span class="header-section-number">2.0.4</span> Función <code>urnsamples()</code></h3>
+<p>Esta función genera todas las muestras posibles de una urna según estos cuatro escenarios:</p>
+<ul>
+<li>x: Representa la urna desde la cual se va a hacer el muestreo.</li>
+<li>size: Tamaño de la muestra.</li>
+<li>replace: TRUE, si es con reemplazo; y FALSE, sin reemplazo.</li>
+<li>ordered: TRUE, si es con orden; y FALSE, sin orden.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>urnsamples <span class="ot">&lt;-</span> <span class="cf">function</span>(x, size, <span class="at">ordered =</span> <span class="cn">TRUE</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (ordered) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Producto cartesiano</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">expand.grid</span>(<span class="fu">replicate</span>(size, x, <span class="at">simplify =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combinaciones sin orden</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">combn</span>(x, size, <span class="at">simplify =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">do.call</span>(<span class="at">what =</span> rbind)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-nsamp" class="level3" data-number="2.0.5">
+<h3 data-number="2.0.5" class="anchored" data-anchor-id="función-nsamp"><span class="header-section-number">2.0.5</span> Función <code>nsamp()</code></h3>
+<p>Esta función calcula cuántas formas distintas hay de tomar <span class="math inline">\(k\)</span> elementos de una población de n elementos, bajo distintas condiciones:</p>
+<ul>
+<li><p><code>n</code>: Tamaño de la población (elementos disponibles).</p></li>
+<li><p><code>k</code>: Tamaño de la muestra-</p></li>
+<li><p><code>replace = FALSE</code>: Sin reemplazo (sin repetir elementos).</p></li>
+<li><p><code>ordered = TRUE</code>: Orden importa (permuta, no combina).</p></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="cf">function</span>(n, k, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (ordered) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (replace) {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(n<span class="sc">^</span>k)  <span class="co"># Producto cartesiano con repetición</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">factorial</span>(n) <span class="sc">/</span> <span class="fu">factorial</span>(n <span class="sc">-</span> k))  <span class="co"># Permutaciones sin repetición</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (replace) {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">choose</span>(n <span class="sc">+</span> k <span class="sc">-</span> <span class="dv">1</span>, k))  <span class="co"># Combinaciones con repetición</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">choose</span>(n, k))  <span class="co"># Combinaciones sin repetición</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separación -->
+</section>
+</section>
+<section id="experimentos-y-tipos" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Experimentos y tipos</h1>
+<ol type="1">
+<li><p><strong>Experimento</strong>: Cualquier acción que genera observaciones. Todo experimento se puede clasificar en determinístico y aleatorio o estocástico (ver definiciones y figura de abajo).</p></li>
+<li><p><strong>Experimento determinístico</strong>: Al repetirse bajo las mismas condiciones, genera siempre los mismos resultados.</p></li>
+<li><p><strong>Experimento aleatorio (o estocástico)</strong>: Al repertirse bajo las mismas condiciones, no genera siempre los mismos resultados.</p></li>
+</ol>
+<center>
+<img src="Mind(Experimento).png" class="img-fluid" width="600">
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 3 -->
+</section>
+<section id="espacio-muestral-evento-y-evento-elemental" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Espacio muestral, evento y evento elemental</h1>
+<ol type="1">
+<li><p><strong>Espacio muestral</strong>: Conjunto de todos los posibles resultados de un experimento aleatorio. Teóricamente se simbolizará con la letra griega <em>omega</em>: <span class="math inline">\(\Omega\)</span>.</p></li>
+<li><p><strong>Evento</strong>: cualquier subconjunto de <span class="math inline">\(\Omega\)</span>.</p></li>
+<li><p><strong>Evento elemental</strong>: evento con un solo elemento.</p></li>
+</ol>
+<p>Revisaremos algunos ejemplos para encontrar los elementos de este conjunto.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador  -->
+</section>
+<section id="ejemplos-sin-r-espacio-muestral-y-eventos" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Ejemplos sin R (espacio muestral y eventos)</h1>
+<section id="ejemplo-el-lanzamiento-de-una-moneda" class="level3" data-number="5.0.1">
+<h3 data-number="5.0.1" class="anchored" data-anchor-id="ejemplo-el-lanzamiento-de-una-moneda"><span class="header-section-number">5.0.1</span> Ejemplo: El lanzamiento de una moneda</h3>
+<ol type="a">
+<li><p>Los posibles resultados son cara <span class="math inline">\((C)\)</span> o sello <span class="math inline">\((S)\)</span>. Por tanto, <span class="math display">\[\Omega=\{C,S\}\]</span></p></li>
+<li><p><span class="math inline">\(A=\{S\}=\)</span> “<em>la moneda señala sello</em>” es un evento elemental.</p></li>
+<li><p><span class="math inline">\(B=\{C\}=\)</span> “<em>la moneda señala cara</em>” es un evento elemental.</p></li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-86e44b028ecea9536702" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-86e44b028ecea9536702">{"x":{"diagram":"\ndigraph moneda {\n  rankdir = LR\n  graph [layout = dot]\n\n  node [shape = circle, style = filled, fillcolor = lightblue,\n        fontname = Helvetica, fontsize = 16, fixedsize = true, width = 1.2]\n\n  Inicio [label = \"Inicio\"]\n  C [label = \"C\"]\n  S [label = \"S\"]\n\n  edge [fontname = Helvetica, fontsize = 14]\n\n  Inicio -> C [label = \"Cara\"]\n  Inicio -> S [label = \"Sello\"]\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador  -->
+</section>
+<section id="ejemplo-lanzamiento-de-dos-monedas" class="level3" data-number="5.0.2">
+<h3 data-number="5.0.2" class="anchored" data-anchor-id="ejemplo-lanzamiento-de-dos-monedas"><span class="header-section-number">5.0.2</span> Ejemplo: Lanzamiento de dos monedas</h3>
+<p>Dos monedas diferentes se lanzan al mismo tiempo.</p>
+<ol type="a">
+<li><p>El espacio muestral correspondiente está dado por (en este caso <span class="math inline">\((C,S)\ne(S,C)\)</span>): <span class="math display">\[\Omega=\{(C,C),(C,S),(S,C),(S,S)\}\]</span></p></li>
+<li><p><span class="math inline">\(A=\{(C,C)\}=\)</span> “<em>las monedas muestran cara</em>” es un evento elemental.</p></li>
+<li><p><span class="math inline">\(B\,=\,\{(S,S),(C,C)\}=\)</span> “<em>Ambas monedas muestran el mismo lado</em>” es un ejemplo de un evento.</p></li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.1.1.Exp-Conteo_Teoria_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador  -->
+</section>
+<section id="ejemplo-repetir-lanzamiento-de-una-moneda" class="level3" data-number="5.0.3">
+<h3 data-number="5.0.3" class="anchored" data-anchor-id="ejemplo-repetir-lanzamiento-de-una-moneda"><span class="header-section-number">5.0.3</span> Ejemplo: repetir lanzamiento de una moneda</h3>
+<p>Se observa el número de lanzamientos que muestran sello (<span class="math inline">\(S\)</span>) antes de que aparezca, por primera vez, una cara (<span class="math inline">\(C\)</span>)</p>
+<ol type="a">
+<li><p>En este caso, <span class="math display">\[\Omega=\{0,1,2,\ldots,\infty\}\]</span></p></li>
+<li><p><span class="math inline">\(A\,=\,\{6,7,8,\ldots,\infty\} =\)</span> “<em>aparece, por primera vez, una cara después del quinto lanzamiento</em>” es un evento.</p></li>
+<li><p><span class="math inline">\(B=\{3\}=\)</span> “<em>aparece cara, por primera vez, en el cuarto lanzamiento</em>” es un evento elemental.</p></li>
+<li><p><span class="math inline">\(C=\{\infty\}\)</span> es el evento elemental de que “<em>la moneda nunca muestre a <span class="math inline">\(C\)</span></em>”.</p></li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.1.1.Exp-Conteo_Teoria_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador  -->
+</section>
+<section id="ejemplo-edad-de-fallecimiento" class="level3" data-number="5.0.4">
+<h3 data-number="5.0.4" class="anchored" data-anchor-id="ejemplo-edad-de-fallecimiento"><span class="header-section-number">5.0.4</span> Ejemplo: edad de fallecimiento</h3>
+<p>Se observa la edad en la que diferentes personas mueren.</p>
+<ol type="a">
+<li><p>De esta forma, <span class="math inline">\(\Omega\)</span> es el conjunto de todos los números reales menores o iguales que <span class="math inline">\(k\)</span>, donde <span class="math inline">\(k\)</span> es la edad de la persona que más años ha vivido en la tierra.Es decir, <span class="math display">\[\Omega = [0, k]\]</span></p></li>
+<li><p><span class="math inline">\(A=\{59.7\} =\)</span> “<em>Una determinada persona murió a la edad de 59.7 años</em>” es un evento elemental.</p></li>
+<li><p><span class="math inline">\(B\, =\, [60,70]=\)</span> “<em>Alguien muere con edad entre 60 y 70 años</em>” es un ejemplo de un evento de <span class="math inline">\(\Omega\)</span>.</p></li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.1.1.Exp-Conteo_Teoria_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador  -->
+</section>
+</section>
+<section id="ejemplos-con-r-espacio-muestral" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Ejemplos con R (espacio muestral)</h1>
+<section id="ejemplo-lanzar-monedas" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="ejemplo-lanzar-monedas"><span class="header-section-number">6.0.1</span> Ejemplo: Lanzar monedas</h3>
+<p>Considere el experimento aleatorio de lanzar n veces una moneda. Los resultados elementales son <code>H</code> (head, cara) y <code>T</code> (tail, sello).Podemos hallar los elementos del espacio muestral con la función <code>tosscoin</code> (lanzamiento de monedas):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tosscoin</span>(<span class="dv">1</span>)     <span class="co">#A) Espacio muestral con n=1 lanzamiento de una moneda</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1
+## 1  H
+## 2  T</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tosscoin</span>(<span class="dv">2</span>)     <span class="co">#B) Espacio muestral con n=2 lanzamientos de una moneda</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2
+## 1  H  H
+## 2  T  H
+## 3  H  T
+## 4  T  T</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tosscoin</span>(<span class="dv">3</span>)     <span class="co">#C) Espacio muestral con n=3 lanzamientos de una moneda</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2 X3
+## 1  H  H  H
+## 2  T  H  H
+## 3  H  T  H
+## 4  T  T  H
+## 5  H  H  T
+## 6  T  H  T
+## 7  H  T  T
+## 8  T  T  T</code></pre>
+</div>
+</div>
+<p>Para determinar el número de elementos que tiene el espacio muestral <span class="math inline">\(\Omega\)</span> y el de la muestra, se puede utilizar la función <code>dim</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Omega<span class="ot">&lt;-</span> <span class="fu">tosscoin</span>(<span class="dv">10</span>)  <span class="co">#D) Espacio muestral con n=10 lanzamientos de una moneda</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Omega)            <span class="co">#E) Tamaños de Omega y de la muestra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 1024   10</code></pre>
+</div>
+</div>
+</section>
+<section id="ejemplo-lanzar-dados" class="level3" data-number="6.0.2">
+<h3 data-number="6.0.2" class="anchored" data-anchor-id="ejemplo-lanzar-dados"><span class="header-section-number">6.0.2</span> Ejemplo: Lanzar dados</h3>
+<p>Ahora considere el experimento aleatorio de lanzar n veces un dado. Los resultados elementales son 1, 2, 3,4, 5 y 6. Podemos hallar los elementos del espacio muestral con la función <code>rolldie</code> (lanzamiento de dados):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Omega<span class="ot">&lt;-</span> <span class="fu">rolldie</span>(<span class="dv">2</span>); Omega    <span class="co">#F) Espacio muestral con n=2 lanzamientos de un dado</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##    X1 X2
+## 1   1  1
+## 2   2  1
+## 3   3  1
+## 4   4  1
+## 5   5  1
+## 6   6  1
+## 7   1  2
+## 8   2  2
+## 9   3  2
+## 10  4  2
+## 11  5  2
+## 12  6  2
+## 13  1  3
+## 14  2  3
+## 15  3  3
+## 16  4  3
+## 17  5  3
+## 18  6  3
+## 19  1  4
+## 20  2  4
+## 21  3  4
+## 22  4  4
+## 23  5  4
+## 24  6  4
+## 25  1  5
+## 26  2  5
+## 27  3  5
+## 28  4  5
+## 29  5  5
+## 30  6  5
+## 31  1  6
+## 32  2  6
+## 33  3  6
+## 34  4  6
+## 35  5  6
+## 36  6  6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Omega)                   <span class="co">#G) Tamaños de Omega y de la muestra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 36  2</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 4 -->
+</section>
+</section>
+<section id="ejemplos-con-r-evento" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Ejemplos con R (evento)</h1>
+<p>Para obtener un evento de <span class="math inline">\(\Omega\)</span> en R, podemos extraer filas usando el operador <code>[]</code>.</p>
+<section id="ejemplo-lanzar-monedas-1" class="level3" data-number="7.0.1">
+<h3 data-number="7.0.1" class="anchored" data-anchor-id="ejemplo-lanzar-monedas-1"><span class="header-section-number">7.0.1</span> Ejemplo: Lanzar monedas</h3>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">tosscoin</span>(<span class="dv">3</span>); Omega    <span class="co">#A) Espacio muestral</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2 X3
+## 1  H  H  H
+## 2  T  H  H
+## 3  H  T  H
+## 4  T  T  H
+## 5  H  H  T
+## 6  T  H  T
+## 7  H  T  T
+## 8  T  T  T</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Omega)                     <span class="co">#B) Tamaños de Omega y de la muestra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 8 3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>B<span class="ot">&lt;-</span> Omega[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, ]; B            <span class="co">#C) Evento B</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2 X3
+## 1  H  H  H
+## 2  T  H  H
+## 3  H  T  H
+## 4  T  T  H</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>C<span class="ot">&lt;-</span> Omega[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>),]; C          <span class="co">#D) Evento C</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2 X3
+## 1  H  H  H
+## 4  T  T  H</code></pre>
+</div>
+</div>
+</section>
+<section id="ejemplo-lanzar-dados-1" class="level3" data-number="7.0.2">
+<h3 data-number="7.0.2" class="anchored" data-anchor-id="ejemplo-lanzar-dados-1"><span class="header-section-number">7.0.2</span> Ejemplo: Lanzar dados</h3>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">rolldie</span>(<span class="dv">2</span>); <span class="fu">head</span>(Omega)          <span class="co">#E) Espacio muestral</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2
+## 1  1  1
+## 2  2  1
+## 3  3  1
+## 4  4  1
+## 5  5  1
+## 6  6  1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Omega)                                <span class="co">#F) Tamaños de Omega y de la muestra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 36  2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">subset</span>(Omega, X1 <span class="sc">+</span> X2 <span class="sc">&gt;</span> <span class="dv">10</span>); G       <span class="co">#G) Evento G</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##    X1 X2
+## 30  6  5
+## 35  5  6
+## 36  6  6</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+</section>
+<section id="funciones-para-encontrar-subconjuntos" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Funciones para encontrar subconjuntos</h1>
+<section id="la-función-b-in-a" class="level3" data-number="8.0.1">
+<h3 data-number="8.0.1" class="anchored" data-anchor-id="la-función-b-in-a"><span class="header-section-number">8.0.1</span> La función (<code>b %in% a</code>)</h3>
+<p>Retornará <code>TRUE</code> si el valor de un vector <code>b</code> está en algún lugar dentro de otro vector <code>a</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>          <span class="co">#A)</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>          <span class="co">#B)</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">4</span>)     <span class="co">#C)</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>y <span class="sc">%in%</span> x          <span class="co">#D)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE TRUE TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">%in%</span> y          <span class="co">#E)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">%in%</span> z          <span class="co">#F)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE  TRUE FALSE  TRUE FALSE FALSE</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="la-función-allb-in-a" class="level3" data-number="8.0.2">
+<h3 data-number="8.0.2" class="anchored" data-anchor-id="la-función-allb-in-a"><span class="header-section-number">8.0.2</span> La función <code>all(b %in% a)</code></h3>
+<p>La función retornará <code>TRUE</code> si todos los valores del vector <code>b</code> están dentro de otro vector <code>a</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(y <span class="sc">%in%</span> x)          <span class="co">#G)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(x <span class="sc">%in%</span> y)          <span class="co">#H)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(x <span class="sc">%in%</span> z)          <span class="co">#I)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="la-función-anyb-in-a" class="level3" data-number="8.0.3">
+<h3 data-number="8.0.3" class="anchored" data-anchor-id="la-función-anyb-in-a"><span class="header-section-number">8.0.3</span> La función <code>any(b %in% a)</code></h3>
+<p>La función retornará <code>TRUE</code> si al menos uno de los valores lógicos dentro de un vector es <code>TRUE</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(y <span class="sc">%in%</span> x)          <span class="co">#G)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(x <span class="sc">%in%</span> y)          <span class="co">#H)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(x <span class="sc">%in%</span> z)          <span class="co">#I)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="la-función-isinab" class="level3" data-number="8.0.4">
+<h3 data-number="8.0.4" class="anchored" data-anchor-id="la-función-isinab"><span class="header-section-number">8.0.4</span> La función <code>isin(a,b)</code></h3>
+<p>La función retornará <code>TRUE</code> si cada elemento de <code>b</code> está presente en el vector <code>a</code>, contando multiplicidades.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isin</span>(y, x)          <span class="co">#J)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isin</span>(x, y)          <span class="co">#K)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isin</span>(x, y)          <span class="co">#L)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="la-función-isinab-con-opción-ordered" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="la-función-isinab-con-opción-ordered"><span class="header-section-number">8.1</span> La función <code>isin(a,b)</code> con opción <code>ordered</code></h2>
+<p>Hay un argumento opcional que prueba si un elemento del vector <code>b</code> aparece en el <code>a</code> en el mismo orden en que ellos aparecen en <code>b</code>. Por ejemplo:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isin</span>(x, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>)          <span class="co">#M)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isin</span>(x, <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>)          <span class="co">#N)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+<section id="la-función-isinab-para-construir-eventos" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="la-función-isinab-para-construir-eventos"><span class="header-section-number">8.1.1</span> La función <code>isin(a,b)</code> para construir eventos</h3>
+<p>La función <code>isin</code> se puede aplicar a cada fila del data frama para encontrar el evento deseado. Por ejemplo,</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">rolldie</span>(<span class="dv">3</span>); <span class="fu">head</span>(Omega)          <span class="co">#O) Dados, n=3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2 X3
+## 1  1  1  1
+## 2  2  1  1
+## 3  3  1  1
+## 4  4  1  1
+## 5  5  1  1
+## 6  6  1  1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Omega)                                <span class="co">#P) Tamaños de Omega y muestra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 216   3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">subset</span>(Omega, <span class="fu">isin</span>(Omega, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>)); A      <span class="co">#Q) Evento</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##     X1 X2 X3
+## 2    2  1  1
+## 7    1  2  1
+## 8    2  2  1
+## 9    3  2  1
+## 10   4  2  1
+## 11   5  2  1
+## 12   6  2  1
+## 38   2  1  2
+## 74   2  1  3
+## 110  2  1  4
+## 146  2  1  5
+## 182  2  1  6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(A)          <span class="co">#R) Tamaños del evento y de la muestra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 12  3</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+</section>
+</section>
+<section id="conjuntos" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Conjuntos</h1>
+<section id="operaciones-con-eventos" class="level3" data-number="9.0.1">
+<h3 data-number="9.0.1" class="anchored" data-anchor-id="operaciones-con-eventos"><span class="header-section-number">9.0.1</span> Operaciones con eventos</h3>
+<p>Se deja como repaso al lector repasar lo relacionado con el diagrama de Venn y con las operaciones básicas entre conjuntos entre dos eventos <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span>. Para el repaso, se puede consultar la sección 2.1 de la bibliografía No.&nbsp;2.</p>
+<ol type="1">
+<li><p>Intersección (<span class="math inline">\(A\cap B\)</span>).</p></li>
+<li><p>Unión (<span class="math inline">\(A\cup B\)</span>).</p></li>
+<li><p>Diferencia entre conjuntos (por ejemplo, <span class="math inline">\(A-B\)</span>).</p></li>
+<li><p>Diferencia entre conjuntos (por ejemplo, <span class="math inline">\(B-A\)</span>).</p></li>
+<li><p>Eventos disyuntos.</p></li>
+<li><p>Eventos mutuamente excluyentes.</p></li>
+<li><p><span class="math inline">\(\overline{A}\)</span>, el complemento de <span class="math inline">\(A\)</span>.</p></li>
+<li><p>Partición.</p></li>
+<li><p>Eventos colectivamente exhaustivos.</p></li>
+<li><p>Leyes de De Morgan.</p></li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.1.1.Exp-Conteo_Teoria_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.1.1.Exp-Conteo_Teoria_files/figure-html/unnamed-chunk-27-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1728"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.1.1.Exp-Conteo_Teoria_files/figure-html/unnamed-chunk-28-5.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="operaciones-con-conjuntos-ejemplo" class="level3" data-number="9.0.2">
+<h3 data-number="9.0.2" class="anchored" data-anchor-id="operaciones-con-conjuntos-ejemplo"><span class="header-section-number">9.0.2</span> Operaciones con conjuntos: ejemplo</h3>
+<p>Revisemos algunos ejemplos:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear espacio muestral</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">rolldie</span>(<span class="dv">2</span>)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir eventos</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">subset</span>(Omega, <span class="fu">isin</span>(Omega, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>))  <span class="co"># Evento A</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">subset</span>(Omega, <span class="fu">isin</span>(Omega, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">FALSE</span>)) <span class="co"># Evento B</span></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertir a representaciones de fila únicas</span></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>rows_A <span class="ot">&lt;-</span> <span class="fu">apply</span>(A, <span class="dv">1</span>, paste, <span class="at">collapse =</span> <span class="st">"_"</span>)</span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>rows_B <span class="ot">&lt;-</span> <span class="fu">apply</span>(B, <span class="dv">1</span>, paste, <span class="at">collapse =</span> <span class="st">"_"</span>)</span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Operaciones de conjuntos</span></span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>union_rows <span class="ot">&lt;-</span> <span class="fu">union</span>(rows_A, rows_B)</span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>intersect_rows <span class="ot">&lt;-</span> <span class="fu">intersect</span>(rows_A, rows_B)</span>
+<span id="cb68-15"><a href="#cb68-15" aria-hidden="true" tabindex="-1"></a>setdiff_A_B <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(rows_A, rows_B)</span>
+<span id="cb68-16"><a href="#cb68-16" aria-hidden="true" tabindex="-1"></a>setdiff_B_A <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(rows_B, rows_A)</span>
+<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a>set_equal <span class="ot">&lt;-</span> <span class="fu">setequal</span>(rows_A, rows_B)</span>
+<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-19"><a href="#cb68-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Reconstruir los data.frames desde las filas originales</span></span>
+<span id="cb68-20"><a href="#cb68-20" aria-hidden="true" tabindex="-1"></a>reconstruct <span class="ot">&lt;-</span> <span class="cf">function</span>(keys, original_df) {</span>
+<span id="cb68-21"><a href="#cb68-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(original_df, <span class="fu">apply</span>(original_df, <span class="dv">1</span>, paste, <span class="at">collapse =</span> <span class="st">"_"</span>) <span class="sc">%in%</span> keys)</span>
+<span id="cb68-22"><a href="#cb68-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb68-23"><a href="#cb68-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-24"><a href="#cb68-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"C) Unión</span><span class="sc">\n</span><span class="st">"</span>); <span class="fu">print</span>(<span class="fu">reconstruct</span>(union_rows, Omega))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## C) Unión</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2
+## 2  2  1
+## 7  1  2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"D) Intersección</span><span class="sc">\n</span><span class="st">"</span>); <span class="fu">print</span>(<span class="fu">reconstruct</span>(intersect_rows, Omega))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## D) Intersección</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2
+## 2  2  1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"E) Diferencia A-B</span><span class="sc">\n</span><span class="st">"</span>); <span class="fu">print</span>(<span class="fu">reconstruct</span>(setdiff_A_B, Omega))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## E) Diferencia A-B</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] X1 X2
+## &lt;0 rows&gt; (o 0- extensión row.names)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"F) Diferencia B-A</span><span class="sc">\n</span><span class="st">"</span>); <span class="fu">print</span>(<span class="fu">reconstruct</span>(setdiff_B_A, Omega))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## F) Diferencia B-A</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   X1 X2
+## 7  1  2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"G) Igualdad A == B ? "</span>, set_equal, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## G) Igualdad A == B ?  FALSE</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+</section>
+<section id="modelos-de-urnas" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Modelos de urnas</h1>
+<p>Se caracterizan por las siguientes dos codiciones:</p>
+<p><strong>Condición 1:</strong></p>
+<p>En una urna hay objetos distinguibles (por ejemplo, numeradas), no distinguibles (por ejemplo, rojas) o mixtas. Estos objetos se consideran como una población y pueden ser: fichas, bolas, letras, personas, etc.</p>
+<p><strong>Condición 2:</strong></p>
+<p>De esta urna se quiere sacar uno o más objetos, al mismo tiempo o no, reemplazando o no los objetos seleccionadas antes de seleccionar nuevamente otro(s) objetos(s) y observando el orden o no de objetos extraídos. Los objetos extraídos se consideran como una muestra. Para obtener estas muestras, podemos distinguir los siguientes casos:</p>
+<ol type="1">
+<li><p><em>Seleccionar sin reemplazo</em>. Cada objeto seleccionado se deposita fuera de la urna, y por eso puede seleccionarse una sola vez.</p></li>
+<li><p><em>Seleccionar con reemplazo</em>. Cada objeto seleccionado se reemplaza en la urna, y por eso puede seleccionarse varias veces.</p></li>
+<li><p><em>Seleccionar considerando el orden</em>. Se selecciona cierta cantidad de objetos, uno tras otro, y se considera el orden obtenido. En este caso, los objetos seleccionados se pueden considerar como tuplas ordenadas.</p></li>
+<li><p><em>Seleccionar sin considerar el orden</em>. Se selecciona cierta cantidad de objetos a la vez (o también uno tras otro), pero sin que interese el orden de los objetos extraídos.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+<section id="modelos-de-urnas-ejemplo" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Modelos de urnas: ejemplo</h1>
+<p>Los cuatro casos se pueden combinar: los objetos se seleccionan con o sin reemplazo y con o sin orden (como se muestra en la figura de abajo).</p>
+<center>
+<p><img src="ModelosUrnas1.png" class="img-fluid" width="900"></p>
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+<section id="otros-modelos-de-urnas" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Otros modelos de urnas</h1>
+<p>Podemos identificar otros tipos de modelo de urna con base en las situaciones anteriores, como, por ejemplo:</p>
+<ol start="5" type="1">
+<li><em>Seleccionar formando una partición</em>. Seleccionar grupos de objetos sin importar el orden y cada grupo se guarda, por ejemplo, en gavetas numeradas. Esto se hace hasta que no queden objetos en la urna.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+<section id="técnicas-de-conteo" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Técnicas de conteo</h1>
+<p>Son:</p>
+<ol type="1">
+<li><p>Conteo por enumeración de elementos.</p></li>
+<li><p>Conteo a través de diagramas de árbol.</p></li>
+<li><p>Principio de adición.</p></li>
+<li><p>Teorema fundamental del conteo.</p></li>
+<li><p>Conteo de permutaciones.</p></li>
+<li><p>Conteo de combinaciones.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+<section id="enumeración-de-elementos" class="level3" data-number="13.0.1">
+<h3 data-number="13.0.1" class="anchored" data-anchor-id="enumeración-de-elementos"><span class="header-section-number">13.0.1</span> Enumeración de elementos</h3>
+<p><strong>Ejemplo 1</strong></p>
+<p>Ver ejemplo de la sección 6.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+<section id="diagrama-de-árbol" class="level3" data-number="13.0.2">
+<h3 data-number="13.0.2" class="anchored" data-anchor-id="diagrama-de-árbol"><span class="header-section-number">13.0.2</span> Diagrama de árbol</h3>
+<p><strong>Ejemplo 2</strong></p>
+<p>El diagrama de árbol correspondiente al caso 2 del ejemplo de la sección 6 es:</p>
+<center>
+<p><img src="Arbol1.png" class="img-fluid" width="800"></p>
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+<section id="principio-de-adición" class="level3" data-number="13.0.3">
+<h3 data-number="13.0.3" class="anchored" data-anchor-id="principio-de-adición"><span class="header-section-number">13.0.3</span> Principio de adición</h3>
+<p>Siempre se cumple que</p>
+<p><span class="math display">\[\#(A\cup B) \;=\; \#A \;+\; \#B \;-\; \#(A \cap B)\]</span></p>
+<p><strong>Ejemplo 3</strong></p>
+<p>En el lanzamiento de dos dados, ¿de cuántas formas se puede obtener que la suma de los números sea un siete o un ocho?</p>
+<p><em>Solución</em>. Sean <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span> los eventos “obtener un siete” y “obtener un ocho” respectivamente. Entonces, <span class="math inline">\(A\cup B\)</span> será el evento “obtener un siete o un ocho”. Debido a que</p>
+<p><span class="math display">\[A =\{(1, 6), (2, 5), (3, 4), (4, 3), (5, 2), (6, 1)\}, \qquad  B = \{(2, 6), (3, 5), (4, 4), (5, 3), (6, 2)\}\]</span> entonces <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span> pueden ocurrir de 6 y 5 formas distintas respectivamente, y, además, son mutuamente excluyentes. Por consiguiente, por el principio de adición, el evento <span class="math inline">\(A∪B\)</span> ocurrirá de 6 + 5 = 11 maneras distintas. Es decir,</p>
+<p><span class="math display">\[\#(A\cup B) \;=\; \#A \;+\; \#B\;-\; \#(A \cap B) \;=\; 6+ 5- 0 \;=\; 11\]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+<section id="teorema-fundamental-del-conteo" class="level3" data-number="13.0.4">
+<h3 data-number="13.0.4" class="anchored" data-anchor-id="teorema-fundamental-del-conteo"><span class="header-section-number">13.0.4</span> Teorema fundamental del conteo</h3>
+<p>Si <span class="math inline">\(r\)</span> experimentos se ejecutan de tal manera que:</p>
+<ul>
+<li><p>El primero puede resultar en <span class="math inline">\(n_1\)</span> posibles resultados.</p></li>
+<li><p>Si para cada uno de estos <span class="math inline">\(n_1\)</span> posibles resultados hay <span class="math inline">\(n_2\)</span> posibles resultados del segundo experimento.</p></li>
+<li><p>Si para cada uno de los posibles resultados de los dos primeros experimentos hay <span class="math inline">\(n_3\)</span> posibles resultados del tercer experimento.</p></li>
+<li><p>Y así sucesivamente.</p></li>
+</ul>
+<p>Entonces, hay un total de <span class="math inline">\(n_1 \cdot n_2 \cdots n_r\)</span> posibles resultados de los <span class="math inline">\(r\)</span> experimentos.</p>
+<p><strong>Ejemplo 4</strong></p>
+<p>Considerando el caso 1 del ejemplo de la sección 6, el número posible de muestras de tamaño 2 (con orden y con reemplazo) que se pueden seleccionar de un total de 4 objetos es:</p>
+<p><span class="math display">\[ 4\cdot 4 \;=\; 16 \]</span> <strong>Ejemplo 5</strong></p>
+<p>Considerando el caso 2 del ejemplo de la sección 6, el número posible de muestras de tamaño 2 (con orden y sin reemplazo) que se pueden seleccionar de un total de 4 objetos es:</p>
+<p><span class="math display">\[ 4\cdot 3 \;=\; 12 \]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+</section>
+<section id="conteo-de-permutaciones" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> Conteo de permutaciones</h1>
+<section id="preliminares" class="level3" data-number="14.0.1">
+<h3 data-number="14.0.1" class="anchored" data-anchor-id="preliminares"><span class="header-section-number">14.0.1</span> Preliminares</h3>
+<p><strong>Definición</strong></p>
+<p>Una permutación es un arreglo ordenado de una cantidad finita de objetos.</p>
+<p><strong>Tipos de permutaciones</strong></p>
+<ol type="1">
+<li><p>Permutaciones sin repetición de <span class="math inline">\(n\)</span> objetos tomados todos a la vez.</p></li>
+<li><p>Permutaciones sin repetición de <span class="math inline">\(n\)</span> objetos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> (<span class="math inline">\(k \leq n\)</span>).</p></li>
+<li><p>Permutaciones con repetición de <span class="math inline">\(n\)</span> objetos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> (<span class="math inline">\(k\)</span> es cualquier número natural).</p></li>
+<li><p>Permutaciones circulares.</p></li>
+<li><p>Permutaciones de <span class="math inline">\(n\)</span> objetos de los cuales hay <span class="math inline">\(n_1\)</span> de un primer tipo, <span class="math inline">\(n_2\)</span> de un segundo tipo, <span class="math inline">\(\cdots\)</span>, <span class="math inline">\(n_k\)</span> de un <span class="math inline">\(k\)</span>-ésimo tipo, donde <span class="math inline">\(n_1 + n_2 + \cdots + n_k = n\)</span>.</p></li>
+<li><p>Maneras de hacer una partición de un conjunto.</p></li>
+</ol>
+</section>
+<section id="permutaciones-sin-repetición-de-n-objetos-tomados-todos-a-la-vez" class="level3" data-number="14.0.2">
+<h3 data-number="14.0.2" class="anchored" data-anchor-id="permutaciones-sin-repetición-de-n-objetos-tomados-todos-a-la-vez"><span class="header-section-number">14.0.2</span> Permutaciones sin repetición de <span class="math inline">\(n\)</span> objetos tomados todos a la vez</h3>
+<p>El número de permutaciones de un conjunto de <span class="math inline">\(n\)</span> elementos distintos es igual a</p>
+<p><span class="math display">\[n!:=1\cdot 2\cdots (n-1)\cdot n\]</span></p>
+<p>El símbolo “<span class="math inline">\(!\)</span>” se conoce con el nombre de <em>factorial</em>. Cuando escribamos, por ejemplo, <span class="math inline">\(5!\)</span> leeremos “5 factorial”. Algunos valores factoriales son los siguientes:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+0!&amp;:=&amp; 1 \\
+1!&amp;=&amp; 1, \\
+2!&amp;=&amp; 2\cdot 1 \;=\;2,\\
+3!&amp;=&amp; 3 \cdot 2\cdot 1\;=\;6, \\
+4!&amp;=&amp; 4 \cdot 3 \cdot 2\cdot 1 \;=\; 24, \qquad etc.
+\end{eqnarray*}\]</span></p>
+<p><strong>Ejemplo 6</strong></p>
+<p>Si se le pide a un consumidor que ordene, por orden de preferencia, el sabor de cinco marcas de cerveza, entonces el número de permutaciones que resultan será <span class="math inline">\(5! = 120\)</span>.</p>
+<p><strong>Ejemplo 7</strong></p>
+<p>Cuatro libros distintos de matemáticas, seis diferentes de física y dos diferentes de química se colocan en un estante. ¿De cuántas formas distintas es posible ordenarlos si:</p>
+<ol type="a">
+<li><p>Los libros de cada asignatura deben estar todos juntos.</p></li>
+<li><p>Solamente los libros de matemáticas deben estar juntos?</p></li>
+</ol>
+<p><em>Solución</em>.</p>
+<ol type="a">
+<li>Los libros de matemáticas pueden ordenarse de 4! formas, los de física de 6! formas, los de química de 2! formas y los tres grupos de 3! formas. Por consiguiente,</li>
+</ol>
+<p><span class="math display">\[\mbox{Número de ordenaciones pedido = 4! 6! 2! 3! = 207.360}\]</span></p>
+<ol start="2" type="a">
+<li>Considerar los cuatro libros de matemáticas como un solo libro. Entonces, se tienen 9 libros que pueden ordenarse de 9! formas. En todos estos casos, los libros de matemáticas están juntos, pero pueden ordenarse de 4! formas. Por consiguiente,</li>
+</ol>
+<p><span class="math display">\[\mbox{Número de ordenaciones pedido = 9! 4! = 8.709.120}\]</span></p>
+</section>
+<section id="permutaciones-sin-repetición-de-n-objetos-tomados-de-k-en-k-k-leq-n" class="level3" data-number="14.0.3">
+<h3 data-number="14.0.3" class="anchored" data-anchor-id="permutaciones-sin-repetición-de-n-objetos-tomados-de-k-en-k-k-leq-n"><span class="header-section-number">14.0.3</span> Permutaciones sin repetición de <span class="math inline">\(n\)</span> objetos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> (<span class="math inline">\(k \leq n\)</span>)</h3>
+<p>El número de permutaciones de un conjunto de <span class="math inline">\(n\)</span> elementos distintos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> es igual a</p>
+<p><span class="math display">\[nPk \;=\; \frac{n!}{(n-k)!}\]</span></p>
+<p>Las permutaciones de este tipo también se pueden considerar como muestras seleccionadas sin reemplazo. Además, obsérvese que cuando <span class="math inline">\(k=n\)</span>, este resultado coincide siempre con $n!. Es decir,</p>
+<p><span class="math display">\[nPn \;=\; n!\]</span></p>
+<p><strong>Ejemplo 8</strong></p>
+<p>Considerando el caso 2 del ejemplo de la sección 6, el número posible de muestras de tamaño <span class="math inline">\(k=2\)</span> (con orden y sin reemplazo) que se pueden seleccionar de un total de <span class="math inline">\(n=4\)</span> objetos es:</p>
+<p><span class="math display">\[4P2 \;=\; \frac{4!}{(4-2)!} \;=\; \frac{24}{2} \;=\;12\]</span></p>
+</section>
+<section id="permutaciones-con-repetición-de-n-objetos-tomados-de-k-en-k-k-es-cualquier-número-natural" class="level3" data-number="14.0.4">
+<h3 data-number="14.0.4" class="anchored" data-anchor-id="permutaciones-con-repetición-de-n-objetos-tomados-de-k-en-k-k-es-cualquier-número-natural"><span class="header-section-number">14.0.4</span> Permutaciones con repetición de <span class="math inline">\(n\)</span> objetos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> (<span class="math inline">\(k\)</span> es cualquier número natural)</h3>
+<p>El número de permutaciones de un conjunto de <span class="math inline">\(n\)</span> elementos distintos tomados de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span> es igual a</p>
+<p><span class="math display">\[n^k\]</span></p>
+<p><strong>Ejemplo 9</strong></p>
+<p>Considerando el caso 1 del ejemplo de la sección 6, el número posible de muestras de tamaño <span class="math inline">\(k=2\)</span> (con orden y con reemplazo) que se pueden seleccionar de un total de <span class="math inline">\(n=4\)</span> objetos es:</p>
+<p><span class="math display">\[n^k \;=\; 4^2 \;=\; 16\]</span></p>
+</section>
+<section id="permutaciones-circulares" class="level3" data-number="14.0.5">
+<h3 data-number="14.0.5" class="anchored" data-anchor-id="permutaciones-circulares"><span class="header-section-number">14.0.5</span> Permutaciones circulares</h3>
+<p>El número de permutaciones de un conjunto de <span class="math inline">\(n\)</span> elementos distintos acomodados en un círculo es igual a</p>
+<p><span class="math display">\[(n-1)!\]</span></p>
+<p><strong>Ejemplo 10</strong></p>
+<p>Sabemos que si queremos sentar a cuatro personas A, B, C, D, una al lado de la otra en fila, el número de arreglos que podemos hacer es 4! = 24. Ahora bien, si los queremos sentar alrededor de una mesa circular, ¿de cuántas maneras lo podemos hacer?</p>
+<p><em>Solución</em>.</p>
+<p>Al considerar a una persona en un lugar fijo (digamos A) y acomodar a las otras tres personas en 3! formas diferentes, se encuentra que hay 6 arreglos distintos alrededor de la mesa circular (compárese con la figura de abajo).</p>
+<center>
+<p><img src="Circular1.png" class="img-fluid" width="450"></p>
+</center>
+</section>
+<section id="permutaciones-por-tipos" class="level3" data-number="14.0.6">
+<h3 data-number="14.0.6" class="anchored" data-anchor-id="permutaciones-por-tipos"><span class="header-section-number">14.0.6</span> Permutaciones por tipos</h3>
+<p>El número de permutaciones de <span class="math inline">\(n\)</span> objetos de los cuales hay <span class="math inline">\(n_1\)</span> de un primer tipo, <span class="math inline">\(n_2\)</span> de un segundo tipo, <span class="math inline">\(\cdots\)</span>, <span class="math inline">\(n_k\)</span> de un <span class="math inline">\(k\)</span>-ésimo tipo, donde</p>
+<p><span class="math display">\[n_1 + n_2 + \cdots + n_k = n\]</span></p>
+<p>es:</p>
+<p><span class="math display">\[\frac{n!}{n_1! \, n_2!\cdots n_k!}\]</span></p>
+<p>donde <span class="math inline">\(n_1, \ldots, n_k\)</span> son números naturales.</p>
+<p><strong>Ejemplo 11</strong></p>
+<p>¿Cuántas palabras distintas se pueden formar con las letras de la palabra “estadística”? (También cuentan palabras sin sentido como, por ejemplo, “setadistica”).</p>
+<p><em>Solución</em>.</p>
+<p>Obsérvese que en la palabra “estadística” hay <span class="math inline">\(n=11\)</span> letras, distribuidas así: 1 <code>e", 2</code>s”, 2 “t”, 2 “a”, 1 “d”, 2 “i” y 1 “c”. Por tanto, se concluye que podemos formar</p>
+<p><span class="math display">\[\frac{11!}{1! \, 2!\, 2!\, 2!\, 1!\, 2! \, 1!} \;= \; 2.494.800\]</span></p>
+<p>palabras distintas con las letras de la palabra mencionada anteriormente.</p>
+<p><strong>Ejemplo 12</strong></p>
+<p>¿Cuántas señales diferentes se pueden hacer con 5 banderas de las cuales 2 son azules y 3, rojas?</p>
+<p><em>Solución</em>.</p>
+<p>El número de señales que se pueden hacer es: <span class="math display">\[\frac{5!}{2!\, 3!} = 10\]</span></p>
+</section>
+<section id="maneras-de-hacer-una-partición-de-un-conjunto" class="level3" data-number="14.0.7">
+<h3 data-number="14.0.7" class="anchored" data-anchor-id="maneras-de-hacer-una-partición-de-un-conjunto"><span class="header-section-number">14.0.7</span> Maneras de hacer una partición de un conjunto</h3>
+<p>El número de formas de partir <span class="math inline">\(n\)</span> objetos distintos en donde en <span class="math inline">\(k\)</span> celdas con <span class="math inline">\(n_1\)</span> objetos en la primera celda, <span class="math inline">\(n_2\)</span> en la segunda celda, <span class="math inline">\(\ldots\)</span>, <span class="math inline">\(n_k\)</span> en la <span class="math inline">\(k\)</span>-ésima celda, con <span class="math inline">\(n_1 +
+n_2 + \cdots + n_k =n\)</span>, es</p>
+<p><span class="math display">\[{n\choose {n_1, n_2, \ldots, n_k}}\;= \;  \frac{n!}{n_1! \, n_2!\cdots n_k!}\]</span></p>
+<p>Se resalta el hecho que no importa el orden de los objetos dentro de cada celda.</p>
+<p><strong>Ejemplo 13</strong></p>
+<p>Doce estudiantes van a viajar en carros distintos a cierta ciudad. Si 3 de ellos van en un carro, 4 en otro carro y 5 en el otro, ¿de cuántas maneras se pueden acomodar si cualquiera puede conducir?</p>
+<p><em>Solución</em>.</p>
+<p>Hay</p>
+<p><span class="math display">\[{12\choose {3, 4, 5}}\;= \;  \frac{12!}{3! \, 4!\, 5!} \;= \; 27.720\]</span></p>
+<p>formas en que los 12 estudiantes se pueden acomodar en los tres carros, viajando 3, 4 y 5 estudiantes en carros distintos.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+</section>
+<section id="conteo-de-combinaciones" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> Conteo de combinaciones</h1>
+<p><strong>Definición</strong></p>
+<p>Una escogencia de <span class="math inline">\(k\)</span> objetos de un conjunto de n objetos distintos, sin importar el orden en que los <span class="math inline">\(k\)</span> objetos son escogidos, se llama combinación.</p>
+<p><strong>Tipos de combinaciones</strong></p>
+<ol type="a">
+<li>El número de combinaciones de <span class="math inline">\(k\)</span> objetos seleccionados (<strong>sin repetición</strong>) de un conjunto de <span class="math inline">\(n\)</span> elementos es:</li>
+</ol>
+<p><span class="math display">\[nCk = {n\choose k}:= \frac{n!}{k!(n-k)!},\quad \text{siendo}\quad {n\choose 0}:=1\]</span></p>
+<ol start="2" type="a">
+<li>El número de combinaciones de <span class="math inline">\(k\)</span> objetos seleccionados (<strong>con repetición</strong>) de un conjunto de <span class="math inline">\(n\)</span> elementos es:</li>
+</ol>
+<p><span class="math display">\[{n+k-1\choose k} = \frac{(n+k-1)!}{k!(n-1)!},\quad    \text{siendo}\quad {n\choose 0}:=1\]</span></p>
+<p><strong>Comentario</strong></p>
+<p>Los números <span class="math inline">\({n\choose k}\)</span> se conocen con el nombre de coeficiente binomial porque aparecen como coeficientes de <span class="math inline">\(a^kb^{n-k}\)</span>, con <span class="math inline">\(0\leq k\leq n,\)</span>, en el desarrollo binomial de <span class="math inline">\((a+b)^n\)</span> como se muestra a continuación:</p>
+<p><span class="math display">\[(a+b)^n= \sum\limits_{k=0}^n {n\choose k}a^kb^{n-k}, \qquad \text{para todo $a,b\in R$}.\]</span></p>
+<p><strong>Ejemplo 14</strong></p>
+<p>Ver casos 3 y 4 del ejemplo de la sección 6.</p>
+<p><strong>Ejemplo 15</strong></p>
+<p>De un total de 5 matemáticos y 7 físicos se forma un comité de 2 matemáticos y 3 físicos. ¿De cuántas maneras puede formarse si:</p>
+<ol type="a">
+<li><p>Puede pertenecer a él cualquier matemático y físico.</p></li>
+<li><p>Un físico determinado debe pertenecer al comité.</p></li>
+<li><p>Dos matemáticos determinados no pueden pertenecer al comité?</p></li>
+</ol>
+<p><em>Solución de la parte (a)</em>.</p>
+<p>2 matemáticos, de un total de 5, pueden elegirse de <span class="math inline">\({5\choose 2}=10\)</span> maneras. Ahora, 3 físicos de un total de 7 pueden elegirse de <span class="math inline">\({7\choose 3}=35\)</span> maneras. Por consiguiente, <span class="math display">\[\text{número total de selecciones posibles} \;= \; 10 \cdot 35 \; =\; 350.\]</span></p>
+<p><em>Solución de la parte (b)</em>.</p>
+<p>2 matemáticos, de un total de 5, pueden elegirse de <span class="math inline">\({5\choose 2}=10\)</span> maneras. Ahora, 2 físicos restantes, de un total de 6, pueden elegirse de <span class="math inline">\({6\choose 2}=15\)</span> maneras. Por consiguiente, <span class="math display">\[\text{número total de selecciones posibles} \;= \; 10 \cdot 15 \; =\; 150.\]</span></p>
+<p><em>Solución de la parte (c)</em>.</p>
+<p>2 matemáticos, de un total de 3, pueden elegirse de <span class="math inline">\({3\choose 2}=3\)</span> maneras. Ahora, 3 físicos, de un total de 7, pueden elegirse de <span class="math inline">\({7\choose 3}=35\)</span> maneras. Por consiguiente,</p>
+<p><span class="math display">\[ \text{número total de selecciones posibles} \;= \; 3 \cdot 35 \; =\; 105.\]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="modelos-de-urna-con-r" class="level1" data-number="16">
+<h1 data-number="16"><span class="header-section-number">16</span> Modelos de urna (con R)</h1>
+<section id="muestreo-con-orden-y-con-reemplazo" class="level3" data-number="16.0.1">
+<h3 data-number="16.0.1" class="anchored" data-anchor-id="muestreo-con-orden-y-con-reemplazo"><span class="header-section-number">16.0.1</span> Muestreo con orden y con reemplazo</h3>
+<p>Supongamos que tenemos una caja con tres (3) elementos, etiquetados con 1, 2 y 3, respectivamente y que vamos a seleccionar una muestra de tamaño 2 de la caja (con orden y con reemplazo).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">urnsamples</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)    <span class="co">#A) Con orden y con reemplazo</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   Var1 Var2
+## 1    1    1
+## 2    2    1
+## 3    3    1
+## 4    1    2
+## 5    2    2
+## 6    3    2
+## 7    1    3
+## 8    2    3
+## 9    3    3</code></pre>
+</div>
+</div>
+<p>Este experimento es equivalente a lanzar dos veces un dado de 3 caras, lo que podríamos haber logrado con:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rolldie</span> (<span class="dv">2</span>, <span class="at">nsides =</span> <span class="dv">3</span>)      <span class="co">#B) Dado de tres caras</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="muestreo-con-orden-y-sin-reemplazo" class="level3" data-number="16.0.2">
+<h3 data-number="16.0.2" class="anchored" data-anchor-id="muestreo-con-orden-y-sin-reemplazo"><span class="header-section-number">16.0.2</span> Muestreo con orden y sin reemplazo</h3>
+<p>Supongamos que tenemos una caja con tres (3) elementos, etiquetados con 1, 2 y 3, respectivamente y que vamos a seleccionar una muestra de tamaño 2 de la caja (con orden y sin reemplazo).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">urnsamples</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)    <span class="co">#C) Con orden y sin reemplazo</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##   Var1 Var2
+## 1    1    1
+## 2    2    1
+## 3    3    1
+## 4    1    2
+## 5    2    2
+## 6    3    2
+## 7    1    3
+## 8    2    3
+## 9    3    3</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="muestreo-sin-orden-y-con-reemplazo" class="level3" data-number="16.0.3">
+<h3 data-number="16.0.3" class="anchored" data-anchor-id="muestreo-sin-orden-y-con-reemplazo"><span class="header-section-number">16.0.3</span> Muestreo sin orden y con reemplazo</h3>
+<p>Supongamos que tenemos una caja con tres (3) elementos, etiquetados con 1, 2 y 3, respectivamente y que vamos a seleccionar una muestra de tamaño 2 de la caja (sin orden y con reemplazo).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">urnsamples</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">ordered =</span> <span class="cn">FALSE</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)     <span class="co">#D) Sin orden y con reemplazo</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##      [,1] [,2]
+## [1,]    1    2
+## [2,]    1    3
+## [3,]    2    3</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="muestreo-sin-orden-y-sin-reemplazo" class="level3" data-number="16.0.4">
+<h3 data-number="16.0.4" class="anchored" data-anchor-id="muestreo-sin-orden-y-sin-reemplazo"><span class="header-section-number">16.0.4</span> Muestreo sin orden y sin reemplazo</h3>
+<p>Supongamos que tenemos una caja con tres (3) elementos, etiquetados con 1, 2 y 3, respectivamente y que vamos a seleccionar una muestra de tamaño 2 de la caja (con orden y sin reemplazo).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">urnsamples</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">ordered =</span> <span class="cn">FALSE</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)     <span class="co">#E) Sin orden y con reemplazo</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##      [,1] [,2]
+## [1,]    1    2
+## [2,]    1    3
+## [3,]    2    3</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+</section>
+<section id="conteo-con-r" class="level1" data-number="17">
+<h1 data-number="17"><span class="header-section-number">17</span> Conteo (con R)</h1>
+<section id="ejemplo" class="level3" data-number="17.0.1">
+<h3 data-number="17.0.1" class="anchored" data-anchor-id="ejemplo"><span class="header-section-number">17.0.1</span> Ejemplo</h3>
+<p>Si se le pide a un consumidor que ordene, por orden de preferencia, el sabor de cinco marcas de cerveza, entonces el número de permutaciones que resultan será <span class="math inline">\(5!=120\)</span>. Con R se puede calcular de dos maneras:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factorial</span>(<span class="dv">5</span>)                   <span class="co">#A) Factorial</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nsamp</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>)    <span class="co">#B) Sin reemplazo, con orden    </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 120</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="ejemplo-1" class="level3" data-number="17.0.2">
+<h3 data-number="17.0.2" class="anchored" data-anchor-id="ejemplo-1"><span class="header-section-number">17.0.2</span> Ejemplo</h3>
+<p>Supongamos que se quiere seleccionar (con orden) una muestra de tamaño 2 de una urna con 3 elementos disponibles. Si es con reemplazo, tendríamos 9 posibilidades, pero, sin reemplazo, solo 6. Con R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nsamp</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">k =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>)     <span class="co">#C) Con reemplazo, con orden</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nsamp</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">k =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>)    <span class="co">#D) Sin reemplazo, con orden    </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 9</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 6</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="ejemplo-2" class="level3" data-number="17.0.3">
+<h3 data-number="17.0.3" class="anchored" data-anchor-id="ejemplo-2"><span class="header-section-number">17.0.3</span> Ejemplo</h3>
+<p>El número de formas diferentes en que se pueden sentar 8 alumnos en una oficina con sólo 5 sillas es <span class="math inline">\(\frac{8!}{(8-5)!} =6720\)</span>. Con R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nsamp</span>(<span class="at">n =</span> <span class="dv">8</span>, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>)     <span class="co">#E) Sin reemplazo, con orden</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 6720</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 2 -->
+</section>
+<section id="ejemplo-3" class="level3" data-number="17.0.4">
+<h3 data-number="17.0.4" class="anchored" data-anchor-id="ejemplo-3"><span class="header-section-number">17.0.4</span> Ejemplo</h3>
+<p>Un comité, de 3 mujeres de un grupo de 8, se puede escoger de <span class="math inline">\({8\choose 3}= 56\)</span> maneras. En R se puede calcular de dos maneras:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">choose</span>(<span class="dv">8</span>,<span class="dv">3</span>)                                             <span class="co">#A) Coeficiente binomial</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nsamp</span>(<span class="at">n =</span> <span class="dv">8</span>, <span class="at">k =</span> <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">ordered =</span> <span class="cn">FALSE</span>)   <span class="co">#B) Sin reemplazo, sin orden</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 56</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 2 -->
+</section>
+<section id="ejemplo-4" class="level3" data-number="17.0.5">
+<h3 data-number="17.0.5" class="anchored" data-anchor-id="ejemplo-4"><span class="header-section-number">17.0.5</span> Ejemplo</h3>
+<p>Supongamos que se quiere seleccionar (sin orden) una muestra de tamaño 2 de una urna con 3 elementos disponibles. Si es sin reemplazo, tendríamos 3 posibilidades, pero, con reemplazo, solo 6. Con R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nsamp</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">k =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">ordered =</span> <span class="cn">FALSE</span>)   <span class="co">#C) Sin reemplazo, sin orden</span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nsamp</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">k =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">ordered =</span> <span class="cn">FALSE</span>)    <span class="co">#D) Con reemplazo, sin orden</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 3</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 6</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+<section id="ejemplo-5" class="level3" data-number="17.0.6">
+<h3 data-number="17.0.6" class="anchored" data-anchor-id="ejemplo-5"><span class="header-section-number">17.0.6</span> Ejemplo</h3>
+<p>Cuatro libros distintos de matemáticas, seis diferentes de física y dos diferentes de química se colocan en un estante. Determinar el número de formas distintas de ordenar los 12 libros si los libros de cada asignatura deben estar todos juntos.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+<section id="solución" class="level4 unnumbered unlisted">
+<h4 class="unnumbered unlisted anchored" data-anchor-id="solución">Solución</h4>
+<p>Los libros de matemáticas pueden ordenarse de <span class="math inline">\(4!=24\)</span> formas, los de física de <span class="math inline">\(6!=720\)</span> formas y los de química de <span class="math inline">\(2!=2\)</span> formas. En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">factorial</span>(<span class="dv">4</span>)    <span class="co">#A) Matemática</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">factorial</span>(<span class="dv">6</span>)    <span class="co">#B) Física</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="fu">factorial</span>(<span class="dv">2</span>)    <span class="co">#C) Química</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Los tres grupos se pueden ordenar de <span class="math inline">\(3!=6\)</span> formas. En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">factorial</span>(<span class="dv">3</span>)    <span class="co">#D) Los tres grupos de libros</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Por consiguiente, por el teorema fundamental del conteo, el número posible de maneras de ordenar los libros es (los libros de cada asignatura deben estar todos juntos): <span class="math display">\[ 4!\, 6! \, 2! \, 3! \;= \; 207.360\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>M<span class="sc">*</span>f<span class="sc">*</span>Q<span class="sc">*</span>G  <span class="co">#E) Permutación buscada</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 207360</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="ejemplo-6" class="level3" data-number="17.0.7">
+<h3 data-number="17.0.7" class="anchored" data-anchor-id="ejemplo-6"><span class="header-section-number">17.0.7</span> Ejemplo</h3>
+<p>De un total de 5 matemáticos y 7 físicos se forma un comité de 2 matemáticos y 3 físicos. El objetivo ahora es determinar el número de posible maneras puede formarlo si un físico determinado debe pertenecer al comité. Entonces:</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+<section id="solución-1" class="level4 unnumbered unlisted">
+<h4 class="unnumbered unlisted anchored" data-anchor-id="solución-1">Solución</h4>
+<p>Tenemos que 2 matemáticos (de un total de 5) pueden elegirse de <span class="math inline">\({5\choose 2}=10\)</span> maneras y que 2 físicos restantes (de un total de 6) pueden elegirse de <span class="math inline">\({6\choose 2}=15\)</span> maneras. En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>M<span class="ot">&lt;-</span> <span class="fu">choose</span>(<span class="dv">5</span>,<span class="dv">2</span>)     <span class="co">#A) Matemáticos</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>F<span class="ot">&lt;-</span> <span class="fu">choose</span>(<span class="dv">6</span>,<span class="dv">2</span>)     <span class="co">#B) Físicos</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Por consiguiente, el número total de selecciones posibles es <span class="math inline">\(10 \cdot 15 = 150\)</span>. En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>M<span class="sc">*</span>F        <span class="co">#C) Combinación buscada</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 150</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo -->
+</section>
+</section>
+</section>
+<section id="ejemplos-asociación-de-los-temas-con-la-realidad" class="level1" data-number="18">
+<h1 data-number="18"><span class="header-section-number">18</span> Ejemplos (asociación de los temas con la realidad)</h1>
+<section id="ejemplo-enunciado-baloto" class="level3" data-number="18.0.1">
+<h3 data-number="18.0.1" class="anchored" data-anchor-id="ejemplo-enunciado-baloto"><span class="header-section-number">18.0.1</span> Ejemplo: enunciado (Baloto)</h3>
+<center>
+<p><img src="Baloto1.png" class="img-fluid" width="700"></p>
+</center>
+<p>Baloto es un juego de azar de tipo loto en línea, donde el participante apuesta por un acumulado multimillonario seleccionando <em>cinco números</em> del 1 al 43 (sin repetición) y una <em>súper balota</em> adicional del 1 al 16, a través de una terminal de venta. La apuesta tiene un valor de 6.000 pesos colombianos. Según información actualizada al 27 de julio de 2025 (12:35 a. m.), cerca de 40.000 personas resultaron ganadoras de premios en las modalidades Baloto y Revancha, con un acumulado en juego de 11.400 millones de pesos colombianos para Baloto y 25.600 millones de pesos colombianos para Revancha. Estos y otros detalles pueden consultarse en el <a href="https://baloto.com/">sitio web oficial</a>.</p>
+<center>
+<p><img src="Baloto2.png" class="img-fluid" width="700"></p>
+</center>
+<p>El objetivo es determinar el número de posibilidades que tenemos en sacar las 6 balotas con las condiciones descritas anteriormente.</p>
+</section>
+<section id="ejemplo-solución-baloto" class="level3" data-number="18.0.2">
+<h3 data-number="18.0.2" class="anchored" data-anchor-id="ejemplo-solución-baloto"><span class="header-section-number">18.0.2</span> Ejemplo: solución (Baloto)</h3>
+<p>Se deben escoger 6 números. Entonces:</p>
+<ul>
+<li><p>Para el primer número, hay 43 opciones de elegir un número.</p></li>
+<li><p>Para el segundo número, hay 42 opciones de escogencia, porque no pueden repetirse.</p></li>
+<li><p>Para el tercer número, hay 41 opciones.</p></li>
+<li><p>Para el cuarto, hay 40 opciones.</p></li>
+<li><p>Para el quinto, hay 39 opciones.</p></li>
+<li><p>Para el sexto 16 opciones.</p></li>
+</ul>
+<p>Para conocer el número total de opciones se aplica el <em>teorema fundamental del conteo</em>: se multiplican las opciones por cada número. Es decir:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Permutaciones sin reemplazo de 5 números del 1 al 43</span></span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a>permutaciones_5 <span class="ot">&lt;-</span> <span class="fu">prod</span>(<span class="dv">43</span><span class="sc">:</span><span class="dv">39</span>)</span>
+<span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-4"><a href="#cb110-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Súper balota del 1 al 16</span></span>
+<span id="cb110-5"><a href="#cb110-5" aria-hidden="true" tabindex="-1"></a>super_balota <span class="ot">&lt;-</span> <span class="dv">16</span></span>
+<span id="cb110-6"><a href="#cb110-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-7"><a href="#cb110-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Total de combinaciones posibles</span></span>
+<span id="cb110-8"><a href="#cb110-8" aria-hidden="true" tabindex="-1"></a>total_con_orden <span class="ot">&lt;-</span> permutaciones_5 <span class="sc">*</span> super_balota</span>
+<span id="cb110-9"><a href="#cb110-9" aria-hidden="true" tabindex="-1"></a>total_con_orden</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="math display">\[43 \cdot 42\cdot 41\cdot 40\cdot 39\cdot 16 \;=\; 1.848´188.160\]</span></p>
+<p>Este resultado corresponde al número de casos posibles, el cual es muy grande, ya que debe seleccionar uno de esa cantidad. Esto indica lo difícil que es ganarse el baloto.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+</section>
+<section id="ejercicios" class="level1" data-number="19">
+<h1 data-number="19"><span class="header-section-number">19</span> Ejercicios</h1>
+<section id="ejercicio-1" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-1">Ejercicio 1</h3>
+<p>Dado el experimento aleatorio, encuentre los elementos de los eventos indicados abajo, el número de elementos que contiene y el tamaño de la muestra. Explique siempre sus afirmaciones e interprete los resultados hallados.</p>
+<p>Experimento: Un dado se lanza dos veces.</p>
+<ol type="a">
+<li><span class="math inline">\(\Omega\)</span>: El espacio muestral.</li>
+<li>Evento B: La suma de los números es 7.</li>
+<li>Evento C: La suma de los números es por lo menos un 11.</li>
+<li>Evento D: La suma de los números es a lo más un 2.</li>
+<li>Evento E: Se obtiene un doble.</li>
+<li>Evento F: No se obtiene un doble.</li>
+<li>Unión de B y F.</li>
+<li>Interseción de C y E.</li>
+<li>Diferencia C-F.</li>
+<li>Evento J: Unión de E y F. Verifique si J es igual a <span class="math inline">\(\Omega\)</span>.</li>
+<li>Intersección de C y D.</li>
+<li>Diferencia de B y D.</li>
+<li>Evento M: Contiene los elementos de la forma (3,4), ordenados.</li>
+<li>Evento N: Contiene los elementos de la forma (3,4), no ordenados. Compare con el evento M.</li>
+</ol>
+</section>
+<section id="ejercicio-2" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-2">Ejercicio 2</h3>
+<p>Dado el experimento aleatorio, encuentre los elementos de los eventos indicados abajo, el número de elementos que contiene y el tamaño de la muestra. Explique siempre sus afirmaciones e interprete los resultados hallados.</p>
+<p>Experimento: Una moneda se lanza cuatro veces.</p>
+<ol type="a">
+<li><span class="math inline">\(\Omega\)</span>: El espacio muestral.</li>
+<li>Evento B: Los primeros 2 elementos.<br>
+</li>
+<li>Evento C: Los primeros 5 elementos.</li>
+<li>Unión de B y C.</li>
+<li>Intersección de B y C.</li>
+<li>Diferencia B-C.</li>
+<li>Diferencia C-B.</li>
+<li>Evento H: El complemento de B.</li>
+<li>Evento I: El complemento de C</li>
+<li>Intersección de B y H.</li>
+<li>Evento K: Unión de C y I. Verifique si K es igual a <span class="math inline">\(\Omega\)</span>.</li>
+<li>Evento L: Salgan 2 caras.<br>
+</li>
+<li>Evento M: Salgan 3 caras.</li>
+</ol>
+</section>
+<section id="ejercicio-3" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-3">Ejercicio 3</h3>
+<p>Sea</p>
+<p><span class="math display">\[\Omega=\{0,1,2,3,4,5,6,7,8,9\}\]</span></p>
+<p>el espacio muestral correspondiente a un experimento aleatorio dado. Sean <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(C\)</span> y <span class="math inline">\(D\)</span> eventos de <span class="math inline">\(\Omega\)</span> definidos por</p>
+<p><span class="math display">\[A=\{0,1, 2, 3\}, \quad B=\{4, 5, 6, 7\}, \quad C=\{2, 4, 6\}, \quad  D=\{1, 8, 9\}\]</span></p>
+<p>Liste los elementos de los conjuntos que corresponden a los siguientes eventos:</p>
+<ol type="a">
+<li><p><span class="math inline">\(A\cup D\)</span>.</p></li>
+<li><p><span class="math inline">\(B\cap C\)</span>.</p></li>
+<li><p><span class="math inline">\(\overline{D}\)</span>.</p></li>
+<li><p><span class="math inline">\((\overline{D}\cap A)\cup C\)</span>.</p></li>
+<li><p><span class="math inline">\(\overline{\Omega\cap B}\)</span>.</p></li>
+<li><p><span class="math inline">\(B\cap C\cap \overline{D}\)</span>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-4" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-4">Ejercicio 4</h3>
+<p>Señale la región de la figura de abajo que representa a cada evento:</p>
+<ol type="a">
+<li><p><span class="math inline">\(A\cup B\cup C\)</span>.</p></li>
+<li><p><span class="math inline">\(A\cap B\cap C\)</span>.</p></li>
+<li><p><span class="math inline">\(A\cap B\cap \overline{C}\)</span>.</p></li>
+<li><p><span class="math inline">\(\overline{A}\cap B\cap C\)</span>.</p></li>
+<li><p><span class="math inline">\(\overline{A}\cap \overline{B}\cap \overline{C}\)</span>.</p></li>
+<li><p><span class="math inline">\((\overline{A\cup B}) \cap C\)</span>.</p></li>
+<li><p><span class="math inline">\(A\cup(\overline{B\cap C})\)</span>.</p></li>
+<li><p><span class="math inline">\(\overline{A\cup B\cup C}\)</span>.</p></li>
+</ol>
+<center>
+<p><img src="Librocap1Ex8.png" class="img-fluid" width="350"></p>
+</center>
+</section>
+<section id="ejercicio-5" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-5">Ejercicio 5</h3>
+<p>Sean <span class="math inline">\(\Omega\)</span> el evento de todos los turistas que visitaron a Barranquilla durante un fin de semana, y <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span> y <span class="math inline">\(C\)</span> los eventos formados por los turistas que visitaron el Museo Romántico, el Zoológico y Bocas de Cenizas, respectivamente. Exprese con palabras las regiones indicadas a continuación teniendo en cuenta la figura de abajo:</p>
+<ol type="a">
+<li><p>Región 1.</p></li>
+<li><p>Regiones 1, 2, 3, 4, 5, 6 y 7 juntas.</p></li>
+<li><p>Región 8.</p></li>
+<li><p>Regiones 1 y 4 juntas.</p></li>
+<li><p>Regiones 4, 5, 7 y 8 juntas.</p></li>
+<li><p>Regiones 5, 6 y 7.</p></li>
+<li><p>Regiones 2, 3, y 4 juntas.</p></li>
+</ol>
+<center>
+<p><img src="Librocap1Ex9.png" class="img-fluid" width="350"></p>
+</center>
+</section>
+<section id="ejercicio-6" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-6">Ejercicio 6</h3>
+<p>En una encuesta realizada en un colegio de la ciudad a un total de 150 alumnos se encontró: 54 estudian álgebra; 89, inglés; 80, ciencias naturales; 60, ciencias naturales e inglés; 10, sólo álgebra; 20, álgebra y ciencias naturales; 15, las tres materias simultáneamente. Determine el número de alumnos que conforman los siguientes eventos:</p>
+<ol type="a">
+<li><p>Estudian álgebra e inglés pero no ciencias naturales.</p></li>
+<li><p>Estudian sólo una materia.</p></li>
+<li><p>Estudian a lo sumo dos materias.</p></li>
+</ol>
+<p><em>Sugerencia</em>: Defina los eventos <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span> y <span class="math inline">\(C\)</span> como se indican en el diagrama de Venn de abajo, complételo con las frecuencias correspondientes y aplique propiedades las operaciones con conjuntos para resolver cada inciso.</p>
+<center>
+<p><img src="Librocap1Ex10.png" class="img-fluid" width="350"></p>
+</center>
+</section>
+<section id="ejercicio-7" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-7">Ejercicio 7</h3>
+<p>Una universidad realiza tres tipos de pruebas a 100 aspirantes y obtiene los siguientes resultados: 2 fracasaron en las tres pruebas; 7, en la primera y en la segunda; 8, en la segunda y en la tercera; 10, en la primera y en la tercera; 25, en la primera; 30, en la segunda; 25, en la tercera. Determine el número de aspirantes que conforman los siguientes eventos: (a) Fracasaron exactamente en una prueba.</p>
+<ol start="2" type="a">
+<li><p>Aprobaron las tres pruebas.</p></li>
+<li><p>Fracasaron en la primera y en la tercera pero no en la segunda.</p></li>
+<li><p>Fracasaron en la segunda y en la tercera pero no en la primera.</p></li>
+<li><p>Fracasaron en al menos una prueba.</p></li>
+<li><p>Aprobaron al menos una prueba.</p></li>
+<li><p>Aprobaron la segunda o la tercera pero no la primera.</p></li>
+</ol>
+<p><em>Sugerencia</em>: Defina los eventos <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span> y <span class="math inline">\(C\)</span> como se indican en el diagrama de Venn de abajo, complételo con las frecuencias correspondientes y aplique propiedades las operaciones con conjuntos para resolver cada inciso.</p>
+<center>
+<p><img src="Librocap1Ex11.png" class="img-fluid" width="350"></p>
+</center>
+</section>
+<section id="ejercicios-8-a-14" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicios-8-a-14">Ejercicios 8 a 14</h3>
+<ol start="8" type="1">
+<li><p>Los estudiantes de un curso de estadística se clasifican como estudiantes de administración, economía o ingeniería; como repitente o no repitente y también como hombre o mujer. Encuentre el número total de clasificaciones posibles para los estudiantes de dicho curso.</p></li>
+<li><p>¿De cuántas maneras diferentes se puede responder un cuestionario de falso-verdadero que tiene 10 preguntas?</p></li>
+<li><p>¿De cuántas maneras pueden sentarse tres hombres y tres mujeres en una fila con seis puestos si se deben alternar?</p></li>
+<li><p>¿Cuántas palabras diferentes se pueden formar con la palabra “Barranquilla” (las palabras no necesariamente deben tener sentido) si (a) no hay restricción alguna, (b) la primera letra debe ser una “q” y la última una “a”.</p></li>
+<li><p>Las placas para autos en Barranquilla antes tenían dos letras y cuatro números. El sistema de nomenclatura cambió y ahora son de tres letras y tres números. Con el sistema actual, ¿aumentó o disminuyó el número de placas que se pueden emitir? ¿En qué porcentaje?</p></li>
+<li><p>¿De cuántas maneras se pueden parquear siete carros, de modelos distintos, en una calle si hay tres zonas disponibles en un lado de la calle y cuatro en el lado opuesto?</p></li>
+<li><p>La mayor accionista de una determinada empresa decide que en el futuro se divida el presupuesto de publicidad entre tres agencias. Seis son las agencias que están siendo consideradas para este trabajo. ¿Cuántas son las posibles elecciones de tres agencias?</p></li>
+</ol>
+</section>
+<section id="ejercicio-15" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-15">Ejercicio 15</h3>
+<p>Dados los dígitos 0, 2, 4, 5, 6, 8 y 9. Si no se aceptan repeticiones:</p>
+<ol type="a">
+<li><p>¿Cuántos números de tres dígitos se pueden formar?</p></li>
+<li><p>¿Cuántos de esos números son múltiplos de 5?</p></li>
+</ol>
+</section>
+<section id="ejercicio-16" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-16">Ejercicio 16</h3>
+<p>Supongamos que 7 personas se quieren organizar en una fila.</p>
+<ol type="a">
+<li><p>¿De cuántas maneras diferentes pueden hacerlo?</p></li>
+<li><p>¿De cuántas maneras diferentes pueden hacerlo si una de ellas no debe estar al comienzo de la fila?</p></li>
+</ol>
+</section>
+<section id="ejercicio-17" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-17">Ejercicio 17</h3>
+<p>Una persona ha visto un accidente de tránsito cuyo culpable huyó. A pesar de esto le dice a la Policía que la placa del carro en el que viajaba el culpable tenía tres letras (de las cuales las dos primeras eran C y A) y tres dígitos (de los cuales el último era 0). Encuentre el número máximo de placas de carro que la Policía debe verificar bajo cada una de las siguientes condiciones (nuestro alfabeto tiene 27 letras):</p>
+<ol type="a">
+<li><p>Las tres letras son diferentes y los tres dígitos también.</p></li>
+<li><p>Las tres letras son diferentes y los dos dígitos que faltan son diferentes entre sí.</p></li>
+<li><p>La letra que hace falta es diferente de la A y los dígitos que hacen falta son diferentes e impares.</p></li>
+</ol>
+</section>
+<section id="ejercicio-18" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-18">Ejercicio 18</h3>
+<p>Supongamos que se quieren formar números de tres dígitos con los dígitos 0, 2, 4, 5, 7, 8 y 9.</p>
+<ol type="a">
+<li><p>¿Cuántos números resultan si los dígitos pueden estar repetidos?</p></li>
+<li><p>¿Cuántos números resultan si cada dígito puede usarse sólo una vez?</p></li>
+<li><p>¿Cuántos números resultan si los números resultantes son impares y si los dígitos pueden estar repetidos?</p></li>
+<li><p>¿Cuántos números resultan si los números resultantes son pares y si cada dígito puede usarse sólo una vez?</p></li>
+<li><p>¿Cuántos números son menores que 440 y si los dígitos pueden estar repetidos?</p></li>
+<li><p>¿Cuántos números resultan si el primer dígito es 5 y si cada dígito puede usarse sólo una vez?</p></li>
+</ol>
+</section>
+<section id="ejercicio-19" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-19">Ejercicio 19</h3>
+<p>¿Son las siguientes afirmaciones verdaderas o falsas? Justifique cada respuesta.</p>
+<ol type="a">
+<li><p>Si A y B son mutuamente excluyentes, entonces también lo son sus complementos.</p></li>
+<li><p>Un evento y su complemento son mutuamente excluyentes.</p></li>
+<li><p>Si dos eventos son mutuamente excluyentes, entonces son colectivamente exhaustivos.</p></li>
+<li><p>Si dos sucesos son colectivamente exhaustivos, entonces son mutuamente excluyentes.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="ejercicio-20" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-20">Ejercicio 20</h3>
+<p>De un conjunto <span class="math display">\[B\;=\; \{x\in \mathbb{N}
+\; / \; \forall t\in \mathbb{R}
+:\, \frac{1}{4}t^2-t + 7-x+ \sqrt{68-x^2}\, \geq \,0\} \]</span></p>
+<p>se sacan tres números sin reemplazo.</p>
+<ol type="a">
+<li>¿De cuántas maneras se pueden extraer 3 números sin reemplazo cuya suma sea par?</li>
+</ol>
+<ol start="2" type="a">
+<li>¿Cuántos subconjuntos de 3 elementos contienen al menos un número primo y al menos un cuadrado perfecto?</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="ejercicio-21" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-21">Ejercicio 21</h3>
+<p>Sean <span class="math inline">\(\Omega=\{000, 001, 010, 100, 011, 101, 110, 111\}\)</span>, <span class="math inline">\(S(\omega)\)</span> la suma de las cifras de <span class="math inline">\(\omega\in \Omega\)</span> y <span class="math inline">\(A_i=\{\omega \, / \,
+S(\omega)=i\}\)</span> para <span class="math inline">\(i=0,1,2,3\)</span>.</p>
+<ol type="a">
+<li><p>¿Forman estos conjuntos una descomposición (partición) de <span class="math inline">\(\Omega\)</span>, es decir, si <span class="math inline">\(A_i\cap A_j = \emptyset\)</span> para <span class="math inline">\(i\ne j\)</span> y <span class="math inline">\(\bigcup\limits_{i=0}^3 A_i = \Omega\)</span>?</p></li>
+<li><p>¿Valdrá esto también si <span class="math inline">\(\Omega\)</span> consiste de todos los números de <span class="math inline">\(n\)</span> puestos, compuestos de ceros y unos e <span class="math inline">\(i=0,1, \ldots, n\)</span>?</p></li>
+<li><p>¿Cuántos elementos tiene este conjunto <span class="math inline">\(\Omega\)</span>?</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="ejercicio-22" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-22">Ejercicio 22</h3>
+<p>Una torre camina en un tablero de ajedrez con un solo paso desde la esquina inferior izquierda hasta la esquina superior derecha pasando solamente hacia arriba o hacia la derecha.</p>
+<ol type="a">
+<li><p>De cuántas maneras diferentes puede hacer esto?</p></li>
+<li><p>Responda (a) para el caso en que el tablero sea de <span class="math inline">\(n\times n\)</span>.</p></li>
+</ol>
+<p><strong>Sugerencia:</strong> Marque un paso hacia arriba con un 0 y uno hacia la derecha con un 1.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="ejercicio-23" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-23">Ejercicio 23</h3>
+<p>¿Cuántos divisores tiene el número 100.000.000?</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador -->
+</section>
+<section id="ejercicio-24" class="level3 unnumbered unlisted">
+<h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-24">Ejercicio 24</h3>
+<p>Sea <span class="math inline">\(A=\{1, 2, \ldots, r\}\)</span> y <span class="math inline">\(B=\{1, 2, \ldots, s\}\)</span>. ¿Cuántas funciones diferentes <span class="math inline">\(F:A\to B\)</span> existen?</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+</section>
+<section id="otros-ejercicios" class="level1" data-number="20">
+<h1 data-number="20"><span class="header-section-number">20</span> Otros ejercicios</h1>
+<ol type="1">
+<li><p>Tener en cuenta la <a href="https://editorial.uninorte.edu.co/gpd-estadistica-descriptiva-y-distribuciones-de-probabilidad.html">bibliografía complementaria No.&nbsp;2</a> y realizar los ejercicios que aparecen en:</p>
+<ul>
+<li><p>La Sección 2.1 (página 110): <em>Experimentos, espacios muestrales y eventos</em>.</p></li>
+<li><p>La Sección 2.2 (página 133): <em>Modelos de urna y técnicas de conteo</em>.</p></li>
+<li><p>La Sección de Ejercicios Complementarios (página 175).</p></li>
+</ul></li>
+<li><p>Al hacer <a href="https://github.com/hllinas/Mis-R-Script-Papers">click aquí</a>, usted encontrará una serie de artículos publicados en diferentes áreas de aplicación. Seleccione algunos de ellos y aplique la teoría explicada en este documento.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="texto-guía" class="level1 unnumbered">
+<h1 class="unnumbered">Texto guía</h1>
+<ol type="1">
+<li>Llinás, H. (2014). <a href="https://editorial.uninorte.edu.co/gpd-introduccion-a-la-teoria-de-la-probabilidad.html">Introducción a la teoría de probabibilidad</a>. Barranquilla: Editorial Universidad del Norte.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="bibliografía-complementaria" class="level1 unnumbered">
+<h1 class="unnumbered">Bibliografía complementaria</h1>
+<ol start="2" type="1">
+<li><p>LLinás, H., Rojas, C. (2005). <a href="https://editorial.uninorte.edu.co/gpd-estadistica-descriptiva-y-distribuciones-de-probabilidad.html">Estadística descriptiva y distribuciones de probabilidad</a>. Barranquilla: Editorial Universidad del Norte.</p></li>
+<li><p>Consultar mis <a href="https://rpubs.com/hllinas/Est1_toc">Notas de clase en Estadística I</a>.</p></li>
+<li><p>Consultar mis Notas de clase: <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/1.%20Estad%C3%ADstica%20b%C3%A1sica">Cap. 2 (Descriptiva)</a>.</p></li>
+<li><p>Consultar mis <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/8.%20Teor%C3%ADa%20de%20probabilidad%20(Pregrado)">otras Notas de clase</a>.</p></li>
+<li><p>Apéndice de tablas y diagramas: <a href="https://github.com/hllinas/NotasClase-Publicos/blob/main/6.%20Estadistica%20Math%20(MgStat.Aplic)/Apendice%20(diagrama-%20tabla).pdf">Click aquí</a>.</p></li>
+<li><p>Consultar el documento <a href="https://rpubs.com/hllinas/R_Enlaces_Materiales">RPubs :: Enlace y materiales de ayuda</a>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<hr>
+<p><em>If you found any errors or have suggestions, please write to <a href="mailto:hllinas@uninorte.edu.co">hllinas@uninorte.edu.co</a>. Thank you.</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Department of Mathematics, Physics and Data Science · Universidad del Norte</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
