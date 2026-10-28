@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;rer. nat. Humberto Llinás Solano">
+
+<title>DISTRIBUCIONES DISCRETAS EN R – Humberto Llinás Solano | Teaching and Research</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4055b843e89d92f89939b863a308fe4a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Humberto Llinás Solano | Teaching and Research</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://hllinas.github.io/toc/"> 
+<span class="menu-text">My Publications and Teaching Materials (toc)</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#paquetes" id="toc-paquetes" class="nav-link active" data-scroll-target="#paquetes"><span class="header-section-number">1</span> Paquetes</a></li>
+  <li><a href="#funciones" id="toc-funciones" class="nav-link" data-scroll-target="#funciones"><span class="header-section-number">2</span> Funciones</a>
+  <ul>
+  <li><a href="#función-tosscoinn" id="toc-función-tosscoinn" class="nav-link" data-scroll-target="#función-tosscoinn"><span class="header-section-number">2.0.1</span> Función <code>tosscoin(n)</code></a></li>
+  <li><a href="#función-rolldien" id="toc-función-rolldien" class="nav-link" data-scroll-target="#función-rolldien"><span class="header-section-number">2.0.2</span> Función <code>rolldie(n)</code></a></li>
+  <li><a href="#función-isin" id="toc-función-isin" class="nav-link" data-scroll-target="#función-isin"><span class="header-section-number">2.0.3</span> Función <code>isin()</code></a></li>
+  <li><a href="#función-urnsamples" id="toc-función-urnsamples" class="nav-link" data-scroll-target="#función-urnsamples"><span class="header-section-number">2.0.4</span> Función <code>urnsamples()</code></a></li>
+  <li><a href="#función-nsamp" id="toc-función-nsamp" class="nav-link" data-scroll-target="#función-nsamp"><span class="header-section-number">2.0.5</span> Función <code>nsamp()</code></a></li>
+  </ul></li>
+  <li><a href="#variable-aleatoria" id="toc-variable-aleatoria" class="nav-link" data-scroll-target="#variable-aleatoria"><span class="header-section-number">3</span> Variable aleatoria</a></li>
+  <li><a href="#función-de-probabilidad" id="toc-función-de-probabilidad" class="nav-link" data-scroll-target="#función-de-probabilidad"><span class="header-section-number">4</span> Función de probabilidad</a>
+  <ul>
+  <li><a href="#definición-de-f" id="toc-definición-de-f" class="nav-link" data-scroll-target="#definición-de-f"><span class="header-section-number">4.0.1</span> Definición de <span class="math inline">\(f\)</span></a></li>
+  <li><a href="#propiedades-de-f" id="toc-propiedades-de-f" class="nav-link" data-scroll-target="#propiedades-de-f"><span class="header-section-number">4.0.2</span> Propiedades de <span class="math inline">\(f\)</span></a></li>
+  </ul></li>
+  <li><a href="#función-de-distribución-acumulada" id="toc-función-de-distribución-acumulada" class="nav-link" data-scroll-target="#función-de-distribución-acumulada"><span class="header-section-number">5</span> Función de distribución acumulada</a>
+  <ul>
+  <li><a href="#definición-de-f-1" id="toc-definición-de-f-1" class="nav-link" data-scroll-target="#definición-de-f-1"><span class="header-section-number">5.0.1</span> Definición de <span class="math inline">\(F\)</span></a></li>
+  <li><a href="#propiedades-de-f-1" id="toc-propiedades-de-f-1" class="nav-link" data-scroll-target="#propiedades-de-f-1"><span class="header-section-number">5.0.2</span> Propiedades de <span class="math inline">\(F\)</span></a></li>
+  </ul></li>
+  <li><a href="#más-propiedades" id="toc-más-propiedades" class="nav-link" data-scroll-target="#más-propiedades"><span class="header-section-number">6</span> Más propiedades</a></li>
+  <li><a href="#esperanza-y-varianza" id="toc-esperanza-y-varianza" class="nav-link" data-scroll-target="#esperanza-y-varianza"><span class="header-section-number">7</span> Esperanza y varianza</a>
+  <ul>
+  <li><a href="#definiciones" id="toc-definiciones" class="nav-link" data-scroll-target="#definiciones"><span class="header-section-number">7.0.1</span> Definiciones</a></li>
+  <li><a href="#propiedades" id="toc-propiedades" class="nav-link" data-scroll-target="#propiedades"><span class="header-section-number">7.0.2</span> Propiedades</a></li>
+  </ul></li>
+  <li><a href="#ejemplo-enunciado" id="toc-ejemplo-enunciado" class="nav-link" data-scroll-target="#ejemplo-enunciado"><span class="header-section-number">8</span> Ejemplo: Enunciado</a></li>
+  <li><a href="#ejemplo-solución" id="toc-ejemplo-solución" class="nav-link" data-scroll-target="#ejemplo-solución"><span class="header-section-number">9</span> Ejemplo: Solución</a>
+  <ul>
+  <li><a href="#solución-parte-a" id="toc-solución-parte-a" class="nav-link" data-scroll-target="#solución-parte-a"><span class="header-section-number">9.0.1</span> Solución parte (a)</a></li>
+  <li><a href="#solución-parte-b" id="toc-solución-parte-b" class="nav-link" data-scroll-target="#solución-parte-b"><span class="header-section-number">9.0.2</span> Solución parte (b)</a></li>
+  <li><a href="#solución-parte-c" id="toc-solución-parte-c" class="nav-link" data-scroll-target="#solución-parte-c"><span class="header-section-number">9.0.3</span> Solución parte (c)</a></li>
+  <li><a href="#solución-parte-d" id="toc-solución-parte-d" class="nav-link" data-scroll-target="#solución-parte-d"><span class="header-section-number">9.0.4</span> Solución parte (d)</a></li>
+  <li><a href="#solución-parte-e" id="toc-solución-parte-e" class="nav-link" data-scroll-target="#solución-parte-e"><span class="header-section-number">9.0.5</span> Solución parte (e)</a></li>
+  <li><a href="#solución-parte-f" id="toc-solución-parte-f" class="nav-link" data-scroll-target="#solución-parte-f"><span class="header-section-number">9.0.6</span> Solución parte (f)</a></li>
+  <li><a href="#solución-parte-g" id="toc-solución-parte-g" class="nav-link" data-scroll-target="#solución-parte-g"><span class="header-section-number">9.0.7</span> Solución parte (g)</a></li>
+  <li><a href="#solución-parte-h" id="toc-solución-parte-h" class="nav-link" data-scroll-target="#solución-parte-h"><span class="header-section-number">9.0.8</span> Solución parte (h)</a></li>
+  <li><a href="#solución-parte-i" id="toc-solución-parte-i" class="nav-link" data-scroll-target="#solución-parte-i"><span class="header-section-number">9.0.9</span> Solución parte (i)</a></li>
+  <li><a href="#solución-parte-j" id="toc-solución-parte-j" class="nav-link" data-scroll-target="#solución-parte-j"><span class="header-section-number">9.0.10</span> Solución parte (j)</a></li>
+  <li><a href="#solución-parte-k" id="toc-solución-parte-k" class="nav-link" data-scroll-target="#solución-parte-k"><span class="header-section-number">9.0.11</span> Solución parte (k)</a></li>
+  <li><a href="#solución-parte-l" id="toc-solución-parte-l" class="nav-link" data-scroll-target="#solución-parte-l"><span class="header-section-number">9.0.12</span> Solución parte (l)</a></li>
+  <li><a href="#solución-parte-m" id="toc-solución-parte-m" class="nav-link" data-scroll-target="#solución-parte-m"><span class="header-section-number">9.0.13</span> Solución parte (m)</a></li>
+  </ul></li>
+  <li><a href="#distribuciones-especiales-discretas-resumen" id="toc-distribuciones-especiales-discretas-resumen" class="nav-link" data-scroll-target="#distribuciones-especiales-discretas-resumen"><span class="header-section-number">10</span> Distribuciones especiales discretas: Resumen</a></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios"><span class="header-section-number">11</span> Ejercicios</a></li>
+  <li><a href="#anexos" id="toc-anexos" class="nav-link" data-scroll-target="#anexos">Anexos</a></li>
+  <li><a href="#texto-guía" id="toc-texto-guía" class="nav-link" data-scroll-target="#texto-guía">Texto guía</a></li>
+  <li><a href="#bibliografía-complementaria" id="toc-bibliografía-complementaria" class="nav-link" data-scroll-target="#bibliografía-complementaria">Bibliografía complementaria</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DISTRIBUCIONES DISCRETAS EN R</h1>
+<p class="subtitle lead">Variable aleatoria discreta</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">AUTHOR</div>
+  <div class="quarto-title-meta-heading">AFFILIATION</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Dr.&nbsp;rer. nat. Humberto Llinás Solano <a href="mailto:hllinas@uninorte.edu.co" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Mathematics, Physics and Data Science, Universidad del Norte (Barranquilla, Colombia)
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">LAST UPDATED</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">28/10/2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="academic-intro">
+<p><img src="hllinas2023.jpg" class="profile-photo img-fluid" alt="Fotografía del autor"></p>
+<p><strong><a href="https://rpubs.com/hllinas/Bio_Sketch">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
+<p><strong>About these lecture notes.</strong> These notes introduce discrete random variables, probability mass functions, cumulative distribution functions, expectation, variance, and applications with R.</p>
+</div>
+<hr>
+<section id="paquetes" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Paquetes</h1>
+<p>En R podemos encontrar diversas funciones para ello:</p>
+<ul>
+<li><code>expand.grid</code> en el paquete <code>base</code> de R.</li>
+<li><code>combn</code> en el paquete <code>combinat</code>.</li>
+</ul>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="funciones" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Funciones</h1>
+<p>Para nuestros cálculos, utilizaremos la función <code>expand.grid</code>. En este caso, creamos la siguientes CINCO funcione: <code>tosscoin(n)</code>, <code>rolldie(n)</code>, <code>isin()</code>, <code>urnsamples()</code> y <code>nsamp()</code>. Se describirán a continuación.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+<section id="función-tosscoinn" class="level3" data-number="2.0.1">
+<h3 data-number="2.0.1" class="anchored" data-anchor-id="función-tosscoinn"><span class="header-section-number">2.0.1</span> Función <code>tosscoin(n)</code></h3>
+<p>La idea de esta función es generar el espacio muestral de lanzar una moneda exactamente <span class="math inline">\(n\)</span> veces, con valores cara (<code>H</code>) y sello (<code>T</code>):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tosscoin <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="fu">replicate</span>(n, <span class="fu">c</span>(<span class="st">"H"</span>, <span class="st">"T"</span>), <span class="at">simplify =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"X"</span>, <span class="fu">seq_len</span>(n))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-rolldien" class="level3" data-number="2.0.2">
+<h3 data-number="2.0.2" class="anchored" data-anchor-id="función-rolldien"><span class="header-section-number">2.0.2</span> Función <code>rolldie(n)</code></h3>
+<p>Con ella se genera el espacio muestral al lanzar un dado exactamente <span class="math inline">\(n\)</span> veces, con valores de 1 a 6 por lanzamiento.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rolldie <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">sides =</span> <span class="dv">6</span>, <span class="at">makespace =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="fu">replicate</span>(n, <span class="dv">1</span><span class="sc">:</span>sides, <span class="at">simplify =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"X"</span>, <span class="fu">seq_len</span>(n))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (makespace) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>prob <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df))  <span class="co"># Agrega la columna de probabilidad</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>NOTA: En esta función, <code>makespace = TRUE</code> agregará una columna de probabilidades (prob = 1/n) al espacio muestral, para convertirlo en un “objeto tipo espacio de probabilidad”.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-isin" class="level3" data-number="2.0.3">
+<h3 data-number="2.0.3" class="anchored" data-anchor-id="función-isin"><span class="header-section-number">2.0.3</span> Función <code>isin()</code></h3>
+<p>Con ella se verifica si ciertos valores están presentes en cada fila de una matriz o data frame. Se puede usar con o sin tener en cuenta el orden.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>isin <span class="ot">&lt;-</span> <span class="cf">function</span>(x, table, <span class="at">ordered =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Si x es un vector, lo convertimos en una matriz con una sola fila</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.vector</span>(x)) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(x, <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Validación</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.data.frame</span>(x) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.matrix</span>(x)) <span class="fu">stop</span>(<span class="st">"x debe ser un vector, data.frame o matriz"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aplicar fila por fila</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">apply</span>(x, <span class="dv">1</span>, <span class="cf">function</span>(row) {</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    row_vals <span class="ot">&lt;-</span> <span class="fu">as.character</span>(row)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    tab_vals <span class="ot">&lt;-</span> <span class="fu">as.character</span>(table)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (ordered) {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Buscar subsecuencia exacta</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      len_row <span class="ot">&lt;-</span> <span class="fu">length</span>(row_vals)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      len_tab <span class="ot">&lt;-</span> <span class="fu">length</span>(tab_vals)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (len_tab <span class="sc">&gt;</span> len_row) <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(len_row <span class="sc">-</span> len_tab <span class="sc">+</span> <span class="dv">1</span>)) {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">all</span>(row_vals[i<span class="sc">:</span>(i <span class="sc">+</span> len_tab <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">==</span> tab_vals)) <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Verificar si todos los valores de 'table' están presentes (sin importar orden)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">all</span>(tab_vals <span class="sc">%in%</span> row_vals)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-urnsamples" class="level3" data-number="2.0.4">
+<h3 data-number="2.0.4" class="anchored" data-anchor-id="función-urnsamples"><span class="header-section-number">2.0.4</span> Función <code>urnsamples()</code></h3>
+<p>Esta función genera todas las muestras posibles de una urna según estos cuatro escenarios:</p>
+<ul>
+<li>x: Representa la urna desde la cual se va a hacer el muestreo.</li>
+<li>size: Tamaño de la muestra.</li>
+<li>replace: TRUE, si es con reemplazo; y FALSE, sin reemplazo.</li>
+<li>ordered: TRUE, si es con orden; y FALSE, sin orden.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>urnsamples <span class="ot">&lt;-</span> <span class="cf">function</span>(x, size, <span class="at">ordered =</span> <span class="cn">TRUE</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (ordered) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Producto cartesiano</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">expand.grid</span>(<span class="fu">replicate</span>(size, x, <span class="at">simplify =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">KEEP.OUT.ATTRS =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combinaciones sin orden</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">combn</span>(x, size, <span class="at">simplify =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">do.call</span>(<span class="at">what =</span> rbind)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo 1 -->
+</section>
+<section id="función-nsamp" class="level3" data-number="2.0.5">
+<h3 data-number="2.0.5" class="anchored" data-anchor-id="función-nsamp"><span class="header-section-number">2.0.5</span> Función <code>nsamp()</code></h3>
+<p>Esta función calcula cuántas formas distintas hay de tomar <span class="math inline">\(k\)</span> elementos de una población de n elementos, bajo distintas condiciones:</p>
+<ul>
+<li><p><code>n</code>: Tamaño de la población (elementos disponibles).</p></li>
+<li><p><code>k</code>: Tamaño de la muestra-</p></li>
+<li><p><code>replace = FALSE</code>: Sin reemplazo (sin repetir elementos).</p></li>
+<li><p><code>ordered = TRUE</code>: Orden importa (permuta, no combina).</p></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="cf">function</span>(n, k, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (ordered) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (replace) {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(n<span class="sc">^</span>k)  <span class="co"># Producto cartesiano con repetición</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">factorial</span>(n) <span class="sc">/</span> <span class="fu">factorial</span>(n <span class="sc">-</span> k))  <span class="co"># Permutaciones sin repetición</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (replace) {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">choose</span>(n <span class="sc">+</span> k <span class="sc">-</span> <span class="dv">1</span>, k))  <span class="co"># Combinaciones con repetición</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">choose</span>(n, k))  <span class="co"># Combinaciones sin repetición</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="variable-aleatoria" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Variable aleatoria</h1>
+<ol type="1">
+<li><p>Se resalta que una variable aleatoria no es una probabilidad y, generalmente, se simbolizan con las últimas letras mayúsculas de nuestro alfabeto.</p></li>
+<li><p>Una variable aleatoria <span class="math inline">\(X\)</span> es una función <span class="math inline">\(X: \Omega \to R\)</span>, siendo <span class="math inline">\(R\)</span> el conjunto de los números reales.</p></li>
+<li><p>Las variables aleatorias se clasifican en discretas o continuas.</p></li>
+<li><p>Las variables discretas son las que tienen una cantidad o finita o (infinita) enumerable de valores.</p></li>
+<li><p>Las variables continuas tienen una cantidad infinita no enumerable de valores.</p></li>
+<li><p>En la figura de abajo se muestran algunos ejemplos de ambos tipos de variables.</p></li>
+<li><p>En las secciones siguientes, solo se explicarán los conceptos relacionados con el caso discreto. El caso continuo se tratará en otros documentos.</p></li>
+</ol>
+<center>
+<img src="VA_blanco.png" class="img-fluid" width="800">
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+<section id="función-de-probabilidad" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Función de probabilidad</h1>
+<section id="definición-de-f" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="definición-de-f"><span class="header-section-number">4.0.1</span> Definición de <span class="math inline">\(f\)</span></h3>
+<p>Es una función <span class="math inline">\(f: R \to [0,1]\)</span> tal que <span class="math display">\[f(x) \;= \; \left\{%
+\begin{array}{ll}
+    P(X=x), &amp; \text{si }x=x_1,x_2,\ldots; \\
+    0, &amp; \hbox{de otra forma.} \\
+\end{array}%
+\right.    \]</span></p>
+</section>
+<section id="propiedades-de-f" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="propiedades-de-f"><span class="header-section-number">4.0.2</span> Propiedades de <span class="math inline">\(f\)</span></h3>
+<p>Algunas propiedades de <span class="math inline">\(f\)</span> son las siguientes:</p>
+<ol type="1">
+<li><p><span class="math inline">\(f(x) \geq 0\)</span> para todo valor <span class="math inline">\(x\)</span> real.</p></li>
+<li><p><span class="math inline">\(\sum\limits_{x\in R} f(x) =1\)</span>, siendo <span class="math inline">\(R\)</span> el conjunto de los números reales.</p></li>
+<li><p>La gráfica de <span class="math inline">\(f\)</span> se puede representar a través de un histograma de probabilidad o de un gráfico lineal.</p></li>
+<li><p>A continuación, algunos ejemplos de representaciones gráficas de <span class="math inline">\(f\)</span>.</p></li>
+</ol>
+<center>
+<img src="GraficaDiscreta.png" class="img-fluid" width="800">
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="función-de-distribución-acumulada" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Función de distribución acumulada</h1>
+<section id="definición-de-f-1" class="level3" data-number="5.0.1">
+<h3 data-number="5.0.1" class="anchored" data-anchor-id="definición-de-f-1"><span class="header-section-number">5.0.1</span> Definición de <span class="math inline">\(F\)</span></h3>
+<p>Es una función <span class="math inline">\(F: R \to [0,1]\)</span> definida por <span class="math display">\[F(t)\; =\;  P(X\leq t) \;= \; \sum\limits_{x; \, x\leq t} f(x),
+\quad \text{para todo }t\text{ real.}\]</span></p>
+</section>
+<section id="propiedades-de-f-1" class="level3" data-number="5.0.2">
+<h3 data-number="5.0.2" class="anchored" data-anchor-id="propiedades-de-f-1"><span class="header-section-number">5.0.2</span> Propiedades de <span class="math inline">\(F\)</span></h3>
+<p>Algunas propiedades de <span class="math inline">\(f\)</span> son las siguientes:</p>
+<ol type="1">
+<li><p><span class="math inline">\(0\leq F(t)\leq 1\)</span>.</p></li>
+<li><p><span class="math inline">\(F\)</span> es creciente.</p></li>
+<li><p><span class="math inline">\(F\)</span> es escalonada.</p></li>
+<li><p><span class="math inline">\(F\left(\lim\limits_{t\to\infty} t\right)=1\)</span>.</p></li>
+<li><p><span class="math inline">\(F\left(\lim\limits_{t\to-\infty} t\right)=0\)</span>.</p></li>
+<li><p>A continuación, algunos ejemplos de representaciones gráficas de <span class="math inline">\(F\)</span>.</p></li>
+</ol>
+<center>
+<img src="GraficaDiscretaAcum.png" class="img-fluid" width="800">
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="más-propiedades" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Más propiedades</h1>
+<ol type="1">
+<li><p><span class="math inline">\(P(X=a)\)</span> no siempre es cero.</p></li>
+<li><p><span class="math inline">\(P(a&lt;X\leq b) = F(b)-F(a)\)</span>.</p></li>
+<li><p><span class="math inline">\(P(a\leq X\leq b) \ne F(b)-F(a)\)</span>.</p></li>
+<li><p><span class="math inline">\(P(a\leq X \leq b) \ne P(a&lt;  X \leq b)\)</span>.</p></li>
+<li><p>Si <span class="math inline">\(a^{-}\)</span> es el valor máximo posible de <span class="math inline">\(X\)</span> que es estrictamente menor que <span class="math inline">\(a\)</span>, entonces, <span class="math display">\[f(a) \,= \; F(a) - F(a^{-})\]</span></p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+<section id="esperanza-y-varianza" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Esperanza y varianza</h1>
+<section id="definiciones" class="level3" data-number="7.0.1">
+<h3 data-number="7.0.1" class="anchored" data-anchor-id="definiciones"><span class="header-section-number">7.0.1</span> Definiciones</h3>
+<ol type="1">
+<li><p>La espezanza de <span class="math inline">\(X\)</span> se define así: <span class="math display">\[\mu\; = \; E(X) \;= \;  \sum\limits_k x_k \cdot f(x_k)\]</span></p></li>
+<li><p>La varianza de <span class="math inline">\(X\)</span> se define así: <span class="math display">\[\sigma^2 \;= \; V(X) \;= \; \sum\limits_k (x_k-\mu)^2 \cdot f(x_k).\]</span></p></li>
+</ol>
+</section>
+<section id="propiedades" class="level3" data-number="7.0.2">
+<h3 data-number="7.0.2" class="anchored" data-anchor-id="propiedades"><span class="header-section-number">7.0.2</span> Propiedades</h3>
+<p>Algunas propiedades de la esperanza y varianza son las siguientes:</p>
+<ol type="1">
+<li><p><span class="math inline">\(E(aX + b) \,=\, a E(X) \,+\, b\)</span>.</p></li>
+<li><p><span class="math inline">\(V(aX + b) \,=\, a^2 V(X)\)</span>.</p></li>
+<li><p><span class="math inline">\(V(X)\,=\, E(X^2) \,-\, \big[E(X)\big]^2\)</span>, donde <span class="math inline">\(E(X^2) \;= \;  \sum\limits_k x_k^2 \cdot f(x_k)\)</span>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="ejemplo-enunciado" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Ejemplo: Enunciado</h1>
+<p>Supóngase que una moneda se lanza 5 veces y sea <span class="math inline">\(X\)</span> la variable aleatoria que representa el <em>número de caras que resultan</em>.</p>
+<ol type="a">
+<li><p>¿Cuáles son los posibles valores <span class="math inline">\(k\)</span> de <span class="math inline">\(X\)</span>?</p></li>
+<li><p>Halle la probabilidad de que <span class="math inline">\(X\)</span> tome cada uno de esos valores <span class="math inline">\(k\)</span> de la parte (a).</p></li>
+<li><p>Construya la función de probabilidad <span class="math inline">\(f\)</span> de <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Haga un bosquejo de la representación gráfica de <span class="math inline">\(f\)</span>.</p></li>
+<li><p>Construya la función de distribución acumulada <span class="math inline">\(F\)</span> de <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Haga un bosquejo de su representación gráfica de <span class="math inline">\(F\)</span>.</p></li>
+<li><p>Halle la probabilidad de que el número de caras sea menor o igual que 3.</p></li>
+<li><p>Halle la probabilidad de que el número de caras sea mayor que 2.</p></li>
+<li><p>Halle la probabilidad de que <span class="math inline">\(X\)</span> se encuentre entre 1 y 4 (ambos inclusive).</p></li>
+<li><p>Halle la probabilidad de <span class="math inline">\(X\)</span> se encuentre entre 1 y 4 (ambos no inclusive).</p></li>
+<li><p>Halle la esperanza de <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Halle la esperanza de <span class="math inline">\(X^2\)</span>.</p></li>
+<li><p>Encuentre la varianza de <span class="math inline">\(X\)</span>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+<section id="ejemplo-solución" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Ejemplo: Solución</h1>
+<section id="solución-parte-a" class="level3" data-number="9.0.1">
+<h3 data-number="9.0.1" class="anchored" data-anchor-id="solución-parte-a"><span class="header-section-number">9.0.1</span> Solución parte (a)</h3>
+<p>Al lanzar 5 caras, los elementos y el tamaño del espacio muestral <span class="math inline">\(\Omega\)</span> se pueden encontrar así:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">tosscoin</span>(<span class="dv">5</span>)  <span class="co">#A) Espacio muestral</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>El número de elementos que tiene el espacio muestral <span class="math inline">\(\Omega\)</span> es:</p>
+<p><span class="math display">\[\#\Omega= 1+5+10+10+5+1 = 32, \quad \mbox{o, que es lo mismo},  \quad \# \Omega = 2^5 = 32\]</span></p>
+<p>Comprobando con R, vemos que <span class="math inline">\(\Omega\)</span> tiene 32 elementos:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Omega); w   <span class="co">#B) Tamaño del espacio muestral</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 32</code></pre>
+</div>
+</div>
+<p>En forma resumida, los elementos de <span class="math inline">\(\Omega\)</span> y los posibles valores de <span class="math inline">\(X\)</span> se encuentran en la tabla de abajo:</p>
+<center>
+<img src="Cuadro3.1.png" class="img-fluid" width="700">
+</center>
+<p>El total de elementos que aparecen en la última columna se hallan en R de la siguiente manera:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)  <span class="co">#C) Número de caras</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Conteo <span class="ot">&lt;-</span> <span class="fu">choose</span>(<span class="dv">5</span>,k); Conteo <span class="co">#D) </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1]  1  5 10 10  5  1</code></pre>
+</div>
+</div>
+<p>En conclusión, los posibles valores de <span class="math inline">\(X\)</span> son: 0, 1, 2, 3, 4, 5.</p>
+</section>
+<section id="solución-parte-b" class="level3" data-number="9.0.2">
+<h3 data-number="9.0.2" class="anchored" data-anchor-id="solución-parte-b"><span class="header-section-number">9.0.2</span> Solución parte (b)</h3>
+<p>Las probabilidades solicitadas se describen a continuación:</p>
+<ol type="1">
+<li><p>Probabilidad de que salga 0 cara: <span class="math display">\[P(X=0) = P(SSSSS) = \frac{1}{32} = 0.03125\]</span></p></li>
+<li><p>Probabilidad de que salga 1 cara: <span class="math display">\[P(X=1) = P(SSSSC, SSSCS, SSCSS, SCSSS, CSSSS) = \frac{5}{32} = 0.15625\]</span></p></li>
+<li><p>Probabilidad de que salgan 2 caras: <span class="math display">\[P(X=2) = P(SSSCC, SSCSC, \cdots,SCSCS, CCSSS) = \frac{10}{32} = 0.3125\]</span></p></li>
+<li><p>Probabilidad de que salgan 3 caras: <span class="math display">\[P(X=3) = P(SSCCC, SCCSC, \cdots,SCCCS, CCCSS) = \frac{10}{32} = 0.3125\]</span></p></li>
+<li><p>Probabilidad de que salgan 4 caras: <span class="math display">\[P(X=4) = P(CCCCS, CCCSC, CCSCC, CSCCC, SCCCC) = \frac{5}{32} = 0.15625\]</span></p></li>
+<li><p>Probabilidad de que salgan 5 caras: <span class="math display">\[P(X=5) = P(CCCCC) = \frac{1}{32}= 0.03125\]</span></p></li>
+</ol>
+<p>En R se pueden calcular así:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>probabilidad_b <span class="ot">&lt;-</span> Conteo<span class="sc">/</span>w</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>probabilidad_b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.03125 0.15625 0.31250 0.31250 0.15625 0.03125</code></pre>
+</div>
+</div>
+<p>Estas probabilidades se pueden resumir en la tabla que se indica abajo:</p>
+<center>
+<img src="Cuadro3.2.png" class="img-fluid" width="600">
+</center>
+</section>
+<section id="solución-parte-c" class="level3" data-number="9.0.3">
+<h3 data-number="9.0.3" class="anchored" data-anchor-id="solución-parte-c"><span class="header-section-number">9.0.3</span> Solución parte (c)</h3>
+<p>Debido a que <span class="math inline">\(f(k) = P(X=k)\)</span>, la función de probabilidad <span class="math inline">\(f\)</span> coincide con las probabilidades halladas en el inciso anterior, como se muestra en la tabla de abajo.</p>
+<center>
+<img src="Cuadro3.3.png" class="img-fluid" width="600">
+</center>
+<p>En R se pueden calcular así:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> probabilidad_b; f</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.03125 0.15625 0.31250 0.31250 0.15625 0.03125</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-d" class="level3" data-number="9.0.4">
+<h3 data-number="9.0.4" class="anchored" data-anchor-id="solución-parte-d"><span class="header-section-number">9.0.4</span> Solución parte (d)</h3>
+<p>El bosquejo de la gráfica de <span class="math inline">\(f\)</span> se puede representar de dos maneras: como un gráfico de líneas o como un histograma de probabilidad.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(k, f,  <span class="at">type=</span><span class="st">"h"</span>, <span class="at">main=</span> <span class="st">"Gráfico de puntos"</span>,<span class="at">xlab =</span> <span class="st">"Número de caras"</span>,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="at">ylab =</span> <span class="st">"Probabilidad que esto ocurra"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.2.1.Discreta_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Grafico1.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>Histograma de probabilidad</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="solución-parte-e" class="level3" data-number="9.0.5">
+<h3 data-number="9.0.5" class="anchored" data-anchor-id="solución-parte-e"><span class="header-section-number">9.0.5</span> Solución parte (e)</h3>
+<p>Recordemos que la función de distribución acumulada <span class="math inline">\(F\)</span> se define como: <span class="math display">\[F(t)\; =\;  P(X\leq t) \;= \; \sum\limits_{x; \, x\leq t} f(x),  \quad \text{para todo }t\text{ real.}\]</span></p>
+<p>Hallaremos <span class="math inline">\(F\)</span> en tres pasos:</p>
+<p><strong>PRIMER PASO:</strong> Consideremos solo los valores de <span class="math inline">\(X\)</span>, que son 0, 1, 2, 3, 4, 5.</p>
+<p><span class="math display">\[\begin{eqnarray*}
+F(0) &amp;=&amp; P(X\leq 0) = P(X=0)  = f(0) =0.03125. \\
+&amp;&amp;     \\
+F(1) &amp;=&amp; P(X\leq 1) = P(X=0)+P(X=1)  = f(0)+ f(1) = 0,03125 + 0,15625 = 0.1875.\\
+&amp;&amp;      \\
+F(2) &amp;=&amp; P(X\leq 2) = P(X=0)+\cdots +P(X=2)  = f(0) + \cdots +f(2) = 0.03125 + \cdots + 0.3125= 0.5.\\
+&amp;&amp;\\
+F(3) &amp;=&amp; P(X\leq 3) = P(X=0)+\cdots +P(X=3)  = f(0) + \cdots +f(3)= 0.03125 +\cdots + 0.3125= 0.8125.\\
+&amp;&amp;      \\
+F(4) &amp;=&amp; P(X\leq 4) = P(X=0)+\cdots +P(X=4)  = f(0) + \cdots +f(4)= 0.03125 +\cdots + 0.15625= 0.96875.\\
+&amp;&amp;      \\
+F(5) &amp;=&amp; P(X\leq 5) = P(X=0)+\cdots +P(X=5)  = f(0) + \cdots +f(5)= 0.03125 +\cdots + 0.03125= 1.
+\end{eqnarray*}\]</span></p>
+<p><strong>SEGUNDO PASO:</strong> Consideremos números reales <span class="math inline">\(t\)</span> diferente de los valores de <span class="math inline">\(X\)</span> (0, 1, 2, 3, 4, 5) y utilizaremos siempre valores de prueba (el que usted quiera seleccionar). Aquí consideraremos 7 regiones.</p>
+<div style="margin-left: 20px;">
+<p><strong>Región 1: Supongamos que <span class="math inline">\(t&lt;0\)</span>:</strong></p>
+<p>Tomamos un valor de prueba que esté en este intervalo. Por ejemplo, puede ser -2:</p>
+<p><span class="math display">\[F(-2) = P(X\leq -2) = 0\]</span></p>
+<p>ya que no hay valores de <span class="math inline">\(X\)</span> que sean negativos.</p>
+<p><strong>Región 2: Supongamos que <span class="math inline">\(0&lt;t&lt;1\)</span>:</strong></p>
+<p>Tomamos un valor de prueba que esté en este intervalo. Por ejemplo, puede ser 0.6:</p>
+<p><span class="math display">\[F(0.6) = P(X\leq 0.6) = P(X=0) = 0.03125\]</span></p>
+<p>ya que el único valor de <span class="math inline">\(X\)</span> menor o igual que 0.6 es 0.</p>
+<p><strong>Región 3: Supongamos que <span class="math inline">\(1&lt;t&lt;2\)</span>:</strong></p>
+<p>Tomamos un valor de prueba que esté en este intervalo. Por ejemplo, puede ser 1.2:</p>
+<p><span class="math display">\[F(1.2) = P(X\leq 1.2) = P(X=0)+P(X=1)  = 0.1875\]</span></p>
+<p>ya que los únicos valores de <span class="math inline">\(X\)</span> menores o iguales que 1.2 son 0 y 1.</p>
+<p><strong>Región 4: Supongamos que <span class="math inline">\(2&lt;t&lt;3\)</span>:</strong></p>
+<p>Tomamos un valor de prueba que esté en este intervalo. Por ejemplo, puede ser 2.4:</p>
+<p><span class="math display">\[F(2.4) = P(X\leq 2.4) = P(X=0)+\cdots +P(X=2)  =  0.5\]</span></p>
+<p>ya que los únicos valores de <span class="math inline">\(X\)</span> menores o iguales que 2,4 son 0 , 1 y 2.</p>
+<p><strong>Región 5: Supongamos que <span class="math inline">\(3&lt;t&lt;4\)</span>:</strong></p>
+<p>Tomamos un valor de prueba que esté en este intervalo. Por ejemplo, puede ser 3.5:</p>
+<p><span class="math display">\[F(3.5) = P(X\leq 3.5) = P(X=0)+\cdots +P(X=3)  = 0.8125\]</span></p>
+<p>ya que los únicos valores de <span class="math inline">\(X\)</span> menores o iguales que 3.5 son 0, 1, 2 y 3.</p>
+<p><strong>Región 6: Supongamos que <span class="math inline">\(4&lt;t&lt;5\)</span>:</strong></p>
+<p>Tomamos un valor de prueba que esté en este intervalo. Por ejemplo, puede ser 4.1:</p>
+<p><span class="math display">\[F(4.1) = P(X\leq 4.1) = P(X=0)+\cdots +P(X=4)  =  0.96875\]</span></p>
+<p>ya que los únicos valores de <span class="math inline">\(X\)</span> menores o iguales que 4.1 son 0, 1, 2, 3 y 4.</p>
+<p><strong>Región 7: Supongamos que <span class="math inline">\(5&lt;t\)</span>:</strong></p>
+<p>Tomamos un valor de prueba que esté en este intervalo. Por ejemplo, puede ser 7:</p>
+<p><span class="math display">\[F(7) = P(X\leq 7) = P(X=0)+\cdots +P(X=5)  =  1\]</span></p>
+<p>ya que todos los valores de <span class="math inline">\(X\)</span> son menores o iguales que 7.</p>
+</div>
+<p><strong>TERCER PASO:</strong> Reunimos los pasos 1 y 2:</p>
+<p><span class="math display">\[F(t) = \left\{
+               \begin{array}{ll}
+                 0; &amp; \text{si }t&lt;0; \\
+                 0.03125; &amp; \text{si }0\leq t&lt;1; \\
+                 0.1875; &amp; \text{si }1\leq t&lt;2; \\
+                 0.5; &amp; \text{si }2\leq t&lt;3; \\
+                 0.8125; &amp; \text{si }3\leq t&lt;4; \\
+                 0.96875; &amp; \text{si }4\leq t&lt;5. \\
+                 1; &amp; \text{si }5\leq t.
+               \end{array}
+             \right.\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Dist_Acum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(f)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>Dist_Acum</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.03125 0.18750 0.50000 0.81250 0.96875 1.00000</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-f" class="level3" data-number="9.0.6">
+<h3 data-number="9.0.6" class="anchored" data-anchor-id="solución-parte-f"><span class="header-section-number">9.0.6</span> Solución parte (f)</h3>
+<p>El bosquejo de la gráfica de <span class="math inline">\(F\)</span> se puede representar de dos maneras: como un gráfico de líneas o como una gráfica de una función escalonada.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(k, Dist_Acum,  <span class="at">type=</span><span class="st">"b"</span>, <span class="at">main=</span> <span class="st">"Gráfico de la distribución acumulada"</span>,<span class="at">xlab =</span> <span class="st">"Número de caras"</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="at">ylab =</span> <span class="st">"Probabilidad acumulada que esto ocurra"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.2.1.Discreta_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Grafico2.png" class="img-fluid figure-img" width="900"></p>
+<figcaption>Distribución acumulada</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="solución-parte-g" class="level3" data-number="9.0.7">
+<h3 data-number="9.0.7" class="anchored" data-anchor-id="solución-parte-g"><span class="header-section-number">9.0.7</span> Solución parte (g)</h3>
+<p>La probabilidad de que el número de caras sea menor o igual que 3 es: <span class="math display">\[P(X\leq 3) \; = \;  F(3) \; = \; 0.8125 \]</span> En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>probabilidad_g <span class="ot">&lt;-</span> Dist_Acum[t<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>probabilidad_g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.8125</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-h" class="level3" data-number="9.0.8">
+<h3 data-number="9.0.8" class="anchored" data-anchor-id="solución-parte-h"><span class="header-section-number">9.0.8</span> Solución parte (h)</h3>
+<p>La probabilidad de que el número de caras sea mayor que 2 es: <span class="math display">\[P(X&gt;2) \; = \; 1- P(X\leq 2) \; = \; 1- F(2) \; = \; 1- 0.5 \; = \; 0.5\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>probabilidad_h <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span> Dist_Acum[t<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>probabilidad_h</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.5</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-i" class="level3" data-number="9.0.9">
+<h3 data-number="9.0.9" class="anchored" data-anchor-id="solución-parte-i"><span class="header-section-number">9.0.9</span> Solución parte (i)</h3>
+<p>La probabilidad de que <span class="math inline">\(X\)</span> se encuentre entre 1 y 4 (ambos inclusive) se puede hallar de dos maneras:</p>
+<p><strong>Primera forma: Utilizando <span class="math inline">\(f\)</span>.</strong></p>
+<p><span class="math display">\[P(1 \leq X \leq 4) \; = \;  P(X=1, 2, 3, 4)\; = \; f(1) + f(2) + f(3) + f(4)\; = 0.9375\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> f[x<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>probabilidad_i <span class="ot">&lt;-</span> <span class="fu">sum</span>(c)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>probabilidad_i</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.9375</code></pre>
+</div>
+</div>
+<p><strong>Segunda forma: Utilizando <span class="math inline">\(F\)</span>.</strong></p>
+<p><span class="math display">\[\begin{eqnarray*}
+P(1 \leq X \leq 4) &amp;=&amp;   P(X=1, 2, 3, 4)\; = \;   P(X=0, 1, 2, 3, 4)\, - \,  P(X=0) \\
+&amp;=&amp; P(X\leq 4) \, - \, P(X\leq 0)  \; = \; F(4) \, - \, F(0) \; = \; 0.96875 \, - \, 0.03125 \; = \; 0.9375
+\end{eqnarray*}\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>probabilidad_i <span class="ot">&lt;-</span> Dist_Acum[b <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">-</span> Dist_Acum[a <span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>probabilidad_i</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.9375</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-j" class="level3" data-number="9.0.10">
+<h3 data-number="9.0.10" class="anchored" data-anchor-id="solución-parte-j"><span class="header-section-number">9.0.10</span> Solución parte (j)</h3>
+<p>La probabilidad de <span class="math inline">\(X\)</span> se encuentre entre 1 y 4 (ambos no inclusive) se puede hallar de dos maneras:</p>
+<p><strong>Primera forma: Utilizando <span class="math inline">\(f\)</span>.</strong> <span class="math display">\[P(1 &lt; X &lt; 4) \; = \;  P(X= 2, 3)\; = \; f(2) + f(3) \; = 0.625\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> f[x<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>probabilidad_j <span class="ot">&lt;-</span> <span class="fu">sum</span>(c)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>probabilidad_j</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.625</code></pre>
+</div>
+</div>
+<p><strong>Segunda forma: Utilizando <span class="math inline">\(F\)</span>.</strong> <span class="math display">\[\begin{eqnarray*}
+P(1 &lt; X &lt; 4) &amp;=&amp;   P(X=2, 3)\; = \;   P(X=0, 1, 2, 3)\, - \,  P(X=0, 1) \\
+&amp;=&amp; P(X\leq 3) \, - \, P(X\leq 1)  \; = \; F(3) \, - \, F(1) \; = \; 0.8125 \, - \, 0.1875 \; = \; 0.625
+\end{eqnarray*}\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>probabilidad_i <span class="ot">&lt;-</span> Dist_Acum[b <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">-</span> Dist_Acum[a <span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>probabilidad_i</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.625</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-k" class="level3" data-number="9.0.11">
+<h3 data-number="9.0.11" class="anchored" data-anchor-id="solución-parte-k"><span class="header-section-number">9.0.11</span> Solución parte (k)</h3>
+<p>Recuerde que la esperanza de <span class="math inline">\(X\)</span> está definida por <span class="math display">\[E(X) \;= \;  \sum\limits_k k \cdot f(k)\]</span></p>
+<p>En este ejemplo, <span class="math display">\[\begin{eqnarray*}
+E(X) &amp;=&amp; (0)f(0) + (1) f(1)+ \cdots + (5)f(5) \\
+&amp;=&amp; 0.00000 + 0.15625 + 0.62500 + 0.93750+  0.62500 + 0.15625 \\
+&amp;=&amp; 2.5
+\end{eqnarray*}\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>E <span class="ot">&lt;-</span> k<span class="sc">*</span>f</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>Esperanza <span class="ot">&lt;-</span> <span class="fu">sum</span>(E)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>Esperanza</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 2.5</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-l" class="level3" data-number="9.0.12">
+<h3 data-number="9.0.12" class="anchored" data-anchor-id="solución-parte-l"><span class="header-section-number">9.0.12</span> Solución parte (l)</h3>
+<p>La esperanza de <span class="math inline">\(X^2\)</span> se calcula por <span class="math display">\[E(X^2) \;= \;  \sum\limits_{k=1}^K k^2 \cdot f(k)\]</span></p>
+<p>En este ejemplo,</p>
+<p><span class="math display">\[\begin{eqnarray*}
+E(X^2) &amp;=&amp;  (0^2)f(0) + (1^2) f(1)+ \cdots + (5^2)f(5) \\
+&amp;=&amp; 0.00000 + 0.15625 + 1.25000 + 2.81250 + 2.50000 + 0.78125\\
+&amp;=&amp; 7.5
+\end{eqnarray*}\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>E2 <span class="ot">&lt;-</span> k<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>f</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>Esperanza2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(E2)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>Esperanza2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 7.5</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-m" class="level3" data-number="9.0.13">
+<h3 data-number="9.0.13" class="anchored" data-anchor-id="solución-parte-m"><span class="header-section-number">9.0.13</span> Solución parte (m)</h3>
+<p>Recuerde que la varianza de <span class="math inline">\(X\)</span> se puede calcular así (de dos maneras equivalentes):</p>
+<p><span class="math display">\[V(X) \;= \; \sum\limits_{k=1}^K (k-E(X))^2 \cdot f(k)\,=\, E(X^2) \,-\, \big[E(X)\big]^2\]</span></p>
+<p>En este ejemplo, sin utilizar la propiedad, obtenemos:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+V(X) &amp;=&amp;  \sum\limits_k (k-E(X))^2 \cdot f(k)\\
+&amp;=&amp; 0.1953125 + 0.3515625 + 0.0781250 + 0.0781250 + 0.3515625 + 0.1953125 \\
+&amp;=&amp; 1.25
+\end{eqnarray*}\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> (k<span class="sc">-</span>Esperanza)<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>f</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>Varianza <span class="ot">&lt;-</span> <span class="fu">sum</span>(V)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>Varianza</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 1.25</code></pre>
+</div>
+</div>
+<p>Con la propiedad se obtiene el mismo resultado:</p>
+<p><span class="math display">\[V(X) \,=\, E(X^2) \,-\, \big[E(X)\big]^2 \;= \;  7.5 - (2.5)^2 \;= \;1.25\]</span></p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>Varianza <span class="ot">&lt;-</span> Esperanza2 <span class="sc">-</span> (Esperanza)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>Varianza</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 1.25</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="distribuciones-especiales-discretas-resumen" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Distribuciones especiales discretas: Resumen</h1>
+<p>Las distribuciones discretas más importantes son:</p>
+<ol type="1">
+<li><p>Uniforme discreta</p></li>
+<li><p>De Bernoulli</p></li>
+<li><p>Binomial</p></li>
+<li><p>De Poisson</p></li>
+<li><p>Hipergeométrica</p></li>
+<li><p>Binomial negativa</p></li>
+<li><p>Geométrica</p></li>
+</ol>
+<p>En otros documentos se explicarán cada una de ellas.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+<section id="ejercicios" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Ejercicios</h1>
+<p>Realizar los ejercicios que se indican abajo. Interprete los resultados hallados.</p>
+<p><strong>NOTA</strong>: Al final de las sección 3.1 a 3.3 de la referencia 2 (ver abajo), se pueden revisar más ejercicios.</p>
+<ol type="1">
+<li><p>¿Son las siguientes afirmaciones verdaderas o falsas? Justifique cada respuesta.</p>
+<ol type="a">
+<li>Toda variable aleatoria es un número.</li>
+<li>Si <span class="math inline">\(f\)</span> es la función de probabilidad de una variable aleatoria discreta <span class="math inline">\(X\)</span> y 0 es un posible valor de <span class="math inline">\(X\)</span>, entonces, <span class="math inline">\(f(0)=0\)</span>.</li>
+<li>Para cualquier variable aleatoria discreta <span class="math inline">\(X\)</span> se cumple que <span class="math inline">\(P(X=1)=1\)</span>, en donde 1 es un posible valor de <span class="math inline">\(X\)</span>.</li>
+<li>Si <span class="math inline">\(F\)</span> es la función de distribución acumulada de una variable aleatoria <span class="math inline">\(X\)</span> discreta, entonces, <span class="math inline">\(F\)</span> es una función escalonada.</li>
+<li>Si <span class="math inline">\(X\)</span> es una variable aleatoria discreta con función de distribución acumulada <span class="math inline">\(F\)</span>, entonces, se cumple que <span class="math inline">\(P(3\leq X&lt;5)=F(5)-F(3)\)</span>.</li>
+<li>Si <span class="math inline">\(X\)</span> es cualquier variable aleatoria y si la variable aleatoria <span class="math inline">\(X+4\)</span> tiene esperanza 1, entonces, la esperanza de <span class="math inline">\(X\)</span> es</li>
+</ol></li>
+<li><p>Repita el ejemplo 1 suponiendo que la moneda se lanza 2 veces.</p></li>
+<li><p>Repita el ejemplo 1 suponiendo que la moneda se lanza 3 veces.</p></li>
+<li><p>Repita el ejemplo 1 suponiendo que la moneda se lanza 4 veces.</p></li>
+<li><p>Repita el ejemplo 1 suponiendo que la moneda se lanza 6 veces.</p></li>
+<li><p>Una pizzería, que atiende pedidos por correo, tiene cinco líneas telefónicas. Sea <span class="math inline">\(X\)</span> la variable aleatoria que representa al número de líneas ocupadas en un momento específico. Supongamos que la función de probabilidad <span class="math inline">\(f\)</span> de <span class="math inline">\(X\)</span> está dada en tabla de abajo.</p>
+<ol type="a">
+<li>Calcule la probabilidad del siguiente evento: <span class="math inline">\(A =\)</span> “a lo sumo 2 líneas están en uso”.</li>
+<li>Calcule la probabilidad del siguiente evento: <span class="math inline">\(B =\)</span> “menos de 4 líneas están en uso”.</li>
+<li>Calcule la probabilidad del siguiente evento: <span class="math inline">\(C =\)</span> “por lo menos 3 líneas están en uso”.</li>
+<li>Calcule la probabilidad del siguiente evento: <span class="math inline">\(D =\)</span> “entre 2 y 4 (ambos inclusive) líneas están en uso”.</li>
+<li>Haga un bosquejo gráfico de <span class="math inline">\(f\)</span>.</li>
+<li>Halle la función de distribución acumulada <span class="math inline">\(F\)</span> de <span class="math inline">\(X\)</span> y haga un bosquejo gráfico.</li>
+<li>Halle la esperanza de <span class="math inline">\(X\)</span>.</li>
+<li>Halle la varianza de <span class="math inline">\(X\)</span>.</li>
+</ol></li>
+</ol>
+<center>
+<img src="Grafico1Ex.png" class="img-fluid" width="450">
+</center>
+<ol start="7" type="1">
+<li><p>Considere la situación del ejercicio 6. Suponga que <span class="math inline">\(Y\)</span> representa la variable aleatoria que representa al número de líneas desocupadas en un momento específico.</p>
+<ol type="a">
+<li>Halle la función de probabilidad de <span class="math inline">\(Y\)</span> y haga un bosquejo gráfico de <span class="math inline">\(f\)</span>.</li>
+<li>Calcule la probabilidad del siguiente evento: <span class="math inline">\(E =\)</span> “entre 2 y 5 (ambos inclusive) líneas no están en uso”.</li>
+<li>Calcule la probabilidad del siguiente evento: <span class="math inline">\(F =\)</span> “por lo menos 3 líneas no están en uso”.</li>
+<li>Halle la función de distribución acumulada <span class="math inline">\(F\)</span> de <span class="math inline">\(Y\)</span> y haga un bosquejo gráfico.</li>
+<li>Halle la esperanza de <span class="math inline">\(Y\)</span>.</li>
+<li>Halle la varianza de <span class="math inline">\(Y\)</span>.</li>
+</ol></li>
+<li><p>La función de probabilidad de la variable aleatoria <span class="math inline">\(X\)</span> que representa al número de imperfecciones por 4 metros de un papel especial en rollos continuos de ancho uniforme, está dada por la tabla de abajo.</p>
+<ol type="a">
+<li>Haga un bosquejo gráfico de <span class="math inline">\(f\)</span>.</li>
+<li>Halle la función de distribución acumulada <span class="math inline">\(F\)</span> de <span class="math inline">\(X\)</span> y represéntela gráficamente.</li>
+<li>Halle la esperanza de <span class="math inline">\(X\)</span>.</li>
+<li>Halle la varianza de <span class="math inline">\(X\)</span>.</li>
+</ol></li>
+</ol>
+<center>
+<img src="Grafico2Ex.png" class="img-fluid" width="350">
+</center>
+<ol start="9" type="1">
+<li><p>Una fabricante de lapiceros tiene un programa de control de calidad que incluye la inspección de lapiceros recibidos para revisar que no tengan defectos. Supongamos que, en cierto día, él recibe lapiceros en lotes de cinco y se seleccionan dos lapiceros de un lote para inspeccionarlos. Podemos representar los posibles resultados del proceso de selección por pares. Por ejemplo, el par <span class="math inline">\((3,4)\)</span> representa la selección de los lapiceros 3 y 4 para inspeccionarlos.</p>
+<ol type="a">
+<li>Haga una lista de los resultados diferentes.</li>
+<li>Supongamos que los lapiceros 3 y 4 son los únicos defectuosos de un lote de cinco y se van a escoger dos lapiceros al azar. Defina la variable aleatoria <span class="math inline">\(X\)</span> como el número de de lapiceros defectuosos observado entre los inspeccionados. Encuentre la función de probabilidad de <span class="math inline">\(X\)</span> y represéntela gráficamente.</li>
+<li>Encuentre la función de distribución acumulada <span class="math inline">\(F\)</span> de <span class="math inline">\(X\)</span> y represéntela gráficamente.</li>
+<li>Halle la esperanza de <span class="math inline">\(X\)</span>.</li>
+<li>Halle la varianza de <span class="math inline">\(X\)</span>.</li>
+</ol></li>
+<li><p>Considere la situación del ejercicio 9. Suponga que <span class="math inline">\(Y\)</span> representa la variable aleatoria que representa al número de lapiceros no defectuosos.</p>
+<ol type="a">
+<li>Halle la función de probabilidad de <span class="math inline">\(Y\)</span> y haga un bosquejo gráfico de <span class="math inline">\(f\)</span>.</li>
+<li>Halle la función de distribución acumulada <span class="math inline">\(F\)</span> de <span class="math inline">\(Y\)</span> y haga un bosquejo gráfico.</li>
+<li>Halle la esperanza de <span class="math inline">\(Y\)</span>.</li>
+<li>Halle la varianza de <span class="math inline">\(Y\)</span>.</li>
+</ol></li>
+<li><p>Al invertir en unas acciones particulares, una persona puede tener una ganancia en un año de $8.000.000 con probabilidad de 0,4 o tener una pérdida de $2.000 con probabilidad de 0,6. ¿Cuál es la ganancia esperada de esta persona? Interprete su respuesta.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="anexos" class="level1 unnumbered">
+<h1 class="unnumbered">Anexos</h1>
+<div style="margin-left: 25px;">
+<p>A. Tablas estadísticas: <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/1.%20Estad%C3%ADstica%20b%C3%A1sica">Click derecho aquí</a>.</p>
+<p>B. Apéndice de tablas y diagramas: <a href="https://github.com/hllinas/NotasClase-Publicos/blob/main/6.%20Estadistica%20Math%20(MgStat.Aplic)/Apendice%20(diagrama-%20tabla).pdf">Click aquí</a>.</p>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="texto-guía" class="level1 unnumbered">
+<h1 class="unnumbered">Texto guía</h1>
+<ol type="1">
+<li>Llinás, H. (2014). <a href="https://editorial.uninorte.edu.co/gpd-introduccion-a-la-teoria-de-la-probabilidad.html">Introducción a la teoría de probabibilidad</a>. Barranquilla: Editorial Universidad del Norte.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="bibliografía-complementaria" class="level1 unnumbered">
+<h1 class="unnumbered">Bibliografía complementaria</h1>
+<ol start="2" type="1">
+<li><p>LLinás, H., Rojas, C. (2005). <a href="https://editorial.uninorte.edu.co/gpd-estadistica-descriptiva-y-distribuciones-de-probabilidad.html">Estadística descriptiva y distribuciones de probabilidad</a>. Barranquilla: Editorial Universidad del Norte.</p></li>
+<li><p>Consultar mis <a href="https://hllinas.github.io/toc/1-cursos/1-2-estadistica1/1.2.1.Est1_toc.html">Notas de clase en Estadística I</a>.</p></li>
+<li><p>Consultar mis Notas de clase: <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/1.%20Estad%C3%ADstica%20b%C3%A1sica">Cap. 2 (Descriptiva)</a>.</p></li>
+<li><p>Consultar mis <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/8.%20Teor%C3%ADa%20de%20probabilidad%20(Pregrado)">otras Notas de clase</a>.</p></li>
+<li><p>Consultar el documento <a href="https://hllinas.github.io/toc/0-tocvarios/0-3-enlace-material/0.3.2.Enlace_Material.html">Enlaces y materiales de ayuda</a>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<hr>
+<p><em>If you found any errors or have suggestions, please write to <a href="mailto:hllinas@uninorte.edu.co">hllinas@uninorte.edu.co</a>. Thank you.</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Department of Mathematics, Physics and Data Science · Universidad del Norte</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

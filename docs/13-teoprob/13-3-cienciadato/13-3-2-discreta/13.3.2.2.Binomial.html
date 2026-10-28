@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;rer. nat. Humberto Llinás Solano">
+
+<title>DISTRIBUCIONES DISCRETAS EN R – Humberto Llinás Solano | Teaching and Research</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4055b843e89d92f89939b863a308fe4a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Humberto Llinás Solano | Teaching and Research</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://hllinas.github.io/toc/"> 
+<span class="menu-text">My Publications and Teaching Materials (toc)</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#distribución-binomial" id="toc-distribución-binomial" class="nav-link active" data-scroll-target="#distribución-binomial"><span class="header-section-number">1</span> Distribución binomial</a>
+  <ul>
+  <li><a href="#experimentos-de-bernoulli-y-binomial" id="toc-experimentos-de-bernoulli-y-binomial" class="nav-link" data-scroll-target="#experimentos-de-bernoulli-y-binomial"><span class="header-section-number">1.0.1</span> Experimentos de Bernoulli y binomial</a></li>
+  <li><a href="#función-de-probabilidad" id="toc-función-de-probabilidad" class="nav-link" data-scroll-target="#función-de-probabilidad"><span class="header-section-number">1.0.2</span> Función de probabilidad</a></li>
+  <li><a href="#gráfica-de-la-función-de-probabilidad" id="toc-gráfica-de-la-función-de-probabilidad" class="nav-link" data-scroll-target="#gráfica-de-la-función-de-probabilidad"><span class="header-section-number">1.0.3</span> Gráfica de la función de probabilidad</a></li>
+  <li><a href="#función-de-de-distribución-acumulada" id="toc-función-de-de-distribución-acumulada" class="nav-link" data-scroll-target="#función-de-de-distribución-acumulada"><span class="header-section-number">1.0.4</span> Función de de distribución acumulada</a></li>
+  <li><a href="#esperanza-y-varianza" id="toc-esperanza-y-varianza" class="nav-link" data-scroll-target="#esperanza-y-varianza"><span class="header-section-number">1.0.5</span> Esperanza y varianza</a></li>
+  </ul></li>
+  <li><a href="#cómo-hacerlo-con-r" id="toc-cómo-hacerlo-con-r" class="nav-link" data-scroll-target="#cómo-hacerlo-con-r"><span class="header-section-number">2</span> Cómo hacerlo con R</a></li>
+  <li><a href="#ejemplo-1-enunciado" id="toc-ejemplo-1-enunciado" class="nav-link" data-scroll-target="#ejemplo-1-enunciado"><span class="header-section-number">3</span> Ejemplo 1: Enunciado</a></li>
+  <li><a href="#ejemplo-1-solución" id="toc-ejemplo-1-solución" class="nav-link" data-scroll-target="#ejemplo-1-solución"><span class="header-section-number">4</span> Ejemplo 1: Solución</a>
+  <ul>
+  <li><a href="#solución-parte-a" id="toc-solución-parte-a" class="nav-link" data-scroll-target="#solución-parte-a"><span class="header-section-number">4.0.1</span> Solución parte (a)</a></li>
+  <li><a href="#solución-parte-b" id="toc-solución-parte-b" class="nav-link" data-scroll-target="#solución-parte-b"><span class="header-section-number">4.0.2</span> Solución parte (b)</a></li>
+  <li><a href="#solución-parte-c" id="toc-solución-parte-c" class="nav-link" data-scroll-target="#solución-parte-c"><span class="header-section-number">4.0.3</span> Solución parte (c)</a></li>
+  <li><a href="#solución-parte-d" id="toc-solución-parte-d" class="nav-link" data-scroll-target="#solución-parte-d"><span class="header-section-number">4.0.4</span> Solución parte (d)</a></li>
+  <li><a href="#solución-parte-e" id="toc-solución-parte-e" class="nav-link" data-scroll-target="#solución-parte-e"><span class="header-section-number">4.0.5</span> Solución parte (e)</a></li>
+  <li><a href="#solución-parte-f" id="toc-solución-parte-f" class="nav-link" data-scroll-target="#solución-parte-f"><span class="header-section-number">4.0.6</span> Solución parte (f)</a></li>
+  <li><a href="#solución-parte-g" id="toc-solución-parte-g" class="nav-link" data-scroll-target="#solución-parte-g"><span class="header-section-number">4.0.7</span> Solución parte (g)</a></li>
+  <li><a href="#solución-parte-h" id="toc-solución-parte-h" class="nav-link" data-scroll-target="#solución-parte-h"><span class="header-section-number">4.0.8</span> Solución parte (h)</a></li>
+  <li><a href="#solución-parte-i" id="toc-solución-parte-i" class="nav-link" data-scroll-target="#solución-parte-i"><span class="header-section-number">4.0.9</span> Solución parte (i)</a></li>
+  <li><a href="#solución-parte-j" id="toc-solución-parte-j" class="nav-link" data-scroll-target="#solución-parte-j"><span class="header-section-number">4.0.10</span> Solución parte (j)</a></li>
+  <li><a href="#solución-parte-k" id="toc-solución-parte-k" class="nav-link" data-scroll-target="#solución-parte-k"><span class="header-section-number">4.0.11</span> Solución parte (k)</a></li>
+  </ul></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios"><span class="header-section-number">5</span> Ejercicios</a></li>
+  <li><a href="#otros-ejercicios" id="toc-otros-ejercicios" class="nav-link" data-scroll-target="#otros-ejercicios"><span class="header-section-number">6</span> Otros ejercicios</a></li>
+  <li><a href="#anexos" id="toc-anexos" class="nav-link" data-scroll-target="#anexos">Anexos</a></li>
+  <li><a href="#texto-guía" id="toc-texto-guía" class="nav-link" data-scroll-target="#texto-guía">Texto guía</a></li>
+  <li><a href="#bibliografía-complementaria" id="toc-bibliografía-complementaria" class="nav-link" data-scroll-target="#bibliografía-complementaria">Bibliografía complementaria</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DISTRIBUCIONES DISCRETAS EN R</h1>
+<p class="subtitle lead">Distribución binomial</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">AUTHOR</div>
+  <div class="quarto-title-meta-heading">AFFILIATION</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Dr.&nbsp;rer. nat. Humberto Llinás Solano <a href="mailto:hllinas@uninorte.edu.co" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Mathematics, Physics and Data Science, Universidad del Norte (Barranquilla, Colombia)
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">LAST UPDATED</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">28/10/2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="academic-intro">
+<p><img src="hllinas2023.jpg" class="profile-photo img-fluid" alt="Fotografía del autor"></p>
+<p><strong><a href="https://rpubs.com/hllinas/Bio_Sketch">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
+<p><strong>About these lecture notes.</strong> These notes present the binomial distribution, Bernoulli trials, probability functions, cumulative probabilities, moments, and applications with R.</p>
+</div>
+<hr>
+<section id="distribución-binomial" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Distribución binomial</h1>
+<section id="experimentos-de-bernoulli-y-binomial" class="level3" data-number="1.0.1">
+<h3 data-number="1.0.1" class="anchored" data-anchor-id="experimentos-de-bernoulli-y-binomial"><span class="header-section-number">1.0.1</span> Experimentos de Bernoulli y binomial</h3>
+<ol type="1">
+<li><p>El experimento de Bernoulli sólo tiene dos resultados posibles: “éxito” y “fracaso”. Un éxito ocurre con probabilidad <span class="math inline">\(p\)</span>, siendo<span class="math inline">\(0&lt;p&lt;1\)</span>.</p></li>
+<li><p>El experimento binomial es un experimento de Bernoulli que se ejecuta <span class="math inline">\(n\)</span> veces, de tal manera que las diferentes ejecuciones se efectúen independientemente unas de las otras y con la misma probabilidad <span class="math inline">\(p\)</span>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="función-de-probabilidad" class="level3" data-number="1.0.2">
+<h3 data-number="1.0.2" class="anchored" data-anchor-id="función-de-probabilidad"><span class="header-section-number">1.0.2</span> Función de probabilidad</h3>
+<p>Si se realiza <span class="math inline">\(n\)</span> veces un experimento de Bernoulli con probabilidad de éxito <span class="math inline">\(p\)</span>y si<span class="math inline">\(X\)</span> denota al número total de éxitos obtenidos, entonces, la probabilidad de que se obtengan <span class="math inline">\(k\)</span> éxitos está dada por la función de probabilidad <span class="math inline">\(f\)</span>:</p>
+<p><span class="math display">\[f(k) \;=\;P(X=k)  \;=\; {n\choose k} p^k\, (1-p)^{n-k}, \qquad k=0,1,2, \ldots, n\]</span></p>
+<p>La correspondiente distribución de <span class="math inline">\(X\)</span>se conoce con el nombre de distribución binomial con parámetros<span class="math inline">\(n\)</span>y<span class="math inline">\(p\)</span>.</p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$f(k) \;=\; P(X=k)  \;=\; {n\choose k} p^k\, (1-p)^{n-k}, \qquad k=0,1,2, \ldots, n$$</code></pre>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="gráfica-de-la-función-de-probabilidad" class="level3" data-number="1.0.3">
+<h3 data-number="1.0.3" class="anchored" data-anchor-id="gráfica-de-la-función-de-probabilidad"><span class="header-section-number">1.0.3</span> Gráfica de la función de probabilidad</h3>
+<p>En las gráficas de abajo se muestran diferentes representaciones gráficas de la función de probabilidad binomial con diferentes <span class="math inline">\(n=5, 15, 25, 35, 50, 100\)</span>y el mismo valor de<span class="math inline">\(p=0.5\)</span>.</p>
+<center>
+<img src="fBinomial.png" class="img-fluid" width="800">
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="función-de-de-distribución-acumulada" class="level3" data-number="1.0.4">
+<h3 data-number="1.0.4" class="anchored" data-anchor-id="función-de-de-distribución-acumulada"><span class="header-section-number">1.0.4</span> Función de de distribución acumulada</h3>
+<p>Si <span class="math inline">\(f\)</span>es la función de probabilidad binomial, entonces la función de distribución acumulada binomial<span class="math inline">\(F\)</span> se calcula así:</p>
+<p><span class="math display">\[F(t)\; =\;  P(X\leq t) \;= \; \sum\limits_{x; \, x\leq t} f(x),
+\quad \text{para todo $t$ real}\]</span></p>
+<p>En las gráficas de abajo se muestran diferentes representaciones gráficas de <span class="math inline">\(F\)</span>con diferentes<span class="math inline">\(n=5, 15, 25, 35, 50, 100\)</span>y el mismo valor de<span class="math inline">\(p=0.5\)</span>.</p>
+<center>
+<img src="AcumBinomial.png" class="img-fluid" width="800">
+</center>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="esperanza-y-varianza" class="level3" data-number="1.0.5">
+<h3 data-number="1.0.5" class="anchored" data-anchor-id="esperanza-y-varianza"><span class="header-section-number">1.0.5</span> Esperanza y varianza</h3>
+<p><span class="math display">\[E(X)= np, \qquad V(X)= np(1-p)\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$E(X)= np, \qquad V(X)= np(1-p)$$</code></pre>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="cómo-hacerlo-con-r" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Cómo hacerlo con R</h1>
+<p>Sean <span class="math inline">\(n\)</span>el tamaño muestral y<span class="math inline">\(p\)</span> la probabilidad de éxito.</p>
+<section id="función-de-probabilidad-1" class="level4 unnumbered unlisted">
+<h4 class="unnumbered unlisted anchored" data-anchor-id="función-de-probabilidad-1">Función de probabilidad</h4>
+<p>El código correspondiente para calcular la función de probabilidad <span class="math inline">\(f(k)=P(X=k)\)</span>de la variable aleatoria<span class="math inline">\(X\)</span> es:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(k, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="función-de-distribución-acumulada" class="level4 unnumbered unlisted">
+<h4 class="unnumbered unlisted anchored" data-anchor-id="función-de-distribución-acumulada">Función de distribución acumulada</h4>
+<p>El código correspondiente para calcular la función de distribución acumulada <span class="math inline">\(F(k) = P(X\leq k)\)</span>de la variable aleatoria<span class="math inline">\(X\)</span> es:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(k, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="ejemplo-1-enunciado" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Ejemplo 1: Enunciado</h1>
+<p>Supóngase que se lanza una moneda 5 veces y sea <span class="math inline">\(X\)</span> la variable aleatoria que representa el <em>número de caras que resultan</em>. Halle:</p>
+<ol type="a">
+<li><p>La probabilidad de que el número de caras sea igual a 3 (utilizando la fórmula binomial).</p></li>
+<li><p>La probabilidad de que el número de caras sea igual a 3 (utilizando la función <code>dbinom</code>).</p></li>
+<li><p>La probabilidad de que el número de caras sea menor o igual que 3 (utilizando la fórmula binomial).</p></li>
+<li><p>La probabilidad de que el número de caras sea menor o igual que 3 (utilizando la función <code>pbinom</code>).</p></li>
+<li><p>La probabilidad de que el número de caras sea mayor que 3 (utilizando la fórmula binomial).</p></li>
+<li><p>La probabilidad de que el número de caras sea mayor que 3 (utilizando la función <code>pbinom</code>).</p></li>
+<li><p>La probabilidad de que el número de caras se encuentre entre 1 y 4 (ambos inclusive).</p></li>
+<li><p>La probabilidad de que el número de caras se encuentre entre 1 y 4 (ambos no inclusive).</p></li>
+<li><p>La esperanza de <span class="math inline">\(X\)</span>, es decir, la esperanza del número de caras que resultan.</p></li>
+<li><p>La varianza de <span class="math inline">\(X\)</span>, es decir, la varianza del número de caras que resultan.</p></li>
+<li><p>La desviación de <span class="math inline">\(X\)</span>, es decir, la desviación del número de caras que resultan.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Solucion   -->
+</section>
+<section id="ejemplo-1-solución" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Ejemplo 1: Solución</h1>
+<p>La variable <span class="math inline">\(X\)</span>tiene distribución binomial con parámetros<span class="math inline">\(n=5\)</span>y<span class="math inline">\(p=0.5\)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="solución-parte-a" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="solución-parte-a"><span class="header-section-number">4.0.1</span> Solución parte (a)</h3>
+<p>Utilizando la fórmula binomial, la probabilidad de que el número de caras sea igual a 3 se calcula así:</p>
+<p><span class="math display">\[P(X= 3) = {5\choose 3} (0,5)^3\, (1-0,5)^{5-3} =  0.3125\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$P(X= 3) = {5\choose 3} (0,5)^3\, (1-0,5)^{5-3} =  0.3125$$</code></pre>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>combinatoria <span class="ot">&lt;-</span> <span class="fu">choose</span>(n,k)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>exito <span class="ot">&lt;-</span> p<span class="sc">^</span>k</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>fracaso <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">^</span>(n<span class="sc">-</span>k)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>probabilidad_a <span class="ot">&lt;-</span> combinatoria<span class="sc">*</span>exito<span class="sc">*</span>fracaso</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>probabilidad_a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.3125</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras sea igual a 3 es 0.3125.</p>
+</section>
+<section id="solución-parte-b" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="solución-parte-b"><span class="header-section-number">4.0.2</span> Solución parte (b)</h3>
+<p>Con la función <code>dbinom</code>, la probabilidad se calcula así:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>probabilidad_b <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(k, <span class="at">size=</span>n, <span class="at">prob=</span>p)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>probabilidad_b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.3125</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras sea igual a 3 es 0.3125.</p>
+</section>
+<section id="solución-parte-c" class="level3" data-number="4.0.3">
+<h3 data-number="4.0.3" class="anchored" data-anchor-id="solución-parte-c"><span class="header-section-number">4.0.3</span> Solución parte (c)</h3>
+<p>Utilizando la fórmula binomial, la probabilidad de que el número de caras sea menor o igual que 3 se calcula así:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+  P(X\leq 3) &amp;=&amp; f(0) + f(1) + f(2) + f(3)\\
+  &amp;=&amp; {5\choose 0} (0,5)^0\, (1-0,5)^{5-0}  +{5\choose 1} (0,5)^1\, (1-0,5)^{5-1}+
+      {5\choose 2} (0,5)^2\, (1-0,5)^{5-2} +{5\choose 3} (0,5)^3\, (1-0,5)^{5-3}\\
+  &amp;=&amp; 0.8125
+  \end{eqnarray*}\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+\begin{eqnarray*}
+  P(X\leq 3) &amp;=&amp; f(0) + f(1) + f(2) + f(3)\\
+  &amp;=&amp; {5\choose 0} (0,5)^0\, (1-0,5)^{5-0}  +{5\choose 1} (0,5)^1\, (1-0,5)^{5-1}+
+      {5\choose 2} (0,5)^2\, (1-0,5)^{5-2} +{5\choose 3} (0,5)^3\, (1-0,5)^{5-3}\\
+  &amp;=&amp; 0.8125
+  \end{eqnarray*}</code></pre>
+<p>En R se calcula así</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>combinatoria <span class="ot">&lt;-</span> <span class="fu">choose</span>(n,k)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>exito <span class="ot">&lt;-</span> p<span class="sc">^</span>k</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fracaso <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">^</span>(n<span class="sc">-</span>k)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>probabilidades <span class="ot">&lt;-</span> combinatoria<span class="sc">*</span>exito<span class="sc">*</span>fracaso</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>probabilidad_c <span class="ot">&lt;-</span> <span class="fu">sum</span>(probabilidades)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>probabilidad_c</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.8125</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras sea menor o igual que 3 es 0.8125.</p>
+</section>
+<section id="solución-parte-d" class="level3" data-number="4.0.4">
+<h3 data-number="4.0.4" class="anchored" data-anchor-id="solución-parte-d"><span class="header-section-number">4.0.4</span> Solución parte (d)</h3>
+<p>Con la función <code>pbinom</code>, la probabilidad se halla así:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>probabilidad_d <span class="ot">&lt;-</span> <span class="fu">pbinom</span>(k, <span class="at">size=</span>n, <span class="at">prob=</span>p)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>probabilidad_d</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.8125</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras sea menor o igual que 3 es 0.8125.</p>
+</section>
+<section id="solución-parte-e" class="level3" data-number="4.0.5">
+<h3 data-number="4.0.5" class="anchored" data-anchor-id="solución-parte-e"><span class="header-section-number">4.0.5</span> Solución parte (e)</h3>
+<p>Utilizando la fórmula binomial, la probabilidad de que el número de caras sea mayor que 3 se calcula así:</p>
+<p><span class="math display">\[P(X&gt;3) \; = \; f(4) + f(5)\; = \; 0.1875\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$P(X&gt;3) \; = \; f(4) + f(5)\; = \; 0.1875$$</code></pre>
+<p>Por lo tanto, la probabilidad de que el número de caras sea mayor que 3 es 0.1875.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>combinatoria <span class="ot">&lt;-</span> <span class="fu">choose</span>(n,k)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>exito <span class="ot">&lt;-</span> p<span class="sc">^</span>k</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>fracaso <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">^</span>(n<span class="sc">-</span>k)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>probabilidades <span class="ot">&lt;-</span> combinatoria<span class="sc">*</span>exito<span class="sc">*</span>fracaso</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>probabilidad_e <span class="ot">&lt;-</span> <span class="fu">sum</span>(probabilidades)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>probabilidad_e</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.1875</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras sea mayor que 3 es 0.1875.</p>
+</section>
+<section id="solución-parte-f" class="level3" data-number="4.0.6">
+<h3 data-number="4.0.6" class="anchored" data-anchor-id="solución-parte-f"><span class="header-section-number">4.0.6</span> Solución parte (f)</h3>
+<p>Por la propiedad del complemento:</p>
+<p><span class="math display">\[P(X&gt; 3) \; = \; 1-  F(3)\; = \;1- 0.8125 \; = \; 0.1875\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$P(X&gt; 3) \; = \; 1-  F(3)\; = \;1- 0.8125 \; = \; 0.1875$$</code></pre>
+<p>Con la función <code>pbinom</code>, la probabilidad se calcula así:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>probabilidad_f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> probabilidad_c</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>probabilidad_f</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.1875</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras sea menor o igual que 3 es 0.8125.</p>
+</section>
+<section id="solución-parte-g" class="level3" data-number="4.0.7">
+<h3 data-number="4.0.7" class="anchored" data-anchor-id="solución-parte-g"><span class="header-section-number">4.0.7</span> Solución parte (g)</h3>
+<p>La probabilidad de que el número de caras se encuentre entre 1 y 4 (ambos inclusive) se calcula así:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+P(1 \leq X \leq 4) &amp;=&amp;   P(X=1, 2, 3, 4)\; = \;   P(X=0, 1, 2, 3, 4)\, - \,  P(X=0) \\
+&amp;=&amp; P(X\leq 4) \, - \, P(X\leq 0)  \; = \; F(4) \, - \, F(0) \; = \; 0.96875 \, - \, 0.03125 \; = \; 0.9375
+\end{eqnarray*}\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+\begin{eqnarray*}
+ P(1 \leq X \leq 4) &amp;=&amp;   P(X=1, 2, 3, 4)\; = \;   P(X=0, 1, 2, 3, 4)\, - \,  P(X=0) \\
+ &amp;=&amp; P(X\leq 4) \, - \, P(X\leq 0)  \; = \; F(4) \, - \, F(0) \; = \; 0.96875 \, - \, 0.03125 \; = \; 0.9375
+ \end{eqnarray*}</code></pre>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>probabilidad_g <span class="ot">&lt;-</span> <span class="fu">pbinom</span>(<span class="dv">4</span>, <span class="at">size=</span>n, <span class="at">prob=</span>p) <span class="sc">-</span> <span class="fu">pbinom</span>(<span class="dv">0</span>, <span class="at">size=</span>n, <span class="at">prob=</span>p)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>probabilidad_g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.9375</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras se encuentre entre 1 y 4 (ambos inclusive) es 0.9375.</p>
+</section>
+<section id="solución-parte-h" class="level3" data-number="4.0.8">
+<h3 data-number="4.0.8" class="anchored" data-anchor-id="solución-parte-h"><span class="header-section-number">4.0.8</span> Solución parte (h)</h3>
+<p>La probabilidad de que el número de caras se encuentre entre 1 y 4 (ambos no inclusive) así:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+P(1 &lt; X &lt; 4) &amp;=&amp;   P(X=2, 3)\; = \;   P(X=0, 1, 2, 3)\, - \,  P(X=0, 1) \\
+&amp;=&amp; P(X\leq 3) \, - \, P(X\leq 1)  \; = \; F(3) \, - \, F(1) \; = \; 0.8125 \, - \, 0.1875 \; = \; 0.625
+\end{eqnarray*}\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+ \begin{eqnarray*}
+ P(1 &lt; X &lt; 4) &amp;=&amp;   P(X=2, 3)\; = \;   P(X=0, 1, 2, 3)\, - \,  P(X=0, 1) \\
+ &amp;=&amp; P(X\leq 3) \, - \, P(X\leq 1)  \; = \; F(3) \, - \, F(1) \; = \; 0.8125 \, - \, 0.1875 \; = \; 0.625
+ \end{eqnarray*}</code></pre>
+<p>Es decir, la probabilidad de que el número de caras se encuentre entre 1 y 4 (ambos no inclusive) es 0.625.</p>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>probabilidad_h <span class="ot">&lt;-</span> <span class="fu">pbinom</span>(<span class="dv">3</span>, <span class="at">size=</span>n, <span class="at">prob=</span>p) <span class="sc">-</span> <span class="fu">pbinom</span>(<span class="dv">1</span>, <span class="at">size=</span>n, <span class="at">prob=</span>p)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>probabilidad_h</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.625</code></pre>
+</div>
+</div>
+<p>Es decir, la probabilidad de que el número de caras se encuentre entre 1 y 4 (ambos no inclusive) es 0.625.</p>
+</section>
+<section id="solución-parte-i" class="level3" data-number="4.0.9">
+<h3 data-number="4.0.9" class="anchored" data-anchor-id="solución-parte-i"><span class="header-section-number">4.0.9</span> Solución parte (i)</h3>
+<p>La esperanza de <span class="math inline">\(X\)</span> es 2.5:</p>
+<p><span class="math display">\[E(X) \; = \; np \; = \; (5) (0.5) \; = \; 2.5\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$E(X) \; = \; np \; = \; (5) (0.5) \; = \; 2.5$$</code></pre>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Esperanza <span class="ot">&lt;-</span> n<span class="sc">*</span>p </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>Esperanza</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 2.5</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-j" class="level3" data-number="4.0.10">
+<h3 data-number="4.0.10" class="anchored" data-anchor-id="solución-parte-j"><span class="header-section-number">4.0.10</span> Solución parte (j)</h3>
+<p>La varianza de <span class="math inline">\(X\)</span> es 1.25:</p>
+<p><span class="math display">\[V(X) \; = \; np(1-p) \; = \; (5) (0.5)(1-0.5) \; = \; 1.25\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$V(X) \; = \; np(1-p) \; = \; (5) (0.5)(1-0.5) \; = \; 1.25$$  </code></pre>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Varianza <span class="ot">&lt;-</span> n<span class="sc">*</span>p<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>Varianza</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 1.25</code></pre>
+</div>
+</div>
+</section>
+<section id="solución-parte-k" class="level3" data-number="4.0.11">
+<h3 data-number="4.0.11" class="anchored" data-anchor-id="solución-parte-k"><span class="header-section-number">4.0.11</span> Solución parte (k)</h3>
+<p>La desviación es la raiz cuadrada de la varianza:</p>
+<p><span class="math display">\[\sigma \; =\;  \sqrt{V(X)} \; =\;  \sqrt{1.25} \; = \; 1.118034\]</span></p>
+<pre><code>El código para escribir la expresión anterior es:
+
+$$\sigma \; =\;  \sqrt{V(X)} \; =\;  \sqrt{1.25} \; = \; 1.118034$$</code></pre>
+<p>En R:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>Desviacion <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(Varianza)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>Desviacion</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 1.118034</code></pre>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+</section>
+<section id="ejercicios" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Ejercicios</h1>
+<p>Crear un nuevo documento R Markdown, realizando los ejercicios que se indican abajo. Interprete los resultados hallados.</p>
+<p>NOTA: Al final de la sección 3.5 de la referencia 2 (ver abajo), se pueden revisar más ejercicios.</p>
+<ol type="1">
+<li><p>Repetir el ejemplo 1, utilizando <span class="math inline">\(n=7\)</span>.</p></li>
+<li><p>Repetir el ejemplo 1, utilizando <span class="math inline">\(n=10\)</span>.</p></li>
+<li><p>Una semilla tiene un porcentaje de germinación del 83%. Si se siembran 12 semillas, halle lo que se pide en los incisos de abajo. Sugerencia: defina <span class="math inline">\(X\)</span>como el número de semillas germinadas y<span class="math inline">\(Y\)</span> como el número de semillas no germinadas. Utilícelas en los incisos donde sea el caso.</p>
+<ol type="a">
+<li>La probabilidad de que germinen todas las semillas.</li>
+<li>La probabilidad de que no germinen todas las semillas.</li>
+<li>La probabilidad de que germinen 10 semillas.</li>
+<li>La probabilidad de que no germinen 10 semillas.</li>
+<li>La probabilidad de que germinen a lo sumo 10 semillas.</li>
+<li>La probabilidad de que no germinen a lo sumo 10 semillas.</li>
+<li>La probabilidad de que germinen menos de 7 semillas.</li>
+<li>La probabilidad de que no germinen menos de 7 semillas.</li>
+<li>La probabilidad de que germinen al menos 8 semillas.</li>
+<li>La probabilidad de que no germinen al menos 8 semillas.</li>
+<li>La probabilidad de que germinen más de 5 semillas.</li>
+<li>La probabilidad de que no germinen más de 5 semillas.</li>
+<li>La esperanza, varianza y desviación del número de semillas germinadas.</li>
+<li>La esperanza, varianza y desviación del número de semillas no germinadas.</li>
+</ol></li>
+<li><p>De una producción de 8000 tornillos se sabe que el 5% está defectuosos. Supongamos que se selecciona un muestra al azar de 25 tornillos.</p>
+<ol type="a">
+<li>¿Cuál es la probabilidad de que el número de tornillos no defectuosos en la muestra no exceda a 8?</li>
+<li>¿Cuál es la probabilidad de que el número de tornillos defectuosos en la muestra sea por lo menos 12?</li>
+<li>¿Cuál es la probabilidad de que el número de tornillos no defectuosos en la muestra sea estrictamente mayor que 6 pero menor o igual a 20?</li>
+<li>¿Cuál es la probabilidad de que ninguno de los tornillos esté defectuoso?</li>
+<li>Calcule el valor esperado, la varianza y la desviación estándar del número de tornillos defectuosos en la muestra.</li>
+</ol></li>
+<li><p>De una producción de 9000 tornillos se sabe que el 87% no está defectuosos. Supongamos que se selecciona un muestra al azar de 33 tornillos.</p>
+<ol type="a">
+<li>¿Cuál es la probabilidad de que el número de tornillos defectuosos en la muestra no exceda a 9?</li>
+<li>¿Cuál es la probabilidad de que el número de tornillos no defectuosos en la muestra sea por lo menos 11?</li>
+<li>¿Cuál es la probabilidad de que el número de tornillos defectuosos en la muestra sea estrictamente mayor que 3 pero menor o igual a 18?</li>
+<li>¿Cuál es la probabilidad de que ninguno de los tornillos no esté defectuoso?</li>
+<li>Calcule el valor esperado, la varianza y la desviación estándar del número de tornillos no defectuosos en la muestra.</li>
+</ol></li>
+<li><p>En un peaje se cobra 6000 pesos por cada bus de transporte público y 9500 por carros particulares. Supongamos que durante las horas diurnas, de un total de 10000 de vehículos que pasa por el peaje, el 85% de todos los vehículos son carros particulares. Si 15 vehículos pasan por el peaje durante un período particular diurno,</p>
+<ol type="a">
+<li>¿Cuál es la probabilidad de que el número de carros particulares no exceda a 8?</li>
+<li>¿Cuál es la probabilidad de que el número de transporte público es al menos 8?</li>
+<li>¿Cuál es la probabilidad de que el número de transporte público en la muestra sea por lo menos 6?</li>
+<li>¿Cuál es la probabilidad de que el número de carros particulares en la muestra sea estrictamente menor que 5 y menor o igual a 11?</li>
+<li>¿Cuál es la probabilidad de que el número de transporte público en la muestra sea estrictamente mayor que 5 pero menor o igual a 11?</li>
+<li>¿Cuál es la probabilidad de que todos los vehículos sean de transporte público?</li>
+<li>¿Cuál es la probabilidad de el número de carros particulares en la muestra esté entre 5 y 12 (ambos inclusive)?</li>
+<li>¿Cuál es la probabilidad de el número de transporte público en la muestra esté entre 5 y 12 (ambos no inclusive)?</li>
+<li>¿Cuál es el ingreso de cuotas esperado?</li>
+</ol></li>
+<li><p>El propietario de un local comercial ha comprobado que el 20% de los clientes que entran allí hacen alguna compra. Cierta tarde, entraron <span class="math inline">\(n\)</span>personas. Halle lo que se pide en los incisos de abajo para cada uno de los siguientes tres casos: CASO 1:<span class="math inline">\(n=6\)</span>, CASO 2:<span class="math inline">\(n=7\)</span>y CASO 3:<span class="math inline">\(n=8\)</span>. Sugerencia: defina<span class="math inline">\(X\)</span>como el número de clientes que hicieron alguna compra y<span class="math inline">\(Y\)</span> como el número de clientes que no hicieron compra. Utilícelas en los incisos donde sea el caso.</p>
+<ol type="a">
+<li>La probabilidad de que todos los clientes no hicieron compra.</li>
+<li>La probabilidad de que a lo sumo 5 clientes hicieron alguna compra.</li>
+<li>La probabilidad de que menos de 3 clientes no hicieron compra.</li>
+<li>La probabilidad de que al menos 3 clientes hicieron alguna compra.</li>
+<li>La probabilidad de que más de 2 clientes no hicieron compra.</li>
+<li>La probabilidad de el número de clientes en la muestra que hicieron alguna compra esté entre 3 y 10 (ambos inclusive)</li>
+<li>La probabilidad de que el número de clientes en la muestra que no hicieron compra sea estrictamente mayor que 1 pero menor o igual a 4.</li>
+<li>La probabilidad de que el número de clientes en la muestra que hicieron alguna compra sea estrictamente menor que 3 y menor o igual a 9.</li>
+<li>La esperanza, varianza y desviación del número de clientes que no hicieron compra.</li>
+<li>La esperanza, varianza y desviación del número de clientes que hicieron alguna compra.</li>
+</ol></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+<section id="otros-ejercicios" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Otros ejercicios</h1>
+<ol type="1">
+<li><p>Tener en cuenta las secciones de ejercicios que aparecen en el <a href="https://editorial.uninorte.edu.co/gpd-introduccion-a-la-teoria-de-la-probabilidad.html">texto guía</a> (ver referencia No.&nbsp;1).</p></li>
+<li><p>Tener en cuenta la <a href="https://editorial.uninorte.edu.co/gpd-estadistica-descriptiva-y-distribuciones-de-probabilidad.html">bibliografía complementaria No.&nbsp;2</a> que se referencia abajo y realizar los ejercicios que aparecen en:</p>
+<ul>
+<li><p>La Sección 3.1 (página 187): <em>Variables aleatorias</em>.</p></li>
+<li><p>La Sección 3.2 (página 197): <em>Distribuciones de probabilidad (caso discreto)</em>.</p></li>
+<li><p>La Sección 3.3 (página 210): <em>Esperanza y varianza de una variable aleatoria discreta</em>.</p></li>
+<li><p>La Sección 3.5 (página 221): <em>Distribución binomial</em>.</p></li>
+<li><p>La Sección de Ejercicios Complementarios (página 252), en particular, los de distribución binomial.</p></li>
+</ul></li>
+<li><p>Al hacer <a href="https://github.com/hllinas/Mis-R-Script-Papers">click derecho aquí</a>, usted encontrará una serie de artículos publicados en diferentes áreas de aplicación. Seleccione algunos de ellos y aplique la teoría explicada en este documento.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="anexos" class="level1 unnumbered">
+<h1 class="unnumbered">Anexos</h1>
+<div style="margin-left: 25px;">
+<p>A. Tablas estadísticas: <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/1.%20Estad%C3%ADstica%20b%C3%A1sica">Click derecho aquí</a>.</p>
+<p>B. Apéndice de tablas y diagramas: <a href="https://github.com/hllinas/NotasClase-Publicos/blob/main/6.%20Estadistica%20Math%20(MgStat.Aplic)/Apendice%20(diagrama-%20tabla).pdf">Click derecho aquí</a>.</p>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="texto-guía" class="level1 unnumbered">
+<h1 class="unnumbered">Texto guía</h1>
+<ol type="1">
+<li>Llinás, H. (2014). <a href="https://editorial.uninorte.edu.co/gpd-introduccion-a-la-teoria-de-la-probabilidad.html">Introducción a la teoría de probabibilidad</a>. Barranquilla: Editorial Universidad del Norte.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="bibliografía-complementaria" class="level1 unnumbered">
+<h1 class="unnumbered">Bibliografía complementaria</h1>
+<ol start="2" type="1">
+<li><p>LLinás, H., Rojas, C. (2005). <a href="https://editorial.uninorte.edu.co/gpd-estadistica-descriptiva-y-distribuciones-de-probabilidad.html">Estadística descriptiva y distribuciones de probabilidad</a>. Barranquilla: Editorial Universidad del Norte.</p></li>
+<li><p>Consultar mis <a href="https://hllinas.github.io/toc/1-cursos/1-2-estadistica1/1.2.1.Est1_toc.html">Notas de clase en Estadística I</a>.</p></li>
+<li><p>Consultar mis Notas de clase: <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/1.%20Estad%C3%ADstica%20b%C3%A1sica">Cap. 3 (Discreta)</a>.</p></li>
+<li><p>Consultar mis <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/8.%20Teor%C3%ADa%20de%20probabilidad%20(Pregrado)">otras Notas de clase</a>.</p></li>
+<li><p>Apéndice de tablas y diagramas: <a href="https://github.com/hllinas/NotasClase-Publicos/blob/main/6.%20Estadistica%20Math%20(MgStat.Aplic)/Apendice%20(diagrama-%20tabla).pdf">Click aquí</a>.</p></li>
+<li><p>Consultar el documento <a href="https://hllinas.github.io/toc/0-tocvarios/0-3-enlace-material/0.3.2.Enlace_Material.html">Enlaces y materiales de ayuda</a>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<hr>
+<p><em>If you found any errors or have suggestions, please write to <a href="mailto:hllinas@uninorte.edu.co">hllinas@uninorte.edu.co</a>. Thank you.</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Department of Mathematics, Physics and Data Science · Universidad del Norte</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
