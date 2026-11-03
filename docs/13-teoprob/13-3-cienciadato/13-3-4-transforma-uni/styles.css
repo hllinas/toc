@@ -1,0 +1,164 @@
+/* Academic index — visual refinements on the Quarto Cosmo theme */
+:root { 
+  --academic-blue: #17365d; 
+  --academic-accent: #1767a7;
+  --academic-ink: #263747; 
+}
+
+body { 
+  font-size: 15px; 
+  color: var(--academic-ink); 
+  line-height: 1.68; 
+}
+
+#quarto-content { 
+  padding-top: 1.15rem; 
+}
+
+.navbar { 
+  box-shadow: 0 2px 12px rgba(11,37,63,.12); 
+}
+
+.navbar .navbar-brand { 
+  font-weight: 650; 
+  letter-spacing: .01em; 
+}
+
+#title-block-header { margin-bottom: 1.15rem; }
+
+#title-block-header .title { 
+  font-weight: 750; 
+  color: var(--academic-blue); 
+  font-size: clamp(1.65rem, 2.5vw, 2.15rem); 
+  line-height: 1.25;
+}
+
+#title-block-header .subtitle { 
+  color: #60758b; 
+  font-size: 1.08rem;
+}
+
+#title-block-header .quarto-title-meta { font-size: .88rem; }
+
+main.content > section.level1 { 
+  padding-top: .35rem;
+  padding-bottom: .35rem; border-bottom: 1px solid #e8eef4; }
+main.content > section.level1 > h1 { color: var(--academic-blue); font-size: 22px; font-weight: 700; margin-top: 1.65rem; margin-bottom: .85rem; scroll-margin-top: 5rem; }
+main.content p { margin-bottom: .8rem; }
+a { text-underline-offset: 2px; }
+main.content a:not(.anchorjs-link) { color: #1265a5; }
+main.content a:not(.anchorjs-link):hover { color: #0b416c; }
+.academic-intro { background: #f5f8fc; border: 1px solid #e5ecf5; border-left: 4px solid #3b78aa; border-radius: 9px; padding: 1rem 1.15rem .45rem; min-height: 175px; }
+.profile-photo { width: 150px; max-width: 34vw; height: auto; border-radius: 9px; float: right; margin: 0 0 .5rem 1.25rem; box-shadow: 0 4px 12px rgba(25,50,72,.13); }
+/* Table of contents: readable, clearly numbered, and visible during local file previews. */
+#TOC .nav-link { font-size: .88rem; line-height: 1.42; padding: .22rem .5rem; border-radius: 4px; }
+#TOC .nav-link:hover { background: #edf4fa; }
+#TOC .nav-link.active { color: #145f9c; font-weight: 650; }
+#TOC ul.collapse, #TOC ul.collapse:not(.show) { display: block !important; visibility: visible !important; }
+#toc-title { color: var(--academic-blue); font-weight: 700; }
+@media (max-width: 700px) {
+  .academic-intro { padding: .85rem; }
+  .profile-photo { width: 110px; }
+  main.content > section.level1 > h1 { font-size: 22px; }
+}
+
+/* Apuntes: conservar visualización clara y consistente con el índice. */
+main.content { line-height: 1.64; }
+main.content div.sourceCode, main.content pre { font-size: 0.91rem; }
+main.content img { max-width: 100%; height: auto; }
+
+
+/* ==========================================
+   Estilo de chunks R y sus resultados
+   ========================================== */
+
+/* Bloques de código */
+/* Código R: un solo borde */
+div.sourceCode {
+  background-color: #f5f5f5 !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 5px !important;
+  padding: 8px !important;
+  margin-bottom: 10px;
+}
+
+/* Eliminar el segundo borde interior */
+div.sourceCode pre.sourceCode {
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Resultados de los chunks */
+.cell-output-stdout pre,
+.cell-output-stderr pre,
+.cell-output pre:not(.sourceCode) {
+  background-color: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 5px !important;
+  padding: 10px !important;
+  margin-top: 5px;
+  margin-bottom: 12px;
+}
+
+/* Tamaño de letra de los resultados de R */
+.cell-output pre,
+.cell-output pre code {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+/* Espacio interior de los resultados */
+.cell-output-stdout pre {
+  padding: 7px 9px !important;
+}
+
+/* ========================================================
+   NIVELES DE SECCIÓN DE LOS APUNTES
+   Mantiene el título de portada y la barra azul originales.
+   ======================================================== */
+
+/* El cuerpo general permanece a 15px para legibilidad.
+   Para recuperar los 14px de los apuntes antiguos, cambia
+   la regla body al principio del archivo a font-size: 14px. */
+
+/* Nivel 1 (#) */
+main.content h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--academic-blue);
+}
+
+/* Nivel 2 (##) */
+main.content h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: darkblue;
+}
+
+/* Nivel 3 (###) */
+main.content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: darkgreen;
+}
+
+/* Nivel 4 (####) */
+main.content h4 {
+  font-size: 18px;
+  font-weight: 900;
+  color: green;
+  font-family: "Times New Roman", Times, serif;
+}
+
+/* Tamaño del código fuente, sin alterar resultados ni tablas. */
+main.content div.sourceCode pre code,
+main.content div.sourceCode code.sourceCode {
+  font-size: 12px;
+}
+
+/* Usar solo si realmente se necesita diseño en columnas.
+   Evitamos aplicar flex globalmente a clases internas de Quarto. */
+/* .mis-columnas { display: flex; gap: 1rem; } */
