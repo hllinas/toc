@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;rer. nat. Humberto Llinás Solano">
+<meta name="dcterms.date" content="2026-11-11">
+
+<title>TEORÍA DE PROBABILIDAD (con R) – Humberto Llinás Solano | Teaching and Research</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4055b843e89d92f89939b863a308fe4a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Humberto Llinás Solano | Teaching and Research</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://hllinas.github.io/toc/"> 
+<span class="menu-text">My Publications and Teaching Materials (toc)</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#distribuciones-especiales" id="toc-distribuciones-especiales" class="nav-link active" data-scroll-target="#distribuciones-especiales"><span class="header-section-number">1</span> Distribuciones especiales</a>
+  <ul>
+  <li><a href="#discretas" id="toc-discretas" class="nav-link" data-scroll-target="#discretas"><span class="header-section-number">1.0.1</span> Discretas</a></li>
+  <li><a href="#continuas" id="toc-continuas" class="nav-link" data-scroll-target="#continuas"><span class="header-section-number">1.0.2</span> Continuas</a></li>
+  </ul></li>
+  <li><a href="#distribución-de-funciones-de-variables-aleatorias" id="toc-distribución-de-funciones-de-variables-aleatorias" class="nav-link" data-scroll-target="#distribución-de-funciones-de-variables-aleatorias"><span class="header-section-number">2</span> Distribución de funciones de variables aleatorias</a>
+  <ul>
+  <li><a href="#teorema-de-transformación-univariado" id="toc-teorema-de-transformación-univariado" class="nav-link" data-scroll-target="#teorema-de-transformación-univariado"><span class="header-section-number">2.0.1</span> Teorema de transformación (univariado)</a></li>
+  <li><a href="#relaciones-entre-algunas-distribuciones" id="toc-relaciones-entre-algunas-distribuciones" class="nav-link" data-scroll-target="#relaciones-entre-algunas-distribuciones"><span class="header-section-number">2.0.2</span> Relaciones entre algunas distribuciones</a></li>
+  </ul></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios"><span class="header-section-number">3</span> Ejercicios</a>
+  <ul>
+  <li><a href="#ejercicio-1" id="toc-ejercicio-1" class="nav-link" data-scroll-target="#ejercicio-1"><span class="header-section-number">3.0.1</span> Ejercicio 1</a></li>
+  <li><a href="#ejercicio-2" id="toc-ejercicio-2" class="nav-link" data-scroll-target="#ejercicio-2"><span class="header-section-number">3.0.2</span> Ejercicio 2</a></li>
+  <li><a href="#ejercicio-3" id="toc-ejercicio-3" class="nav-link" data-scroll-target="#ejercicio-3"><span class="header-section-number">3.0.3</span> Ejercicio 3</a></li>
+  <li><a href="#ejercicio-4" id="toc-ejercicio-4" class="nav-link" data-scroll-target="#ejercicio-4"><span class="header-section-number">3.0.4</span> Ejercicio 4</a></li>
+  <li><a href="#ejercicio-5" id="toc-ejercicio-5" class="nav-link" data-scroll-target="#ejercicio-5"><span class="header-section-number">3.0.5</span> Ejercicio 5</a></li>
+  <li><a href="#ejercicios-del-6-al-9" id="toc-ejercicios-del-6-al-9" class="nav-link" data-scroll-target="#ejercicios-del-6-al-9"><span class="header-section-number">3.0.6</span> Ejercicios del 6 al 9</a></li>
+  <li><a href="#ejercicio-10" id="toc-ejercicio-10" class="nav-link" data-scroll-target="#ejercicio-10"><span class="header-section-number">3.0.7</span> Ejercicio 10</a></li>
+  <li><a href="#ejercicio-11" id="toc-ejercicio-11" class="nav-link" data-scroll-target="#ejercicio-11"><span class="header-section-number">3.0.8</span> Ejercicio 11</a></li>
+  <li><a href="#ejercicio-12" id="toc-ejercicio-12" class="nav-link" data-scroll-target="#ejercicio-12"><span class="header-section-number">3.0.9</span> Ejercicio 12</a></li>
+  <li><a href="#ejercicio-13" id="toc-ejercicio-13" class="nav-link" data-scroll-target="#ejercicio-13"><span class="header-section-number">3.0.10</span> Ejercicio 13</a></li>
+  <li><a href="#ejercicio-14" id="toc-ejercicio-14" class="nav-link" data-scroll-target="#ejercicio-14"><span class="header-section-number">3.0.11</span> Ejercicio 14</a></li>
+  <li><a href="#ejercicio-15" id="toc-ejercicio-15" class="nav-link" data-scroll-target="#ejercicio-15"><span class="header-section-number">3.0.12</span> Ejercicio 15</a></li>
+  <li><a href="#ejercicios-del-16-al-20" id="toc-ejercicios-del-16-al-20" class="nav-link" data-scroll-target="#ejercicios-del-16-al-20"><span class="header-section-number">3.0.13</span> Ejercicios del 16 al 20</a></li>
+  <li><a href="#ejercicio-21" id="toc-ejercicio-21" class="nav-link" data-scroll-target="#ejercicio-21"><span class="header-section-number">3.0.14</span> Ejercicio 21</a></li>
+  <li><a href="#ejercicio-22" id="toc-ejercicio-22" class="nav-link" data-scroll-target="#ejercicio-22"><span class="header-section-number">3.0.15</span> Ejercicio 22</a></li>
+  <li><a href="#ejercicios-del-23-al-27" id="toc-ejercicios-del-23-al-27" class="nav-link" data-scroll-target="#ejercicios-del-23-al-27"><span class="header-section-number">3.0.16</span> Ejercicios del 23 al 27</a></li>
+  <li><a href="#ejercicios-del-28-al-31" id="toc-ejercicios-del-28-al-31" class="nav-link" data-scroll-target="#ejercicios-del-28-al-31"><span class="header-section-number">3.0.17</span> Ejercicios del 28 al 31</a></li>
+  <li><a href="#ejercicios-del-32-al-38" id="toc-ejercicios-del-32-al-38" class="nav-link" data-scroll-target="#ejercicios-del-32-al-38"><span class="header-section-number">3.0.18</span> Ejercicios del 32 al 38</a></li>
+  <li><a href="#ejercicios-del-39-al-42" id="toc-ejercicios-del-39-al-42" class="nav-link" data-scroll-target="#ejercicios-del-39-al-42"><span class="header-section-number">3.0.19</span> Ejercicios del 39 al 42</a></li>
+  <li><a href="#ejercicios-del-43-al-50" id="toc-ejercicios-del-43-al-50" class="nav-link" data-scroll-target="#ejercicios-del-43-al-50"><span class="header-section-number">3.0.20</span> Ejercicios del 43 al 50</a></li>
+  <li><a href="#ejercicio-51" id="toc-ejercicio-51" class="nav-link" data-scroll-target="#ejercicio-51"><span class="header-section-number">3.0.21</span> Ejercicio 51</a></li>
+  <li><a href="#ejercicio-52" id="toc-ejercicio-52" class="nav-link" data-scroll-target="#ejercicio-52"><span class="header-section-number">3.0.22</span> Ejercicio 52</a></li>
+  </ul></li>
+  <li><a href="#anexos" id="toc-anexos" class="nav-link" data-scroll-target="#anexos">Anexos</a></li>
+  <li><a href="#texto-guía" id="toc-texto-guía" class="nav-link" data-scroll-target="#texto-guía">Texto guía</a></li>
+  <li><a href="#bibliografía-complementaria" id="toc-bibliografía-complementaria" class="nav-link" data-scroll-target="#bibliografía-complementaria">Bibliografía complementaria</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">TEORÍA DE PROBABILIDAD (con R)</h1>
+<p class="subtitle lead">Teorema de transformación (univariado)</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">AUTHOR</div>
+  <div class="quarto-title-meta-heading">AFFILIATION</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Dr.&nbsp;rer. nat. Humberto Llinás Solano <a href="mailto:hllinas@uninorte.edu.co" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Mathematics, Physics and Data Science, Universidad del Norte (Barranquilla, Colombia)
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">LAST UPDATED</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">11/11/2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="academic-intro">
+<p><img src="hllinas2023.jpg" class="profile-photo img-fluid" alt="Fotografía del autor"></p>
+<p><strong><a href="https://rpubs.com/hllinas/Bio_Sketch">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
+<p><strong>About these lecture notes.</strong> These notes study transformations of random variables, associated density functions and relationships among probability distributions, with examples and exercises in R.</p>
+</div>
+<hr>
+<section id="distribuciones-especiales" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Distribuciones especiales</h1>
+<section id="discretas" class="level3" data-number="1.0.1">
+<h3 data-number="1.0.1" class="anchored" data-anchor-id="discretas"><span class="header-section-number">1.0.1</span> Discretas</h3>
+<p>Uniforme discreta, de Bernoulli, binomial, de Poisson, hipergeométrica, binomial negativa, geométrica, de Polya, multinomial, etc.</p>
+<p>En la tabla de abajo se presenta un resumen de las distribuciones discretas más importantes.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small">
+<caption>Resumen de distribuciones discretas</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">Distribución</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">Función de probabilidad</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">Parámetros</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">E(X)</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">V(X)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Uniforme</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x_k)=\frac{1}{n},\quad k=1,\ldots,n$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$x_1\lt\cdots\lt x_n,\quad n\in\mathbb{N}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\frac{1}{n}\sum_{k=1}^n x_k$$</td>
+<td style="text-align: left;">$$\frac{1}{n}\sum_{k=1}^n x_k^2-\left(\frac{1}{n}\sum_{k=1}^n x_k\right)^2$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">De dos puntos</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x_1)=p,\quad f(x_2)=1-p$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$x_1\lt x_2,\quad 0\lt p\lt 1$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$x_1p+x_2(1-p)$$</td>
+<td style="text-align: left;">$$(x_1-x_2)^2p(1-p)$$</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Bernoulli</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(0)=1-p,\quad f(1)=p$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$0\lt p\lt 1$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$p$$</td>
+<td style="text-align: left;">$$p(1-p)$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Binomial</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(k)=\binom{n}{k}p^k(1-p)^{n-k}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$0\lt p\lt 1,\quad n\in\mathbb{N}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$np$$</td>
+<td style="text-align: left;">$$np(1-p)$$</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Poisson</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(k)=\frac{e^{-\lambda}\lambda^k}{k!}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\lambda\gt 0$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\lambda$$</td>
+<td style="text-align: left;">$$\lambda$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Hipergeométrica</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(k)=\frac{\binom{M}{k}\binom{N-M}{n-k}}{\binom{N}{n}}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$M\leq N,\quad n\leq N$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$n\frac{M}{N}$$</td>
+<td style="text-align: left;">$$n\frac{M}{N}\left(1-\frac{M}{N}\right)\left(\frac{N-n}{N-1}\right)$$</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Binomial negativa</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(k)=\binom{k+r-1}{r-1}p^r(1-p)^k$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$r\gt 0,\quad 0\lt p\lt 1$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\frac{r(1-p)}{p}$$</td>
+<td style="text-align: left;">$$\frac{r(1-p)}{p^2}$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Geométrica</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(k)=p(1-p)^k$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$0\lt p\lt 1$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\frac{1-p}{p}$$</td>
+<td style="text-align: left;">$$\frac{1-p}{p^2}$$</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="continuas" class="level3" data-number="1.0.2">
+<h3 data-number="1.0.2" class="anchored" data-anchor-id="continuas"><span class="header-section-number">1.0.2</span> Continuas</h3>
+<p>Uniforme continua, normal, gamma, exponencial, <span class="math inline">\(t\)</span> de Student, Chi-cuadrada, <span class="math inline">\(F\)</span> de Fisher, Cauchy, Beta, de Laplace, Log-normal, de Rayleigh, Weibull, de Maxwell, del valor extremo, etc.</p>
+<p>En la tabla de abajo se presenta un resumen de las distribuciones continuas más importantes.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small">
+<caption>Resumen de distribuciones continuas</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">Distribución</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">Función de densidad</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">Parámetros</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">E(X)</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; color: white !important; background-color: rgba(23, 54, 93, 1) !important;">V(X)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Uniforme</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\frac{1}{b-a},\quad a\lt x\lt b$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$a\lt b$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\frac{a+b}{2}$$</td>
+<td style="text-align: left;">$$\frac{(b-a)^2}{12}$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Normal</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\mu\in\mathbb{R},\quad \sigma^2\gt 0$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\mu$$</td>
+<td style="text-align: left;">$$\sigma^2$$</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Normal estándar</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$x\in\mathbb{R}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$0$$</td>
+<td style="text-align: left;">$$1$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Gamma</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\frac{x^{\alpha-1}e^{-x/\beta}}{\beta^\alpha\Gamma(\alpha)}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\alpha\gt 0,\quad \beta\gt 0$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\alpha\beta$$</td>
+<td style="text-align: left;">$$\alpha\beta^2$$</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Exponencial</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\lambda e^{-\lambda x},\quad x\gt 0$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\lambda\gt 0$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\frac{1}{\lambda}$$</td>
+<td style="text-align: left;">$$\frac{1}{\lambda^2}$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">t de Student</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\frac{\Gamma((n+1)/2)}{\sqrt{n\pi}\Gamma(n/2)}\left(1+\frac{x^2}{n}\right)^{-(n+1)/2}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$n\in\mathbb{N}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$0,\quad n\gt 1$$</td>
+<td style="text-align: left;">$$\frac{n}{n-2},\quad n\gt 2$$</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">Chi-cuadrada</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\frac{x^{n/2-1}e^{-x/2}}{2^{n/2}\Gamma(n/2)}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$n\gt 0$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$n$$</td>
+<td style="text-align: left;">$$2n$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 11em; font-weight: bold; border-right: 1px solid;">F de Fisher</td>
+<td style="text-align: left; border-right: 1px solid;">$$f(x)=\frac{\Gamma((m+n)/2)}{\Gamma(m/2)\Gamma(n/2)}\frac{(m/n)^{m/2}x^{m/2-1}}{(1+mx/n)^{(m+n)/2}}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$m,n\in\mathbb{N}$$</td>
+<td style="text-align: left; border-right: 1px solid;">$$\frac{n}{n-2},\quad n\gt 2$$</td>
+<td style="text-align: left;">$$\frac{2n^2(m+n-2)}{m(n-2)^2(n-4)},\quad n\gt 4$$</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+</section>
+<section id="distribución-de-funciones-de-variables-aleatorias" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Distribución de funciones de variables aleatorias</h1>
+<section id="teorema-de-transformación-univariado" class="level3" data-number="2.0.1">
+<h3 data-number="2.0.1" class="anchored" data-anchor-id="teorema-de-transformación-univariado"><span class="header-section-number">2.0.1</span> Teorema de transformación (univariado)</h3>
+<p>Es importante anotar que si <span class="math inline">\(g\)</span> es una función continua y <span class="math inline">\(X\)</span> es una variable aleatoria, entonces, <span class="math inline">\(g(X)\)</span> también es una variable aleatoria. Por esta razón, queremos expresar, para algunas funciones especiales <span class="math inline">\(f\)</span>, la función de distribución de <span class="math inline">\(Y:=g(X)\)</span> a través de la función de distribución de <span class="math inline">\(X\)</span>.</p>
+<div id="thm-teo-Bassler-5-31" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1 (Transformación)</strong></span> Sea <span class="math inline">\(X\)</span> una variable aleatoria continua con densidad de probabilidad <span class="math inline">\(f_X\)</span>. Si <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> es continuamente diferenciable sobre <span class="math inline">\(\mathbb{R}\)</span> y <span class="math inline">\(g(x)\ne 0\)</span> para todo <span class="math inline">\(x\in\mathbb{R}\)</span>, entonces la función de densidad de la variable <span class="math inline">\(Y=g(X)\)</span> está dada por <span class="math display">\[f_Y(x)= \left\{
+\begin{array}{ll}
+f_X\big(h(x)\big)|h'(x)|, &amp; \hbox{para todo $x$ en el rango de $g$;} \\
+0, &amp; \hbox{de otro modo}
+\end{array}
+\right. \]</span></p>
+<p>siendo <span class="math inline">\(h:=g^{-1}\)</span> la inversa de <span class="math inline">\(g\)</span>.</p>
+</div>
+<p><strong>Proof:</strong></p>
+<p>Se deja al lector. <span class="math inline">\(\blacksquare\)</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+</section>
+<section id="relaciones-entre-algunas-distribuciones" class="level3" data-number="2.0.2">
+<h3 data-number="2.0.2" class="anchored" data-anchor-id="relaciones-entre-algunas-distribuciones"><span class="header-section-number">2.0.2</span> Relaciones entre algunas distribuciones</h3>
+<div id="thm-teo-Bassler-10-27" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 2 (Normal)</strong></span> Si <span class="math inline">\(X\)</span> tiene distribución normal con parámetros <span class="math inline">\(\mu\)</span> y <span class="math inline">\(\sigma^2\)</span>, es decir, <span class="math inline">\(X \stackrel{\atop d}{=}
+\mathcal{N}(\mu,\sigma^2)\)</span>, entonces,<span class="math inline">\(aX+b \stackrel{\atop d}{=} \mathcal{N}(a\mu+b, a^2\sigma^2)\)</span>, para todo <span class="math inline">\(a,b\in\mathbb{R}\)</span>.</p>
+</div>
+<p><strong>Proof:</strong></p>
+<p>Como ejercicio. Aplicar el teorema <a href="#thm-teo-Bassler-5-31" class="quarto-xref">Theorem&nbsp;1</a>. <span class="math inline">\(\blacksquare\)</span></p>
+<p>A continuación, vemos algunas distribuciones normales.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.4.1.Transforma_uni_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+<div id="thm-teo-Bassler-7-15" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 3 (Normal estándar)</strong></span> <span class="math inline">\(X\stackrel{\atop d}{=} \mathcal{N}(\mu,\sigma^2)\)</span> si y sólo si <span class="math inline">\(\frac{X-\mu}{\sigma}\stackrel{\atop d}{=} \mathcal{N}(0,1)\)</span>.</p>
+</div>
+<p><strong>Proof:</strong></p>
+<p>Como ejercicio. Aplicar el teorema <a href="#thm-teo-Bassler-5-31" class="quarto-xref">Theorem&nbsp;1</a>. <span class="math inline">\(\blacksquare\)</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+<div id="thm-teo-Bassler-10-29-30" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 4 (Gamma)</strong></span> Sea <span class="math inline">\(X\)</span> una variable aleatoria real. Sea <span class="math inline">\(\gamma\big(\alpha,
+\beta\big)\)</span>la distribución gamma con parámetros<span class="math inline">\(\alpha\)</span> y <span class="math inline">\(\beta\)</span>.</p>
+</div>
+<ol type="a">
+<li><p>Si <span class="math inline">\(X \stackrel{\atop d}{=} \mathcal{N}(0,\sigma^2)\)</span>, entonces, <span class="math inline">\(X^2 \stackrel{\atop d}{=} \gamma\big(\frac{1}{2}, 2\sigma^2\big)\)</span>.</p></li>
+<li><p>Si <span class="math inline">\(X \stackrel{\atop d}{=}\gamma(\alpha,\beta)\)</span>, entonces, <span class="math inline">\(cX \stackrel{\atop d}{=} \gamma(\alpha, c \,\beta)\)</span>, para todo <span class="math inline">\(c&gt;0\)</span>.</p></li>
+</ol>
+<p><strong>Proof:</strong></p>
+<p>Como ejercicio. Aplicar el teorema <a href="#thm-teo-Bassler-5-31" class="quarto-xref">Theorem&nbsp;1</a>. <span class="math inline">\(\blacksquare\)</span></p>
+<p>A continuación, vemos algunas distribuciones gammas.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.4.1.Transforma_uni_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo  -->
+<div id="thm-teo-Bassler-7-37" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 5 (Chi-cuadrada)</strong></span> Supongamos que <span class="math inline">\(\chi^2 (n)\)</span> representa la distribución chi-cuadrada con <span class="math inline">\(n\)</span> grados de libertad.</p>
+</div>
+<ol type="a">
+<li><p><span class="math inline">\(\chi^2(n)=\gamma\left(\frac{n}{2}, 2\right)\)</span>.</p></li>
+<li><p>Si <span class="math inline">\(X\stackrel{\atop d}{=} \mathcal{N}(0,1)\)</span>, entonces, <span class="math inline">\(X^2\stackrel{\atop d}{=} \chi^2(1)\)</span>.</p></li>
+</ol>
+<p><strong>Proof:</strong></p>
+<p>Como ejercicio. En la parte (b) aplicar el teorema <a href="#thm-teo-Bassler-5-31" class="quarto-xref">Theorem&nbsp;1</a>. <span class="math inline">\(\blacksquare\)</span></p>
+<p>A continuación, vemos algunas distribuciones chi-cuadradas.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="13.3.4.1.Transforma_uni_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+</section>
+<section id="ejercicios" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Ejercicios</h1>
+<p>Realizar los ejercicios que se indican abajo.</p>
+<section id="ejercicio-1" class="level3" data-number="3.0.1">
+<h3 data-number="3.0.1" class="anchored" data-anchor-id="ejercicio-1"><span class="header-section-number">3.0.1</span> Ejercicio 1</h3>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!--\item \label{ex-liliana-ejemplo1.10-p7} -->
+<p>Sea <span class="math inline">\(\Omega=\{1,2\}\)</span> y <span class="math inline">\(\mathbb{F}\)</span> el conjunto potencia de <span class="math inline">\(\Omega\)</span>. Demuestre que la siguiente aplicación <span class="math inline">\(P\)</span> definida sobre <span class="math inline">\(\mathbb{F}\)</span> es una medida de probabilidad: <span class="math display">\[P(A)=\left\{
+        \begin{array}{ll}
+          0, &amp; \hbox{si $A=\emptyset$;} \\
+         1/3, &amp; \hbox{$A=\{1\}$;} \\
+          2/3, &amp; \hbox{A=\{2\};} \\
+          1, &amp; \hbox{A=\{1,2\}.}
+        \end{array}
+      \right.
+    \]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!--##\item \label{ex-liliana-ejemplo1.32-p12}-->
+</section>
+<section id="ejercicio-2" class="level3" data-number="3.0.2">
+<h3 data-number="3.0.2" class="anchored" data-anchor-id="ejercicio-2"><span class="header-section-number">3.0.2</span> Ejercicio 2</h3>
+<p>Sea <span class="math inline">\(\Omega=\{1,2,3\}\)</span> y <span class="math inline">\(\mathbb{F} =\{\emptyset, \Omega, \{2\},
+\{1,3\}\}\)</span>. Demuestre que los eventos <span class="math inline">\(\emptyset\)</span> y <span class="math inline">\(\{3\}\)</span> son eventos nulos y verifique que <span class="math inline">\(P\)</span> es una medida de probabilidad, donde <span class="math inline">\(P\)</span> está definida sobre <span class="math inline">\(\mathbb{F}\)</span> como: <span class="math display">\[P(A)=\left\{
+        \begin{array}{ll}
+          0, &amp; \hbox{si $2\not\in A$;} \\
+          1, &amp; \hbox{si $2\in A$}
+        \end{array}
+      \right.
+    \]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+<section id="ejercicio-3" class="level3" data-number="3.0.3">
+<h3 data-number="3.0.3" class="anchored" data-anchor-id="ejercicio-3"><span class="header-section-number">3.0.3</span> Ejercicio 3</h3>
+<p><strong>3.</strong> Sea el conjunto</p>
+<p><span class="math display">\[
+B=\left\{x\in\mathbb{N}\ \middle|\
+68-x^2\geq 0 \; \text{ y }\;
+\frac{1}{4}t^2-t+7-x+\sqrt{68-x^2}\geq 0
+\; \text{ para todo }t\in\mathbb{R}
+\right\},
+\]</span></p>
+<p>donde <span class="math inline">\(\mathbb{N}=\{0,1,2,\ldots\}\)</span>. Se extraen al azar tres elementos de <span class="math inline">\(B\)</span>, uno a uno y sin reemplazo. En el orden de extracción, estos elementos ocupan las posiciones de las centenas, las decenas y las unidades.</p>
+<p><em>El cero en la posición de las centenas invalida el resultado</em>, porque el número formado tendría menos de tres cifras. Por ejemplo, escribir <span class="math inline">\(020\)</span> equivale a escribir <span class="math inline">\(20\)</span>. Un ejemplo con cifras distintas, acorde con la extracción sin reemplazo, es <span class="math inline">\(027\)</span>, que representa el número <span class="math inline">\(27\)</span>.</p>
+<ol type="a">
+<li><p>Determine los elementos de <span class="math inline">\(B\)</span>. Luego, aplique técnicas de conteo para calcular cuántos números válidos de tres cifras se pueden formar y cuántos de ellos son estrictamente menores que <span class="math inline">\(368\)</span>. Para este último conteo, organice los casos según la cifra de las centenas.</p></li>
+<li><p>Dado que se formó un número válido de tres cifras, calcule la probabilidad de que sea estrictamente menor que <span class="math inline">\(368\)</span>. Justifique por qué los números válidos son equiprobables.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Ejercicios -->
+</section>
+<section id="ejercicio-4" class="level3" data-number="3.0.4">
+<h3 data-number="3.0.4" class="anchored" data-anchor-id="ejercicio-4"><span class="header-section-number">3.0.4</span> Ejercicio 4</h3>
+<p>En cierta ciudad, el 70% de todas las personas examinadas en cierto consultorio odontológico no tienen caries. Si se supone que personas sucesivas tienen o no tienen caries (por supuesto, independientemente una de otra), calcule la probabilidad de los siguientes eventos:</p>
+<ol type="a">
+<li><p>Las tres personas siguientes examinadas tienen caries.</p></li>
+<li><p>Al menos una de las tres personas siguientes examinadas no tienen caries.</p></li>
+<li><p>Exactamente una de las tres personas siguientes examinadas no tiene caries.</p></li>
+<li><p>A lo más una de las tres personas siguientes examinadas no tiene caries.</p></li>
+<li><p>Al menos una de las tres personas siguientes examinadas tiene caries.</p></li>
+<li><p>Las tres personas siguientes examinadas tienen caries sabiendo que al menos una de ellas tiene caries.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-5" class="level3" data-number="3.0.5">
+<h3 data-number="3.0.5" class="anchored" data-anchor-id="ejercicio-5"><span class="header-section-number">3.0.5</span> Ejercicio 5</h3>
+<!-- ##\item \label{teo-prop-prob}  -->
+<p>Sea <span class="math inline">\(\Omega \ne \emptyset\)</span> y <span class="math inline">\(\mathbb{F}\)</span> una <span class="math inline">\(\sigma\)</span>-álgebra en <span class="math inline">\(\Omega\)</span>. Para <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\((A_n)_{n\in\mathbb{N}}\)</span>, <span class="math inline">\((B_n)_{n\in\mathbb{N}}\in\mathbb{F}\)</span> demuestre las siguientes propiedades que satisface una medida de probabilidad:</p>
+<ol type="a">
+<li><p><span class="math inline">\(P(\emptyset)=0\)</span>.</p></li>
+<li><p> <em>Aditividad</em>: Si los eventos <span class="math inline">\(A_i\)</span>, para <span class="math inline">\(i=1, \ldots, n\)</span>, son disyuntos dos a dos, entonces, <span class="math inline">\(P\left(\bigcup\limits_{i=1}^n A_i \right) = \sum\limits_{i=1}^n
+  P(A_i)\)</span>.</p></li>
+<li><p><span class="math inline">\(P(\overline {A})= 1- P(A)\)</span>.</p></li>
+<li><p><em>Monotonía</em>: Si <span class="math inline">\(A\subseteq B\)</span>, entonces, <span class="math inline">\(P(A)\leq P(B)\)</span>. En especial, <span class="math inline">\(P(A)\leq 1\)</span>.</p></li>
+<li><p> <em>Teorema de adición para 2 eventos</em> o <em>fórmula de Silvester</em>: <span class="math display">\[P(A\cup B)= P(A) + P(B) - P(A\cap B)\]</span></p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicios-del-6-al-9" class="level3" data-number="3.0.6">
+<h3 data-number="3.0.6" class="anchored" data-anchor-id="ejercicios-del-6-al-9"><span class="header-section-number">3.0.6</span> Ejercicios del 6 al 9</h3>
+<!-- ##\item \label{teo-prob-total} -->
+<ol start="6" type="1">
+<li><em>Teorema de la probabilidad total</em>. Sea dada una descomposición finita o enumerable <span class="math inline">\(A_1,A_2,\ldots\)</span> de <span class="math inline">\(\Omega\)</span>, es decir, <span class="math inline">\(A_1, A_2, \ldots \in\mathbb{F}\)</span> son disyuntos dos a dos y <span class="math inline">\(\bigcup\limits_{n=1}^\infty A_n=\Omega\)</span>. Entonces, para cada <span class="math inline">\(B\in\mathbb{F}\)</span>, se tiene que <span class="math display">\[P(B)=\sum\limits_{n=1}^\infty P(B/A_n)\, P(A_n)\]</span></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item   -->
+<ol start="7" type="1">
+<li><em>Teorema o regla de Bayes</em>. Sea <span class="math inline">\(A_1,
+A_2,\ldots\)</span>una descomposición finita o enumerable de<span class="math inline">\(\Omega\)</span>. Entonces, para cada evento <span class="math inline">\(B\)</span> con <span class="math inline">\(P(B)&gt;0\)</span> y para todo <span class="math inline">\(j\in\mathbb{N}\)</span>, se tiene <span class="math display">\[P(A_j/B)=\frac{P(B/A_j)\,
+P(A_j)}{\sum\limits_{n=1}^\infty P(B/A_n) \, P(A_n)}\]</span></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item \label{ejercicio-Humberto-Libro-3.2.5-p190}  -->
+<ol start="8" type="1">
+<li>Se sabe que en un grupo de cuatro componentes hay dos defectuosos. Una inspectora los prueba de uno en uno hasta encontrar las dos piezas defectuosas. Una vez que las localiza interrumpe las pruebas, pero examina la segunda pieza defectuosa por seguridad. Si <span class="math inline">\(X\)</span> es el número de pruebas en la que se detecta la segunda pieza defectuosa, determine la función de probabilidad de <span class="math inline">\(X\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item \label{ejercicio-Humberto-Libro-3.2.6-p190}   -->
+<ol start="9" type="1">
+<li>Para verificar la exactitud de sus estados financieros, las empresas a menudo emplean auditores que verifiquen sus ingresos. Los empleados de la empresa se equivocan al registrar los ingresos 5% de las veces. Suponga que un auditor revisa aleatoriamente tres ingresos y que la detección de los errores es independiente. Determine la función de probabilidad del número de errores detectado por el auditor.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-10" class="level3" data-number="3.0.7">
+<h3 data-number="3.0.7" class="anchored" data-anchor-id="ejercicio-10"><span class="header-section-number">3.0.7</span> Ejercicio 10</h3>
+<!-- #\item \label{Weber-primer examen-Prob-(3)}   -->
+<p>Se lanzan dos dados perfectos y se define la variable aleatoria <span class="math inline">\(X\)</span> de la siguiente manera: <span class="math display">\[X=\left\{      \begin{array}{ll}
+                2.000, &amp; \hbox{si resultan 6 en ambos;} \\
+                100, &amp; \hbox{si resulta 6 sólo en uno;} \\
+                0, &amp; \hbox{si no resulta 6 en ninguno.}
+              \end{array}
+            \right.\]</span></p>
+<ol type="a">
+<li><p>Calcule las tres probabilidades que determinan la distribución de <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Calcule la esperanza de <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Supóngase que este experimento representa un juego, en el cual los valores de <span class="math inline">\(X\)</span> significan la ganancia (en pesos) del jugador y donde el jugador tiene que pagar 100 (pesos) antes. Interprete el valor de <span class="math inline">\(E(X)\)</span>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-11" class="level3" data-number="3.0.8">
+<h3 data-number="3.0.8" class="anchored" data-anchor-id="ejercicio-11"><span class="header-section-number">3.0.8</span> Ejercicio 11</h3>
+<!-- #\item \label{ejercicio-Humberto-Libro-I-119-p182} -->
+<p>Responda las siguientes preguntas. Explique.</p>
+<ol type="a">
+<li><p>Si <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span> y <span class="math inline">\(C\)</span> son mutuamente excluyentes, ¿es posible que <span class="math inline">\(P(A)=0,3\)</span>, <span class="math inline">\(P(B)=0,4\)</span> y <span class="math inline">\(P(C)=0,5\)</span>?</p></li>
+<li><p>Si <span class="math inline">\(P(A/B)=1\)</span>, ¿se cumple <span class="math inline">\(A=B\)</span>?</p></li>
+<li><p>Si <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span> son eventos mutuamente excluyentes, ¿es posible construir un diagrama de Venn que contenga a los tres eventos <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span> y <span class="math inline">\(C\)</span>, tales que <span class="math inline">\(P(A/C)=1\)</span> y <span class="math inline">\(P(B/C)=0\)</span>?</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-12" class="level3" data-number="3.0.9">
+<h3 data-number="3.0.9" class="anchored" data-anchor-id="ejercicio-12"><span class="header-section-number">3.0.9</span> Ejercicio 12</h3>
+<!-- #\item \label{Weber-primer examen-Prob-(4)}  -->
+<p>Sea <span class="math inline">\(X\)</span> una variable aleatoria que tiene distribución exponencial con parámetro <span class="math inline">\(\lambda &gt;0\)</span>.</p>
+<ol type="a">
+<li><p>Demuestre que su función de densidad <span class="math inline">\(f\)</span> es realmente una densidad.</p></li>
+<li><p>Encuentre una fórmula (y demuéstrela) para los valores <span class="math inline">\(F(t)\)</span> de la función de distribución acumulada <span class="math inline">\(F\)</span> y para <span class="math inline">\(P(X\geq t)\)</span>.</p></li>
+<li><p>Con base en el inciso anterior, halle <span class="math inline">\(F(-3)\)</span> y <span class="math inline">\(P(X\geq -3)\)</span>.</p></li>
+<li><p>Demuestre que <span class="math inline">\(P(X\geq x+z \, /\, X\geq x) = P(X\geq z)\)</span>, para todo <span class="math inline">\(x, z &gt;0\)</span>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-13" class="level3" data-number="3.0.10">
+<h3 data-number="3.0.10" class="anchored" data-anchor-id="ejercicio-13"><span class="header-section-number">3.0.10</span> Ejercicio 13</h3>
+<!-- #\item \label{ejercicio-Humberto-Libro-I-120-p182} -->
+<p>Demuestre las siguientes afirmaciones:</p>
+<ol type="a">
+<li><p>Para cualquier evento <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span> con <span class="math inline">\(P(B)&gt;0\)</span> se cumple que <span class="math inline">\(P(A/B) + P(\overline{A}/B) = 1\)</span>.</p></li>
+<li><p>Si <span class="math inline">\(P(B/A) &gt; P(B)\)</span>, entonces <span class="math inline">\(P(\overline{B}/A)
+  &lt;P(\overline{B})\)</span>. <strong>Sugerencia</strong>: Sume<span class="math inline">\(P(\overline{B}/A)\)</span> ambos lados de la desigualdad y use el resultado de la parte (a).</p></li>
+<li><p>Para cualquiera de los tres eventos <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span> y <span class="math inline">\(C\)</span> con <span class="math inline">\(P(C)&gt;0\)</span> se cumple que <span class="math display">\[P(A\cup B /C) = P(A/C) + P(B/C) - P(A\cap B/C)\]</span></p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-14" class="level3" data-number="3.0.11">
+<h3 data-number="3.0.11" class="anchored" data-anchor-id="ejercicio-14"><span class="header-section-number">3.0.11</span> Ejercicio 14</h3>
+<p>En un grupo de cuatro piezas hay dos defectuosas. Una inspectora las prueba de una en una hasta encontrar las dos piezas defectuosas. Una vez que las localiza interrumpe las pruebas, pero examina la segunda pieza defectuosa por seguridad. Si <span class="math inline">\(X\)</span> es el número de pruebas en la que se detecta la segunda pieza defectuosa, determine la función de probabilidad de <span class="math inline">\(X\)</span>.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-15" class="level3" data-number="3.0.12">
+<h3 data-number="3.0.12" class="anchored" data-anchor-id="ejercicio-15"><span class="header-section-number">3.0.12</span> Ejercicio 15</h3>
+<p>El tiempo de vida de un neumático puede representarse mediante una distribución normal con media 35000 kilómetros y desviación estándar de 4000 kilómetros. a) Halle la probabilidad de que el tiempo de un neumático sea más de 30000 kilómetros. b) Halle el valor de k tal que la probabilidad de que el tiempo de vida de un neumático sea menor que k es 0.95. c) Se toma una muestra de 80000 de estos neumáticos. ¿Aproximadamente cuántos tienen un tiempo de vida superior a los 38000 kilómetros? d) Se toma una muestra de 5 de estos neumáticos. ¿Cuál es la probabilidad (aproximada) de que entre 1 (inclusive) y 4 (no inclusive) de ellos tengan un tiempo de vida inferior a los 40000 kilómetros?</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicios-del-16-al-20" class="level3" data-number="3.0.13">
+<h3 data-number="3.0.13" class="anchored" data-anchor-id="ejercicios-del-16-al-20"><span class="header-section-number">3.0.13</span> Ejercicios del 16 al 20</h3>
+<!-- #\item \label{ejercicio-Humberto-Libro-I-120-p182d,e} -->
+<ol start="16" type="1">
+<li>Si <span class="math inline">\(A\)</span> y <span class="math inline">\(B\)</span> son independientes, demuestre que también lo son: (a) <span class="math inline">\(\overline{A}\)</span> y <span class="math inline">\(B\)</span>; (b) sus complementos.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item \label{Propiedad-normal}-->
+<ol start="17" type="1">
+<li>Demostrar el teorema <a href="#thm-teo-Bassler-7-15" class="quarto-xref">Theorem&nbsp;3</a>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item \label{Propiedad-gamma} -->
+<ol start="18" type="1">
+<li>Demostrar el teorema <a href="#thm-teo-Bassler-10-29-30" class="quarto-xref">Theorem&nbsp;4</a>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item \label{Propiedad-chi}-->
+<ol start="19" type="1">
+<li>Demostrar el teorema <a href="#thm-teo-Bassler-7-37" class="quarto-xref">Theorem&nbsp;5</a>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item \label{ex-teo-Bassler-7-37}-->
+<ol start="20" type="1">
+<li>Demostrar el teorema <a href="#thm-teo-Bassler-7-37" class="quarto-xref">Theorem&nbsp;5</a>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-21" class="level3" data-number="3.0.14">
+<h3 data-number="3.0.14" class="anchored" data-anchor-id="ejercicio-21"><span class="header-section-number">3.0.14</span> Ejercicio 21</h3>
+<!-- #\item \label{ex-humberto-Schaum-ex-2.64}  -->
+<p>Sea <span class="math inline">\(X\)</span> una variable aleatoria real que tiene distribución exponencial con parámetro <span class="math inline">\(\lambda\)</span>. Hallar las correspondientes densidades de las siguientes variables aleatorias: (a) <span class="math inline">\(Y=X^2\)</span>; (b) <span class="math inline">\(Y=3X\)</span>.</p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- #\item \label{ex-humberto-Schaum-ex-2.68} -->
+</section>
+<section id="ejercicio-22" class="level3" data-number="3.0.15">
+<h3 data-number="3.0.15" class="anchored" data-anchor-id="ejercicio-22"><span class="header-section-number">3.0.15</span> Ejercicio 22</h3>
+<p>Halle la densidad de <span class="math inline">\(Y=X^2\)</span> si <span class="math inline">\(X\)</span> es una variable aleatoria real con función de densidad dada por <span class="math display">\[ f(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2}, \quad x\in \mathbb{R}\]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicios-del-23-al-27" class="level3" data-number="3.0.16">
+<h3 data-number="3.0.16" class="anchored" data-anchor-id="ejercicios-del-23-al-27"><span class="header-section-number">3.0.16</span> Ejercicios del 23 al 27</h3>
+<ol start="23" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=aX+b\)</span> (caso discreto).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria discreta con función de distribución acumulada <span class="math inline">\(F_X\)</span> y de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con las funciones de distribución acumulada <span class="math inline">\(F_Y\)</span> y de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=aX + b\)</span> para todo <span class="math inline">\(a,b\in\mathbb{R}\)</span>, <span class="math inline">\(a\ne 0\)</span>, demuestre que <span class="math inline">\(f_Y(k)=f_X\big(\frac{k-b}{a}\big)\)</span> para todo <span class="math inline">\(k\in \mathbb{R}\)</span> y</li>
+</ol>
+<p><span class="math display">\[F_Y(t)= \begin{cases}
+    F_X\big(\frac{t-b}{a}\big) &amp; \text{si $a&gt;0$} \\
+    1- F_X\big(\frac{t-b}{a}\big) + f_X\big(\frac{t-b}{a}\big) &amp; \text{si $a&lt;0$}
+  \end{cases}\]</span></p>
+<p><!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% --></p>
+<ol start="24" type="1">
+<li>Sea <span class="math inline">\(X\)</span> una variable aleatoria que tiene función de probabilidad <span class="math inline">\(f_X\)</span> dada por <span class="math inline">\(f_X(k) = {2\choose k} (0,3)^k(0,7)^{2-k}\)</span>, donde <span class="math inline">\(k\in \mathbb{N}\)</span> y <span class="math inline">\(0\leq k\leq 2\)</span>. Si <span class="math inline">\(Y=2X\)</span>, encuentre: (a) La función de probabilidad <span class="math inline">\(f_Y\)</span> de <span class="math inline">\(Y\)</span>; (b) La función de distribución acumulada <span class="math inline">\(F_Y\)</span> de <span class="math inline">\(Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="25" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=aX+b\)</span> (caso continuo).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria continua con función de distribución <span class="math inline">\(F_X\)</span> y densidad de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la función de distribución <span class="math inline">\(F_Y\)</span> y de densidad de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=aX + b\)</span> para todo <span class="math inline">\(a,b\in\mathbb{R}\)</span>, <span class="math inline">\(a\ne 0\)</span>, aplique el teorema de transformación para demostrar que <span class="math inline">\(f_Y(y)= \frac{1}{|a|}f_X\big(\frac{y-b}{a}\big)\)</span> y <span class="math display">\[F_Y(t)= \begin{cases}
+    F_X\big(\frac{t-b}{a}\big) &amp; \text{si $a&gt;0$} \\
+    1- F_X\big(\frac{t-b}{a}\big) &amp; \text{si $a&lt;0$}
+  \end{cases}\]</span></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="26" type="1">
+<li>Resuelva nuevamente el ejercicio 25, calculando primero <span class="math inline">\(F_Y\)</span> y luego <span class="math inline">\(f_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="27" type="1">
+<li>Repita el ejercicio 25, pero ahora <span class="math inline">\(X\)</span> tiene distribución exponencial con parámetro 2.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicios-del-28-al-31" class="level3" data-number="3.0.17">
+<h3 data-number="3.0.17" class="anchored" data-anchor-id="ejercicios-del-28-al-31"><span class="header-section-number">3.0.17</span> Ejercicios del 28 al 31</h3>
+<ol start="28" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=aX^2\)</span> para <span class="math inline">\(a&gt;0\)</span> (caso discreto).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria discreta con funciones de distribución <span class="math inline">\(F_X\)</span> y de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to
+\mathbb{R}\)</span>definen las variables aleatorias<span class="math inline">\(Y=g(X)\)</span> con la funciones de distribución <span class="math inline">\(F_Y\)</span> y de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a\,X^2\)</span> para una constante <span class="math inline">\(a&gt; 0\)</span>, demuestre que <span class="math display">\[f_Y(k)= \begin{cases}
+0, &amp; \text{$k&lt; 0$} \\
+f_X(0), &amp; \text{$k= 0$} \\
+   f_X(\sqrt{k/a}) + f_X(-\sqrt{k/a}), &amp; \text{$k&gt; 0$}
+  \end{cases}\]</span></li>
+</ol>
+<p><span class="math display">\[ F_Y(t)= \begin{cases}
+    0 &amp; \text{$t&lt; 0$} \\
+      f_X(0), &amp; \text{$t= 0$} \\
+   F_X(\sqrt{t/a}) - F_X(-\sqrt{t/a}) + f_X(-\sqrt{t/a}), &amp; \text{$t&gt; 0$}
+  \end{cases}\]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="29" type="1">
+<li>Repita el ejercicio 28, pero ahora <span class="math inline">\(Y=2X^2\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="30" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=aX^2\)</span> para <span class="math inline">\(a&lt;0\)</span> (caso discreto).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria discreta con funciones de distribución <span class="math inline">\(F_X\)</span> y de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la funciones de distribución <span class="math inline">\(F_Y\)</span> y de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a\,X^2\)</span> para una constante <span class="math inline">\(a&lt; 0\)</span>, demuestre que <span class="math display">\[f_Y(k)= \begin{cases}
+    0, &amp; \text{$k&gt;0$} \\
+f_X(0), &amp; \text{$k= 0$} \\
+    f_X(\sqrt{k/a}) + f_X(-\sqrt{k/a}), &amp; \text{$k&lt; 0$}
+  \end{cases}\]</span></li>
+</ol>
+<p><span class="math display">\[ F_Y(t)= \begin{cases}
+        1- F_X(\sqrt{t/a}) + F_X(-\sqrt{t/a}) + f_X(\sqrt{t/a}), &amp; \text{$t&lt; 0$}\\
+         1-f_X(0), &amp; \text{$t= 0$} \\
+        1, &amp; \text{$t&gt; 0$}
+  \end{cases}\]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="31" type="1">
+<li>Repita el ejercicio 30, pero ahora <span class="math inline">\(Y=-2X^2\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicios-del-32-al-38" class="level3" data-number="3.0.18">
+<h3 data-number="3.0.18" class="anchored" data-anchor-id="ejercicios-del-32-al-38"><span class="header-section-number">3.0.18</span> Ejercicios del 32 al 38</h3>
+<ol start="32" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=aX^2\)</span> para <span class="math inline">\(a&gt;0\)</span> (caso continuo).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria continua con función de distribución <span class="math inline">\(F_X\)</span> y densidad de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la función de distribución <span class="math inline">\(F_Y\)</span> y densidad de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a\,X^2\)</span> para una constante <span class="math inline">\(a&gt; 0\)</span>, aplique el teorema de transformación para demostrar que <span class="math display">\[f_Y(y)= \begin{cases}
+    0, &amp; \text{$y\leq 0$} \\
+    \frac{1}{2 a\sqrt{y/a}}[f_X(\sqrt{y/a}) + f_X(-\sqrt{y/a})], &amp; \text{$y&gt; 0$}
+  \end{cases}\]</span></li>
+</ol>
+<p><span class="math display">\[ F_Y(t)= \begin{cases}
+    0, &amp; \text{$t\leq 0$} \\
+    F_X(\sqrt{t/a}) - F_X(-\sqrt{t/a}), &amp; \text{$t&gt; 0$}
+  \end{cases}\]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="33" type="1">
+<li>Resuelva nuevamente el 32, sin aplicar el de transformación, calculando primero <span class="math inline">\(F_Y\)</span> y luego <span class="math inline">\(f_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="34" type="1">
+<li>Repita el ejercicio 32, pero ahora <span class="math inline">\(X\)</span> tiene distribución exponencial con parámetro 2. y <span class="math inline">\(Y=2X^2\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="35" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=aX^2\)</span> para <span class="math inline">\(a&lt;0\)</span> (caso continuo).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria continua con función de distribución <span class="math inline">\(F_X\)</span> y densidad de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la función de distribución <span class="math inline">\(F_Y\)</span> y densidad de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a\,X^2\)</span> para una constante <span class="math inline">\(a&lt; 0\)</span>, aplique el teorema de transformación para demostrar que <span class="math display">\[f_Y(y)= \begin{cases}
+    0, &amp; \text{$y\geq 0$} \\
+    -\frac{1}{2 a\sqrt{y/a}}[f_X(\sqrt{y/a}) + f_X(-\sqrt{y/a})], &amp; \text{$y&lt; 0$}
+  \end{cases}\]</span></li>
+</ol>
+<p><span class="math display">\[ F_Y(t)= \begin{cases}
+    1, &amp; \text{$t\geq 0$} \\
+    1- F_X(\sqrt{t/a}) + F_X(-\sqrt{t/a}), &amp; \text{$t&lt; 0$}
+  \end{cases}\]</span></p>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="36" type="1">
+<li>Resuelva nuevamente el 35, sin aplicar el teorema de transformación, calculando primero <span class="math inline">\(F_Y\)</span> y luego <span class="math inline">\(f_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="37" type="1">
+<li>Repita el ejercicio 35, pero ahora <span class="math inline">\(X\)</span> tiene distribución exponencial con parámetro 2 y <span class="math inline">\(Y=-2X^2\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="38" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=X^n\)</span> (caso continuo).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria continua con función de distribución <span class="math inline">\(F_X\)</span> y densidad de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X) = X^n\)</span>. Halle la función de distribución acumulada <span class="math inline">\(F_Y\)</span> y densidad de probabilidad <span class="math inline">\(f_Y\)</span>. <strong>Sugerencia:</strong> Distinga los caso <span class="math inline">\(n\)</span> par y <span class="math inline">\(n\)</span> impar.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicios-del-39-al-42" class="level3" data-number="3.0.19">
+<h3 data-number="3.0.19" class="anchored" data-anchor-id="ejercicios-del-39-al-42"><span class="header-section-number">3.0.19</span> Ejercicios del 39 al 42</h3>
+<ol start="39" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=a|X|\)</span> para <span class="math inline">\(a&gt;0\)</span> (caso discreto).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria discreta con funciones de distribución <span class="math inline">\(F_X\)</span> y de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la funciones de distribución <span class="math inline">\(F_Y\)</span> y de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a|X|\)</span> para una constante <span class="math inline">\(a&gt; 0\)</span>, encuentre <span class="math inline">\(f_Y\)</span> y <span class="math inline">\(F_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="40" type="1">
+<li>Repita el ejercicio 39 con <span class="math inline">\(Y=2|X|\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="41" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=a|X|\)</span> para <span class="math inline">\(a&lt;0\)</span> (caso discreto)</strong>. Si <span class="math inline">\(X\)</span> es una variable aleatoria discreta con funciones de distribución <span class="math inline">\(F_X\)</span> y de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la funciones de distribución <span class="math inline">\(F_Y\)</span> y de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a|X|\)</span> para una constante <span class="math inline">\(a&lt; 0\)</span>, encuentre <span class="math inline">\(f_Y\)</span> y <span class="math inline">\(F_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="42" type="1">
+<li>Repita el ejercicio 41 con <span class="math inline">\(Y=-2|X|\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicios-del-43-al-50" class="level3" data-number="3.0.20">
+<h3 data-number="3.0.20" class="anchored" data-anchor-id="ejercicios-del-43-al-50"><span class="header-section-number">3.0.20</span> Ejercicios del 43 al 50</h3>
+<ol start="43" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=a|X|\)</span> para <span class="math inline">\(a&gt;0\)</span> (caso continuo).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria continua con función de distribución <span class="math inline">\(F_X\)</span> y densidad de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la función de distribución <span class="math inline">\(F_Y\)</span> y densidad de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a|X|\)</span> para una constante <span class="math inline">\(a&gt;0\)</span>, encuentre <span class="math inline">\(f_Y\)</span> y <span class="math inline">\(F_Y\)</span> aplicando el teorema de transformación.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="44" type="1">
+<li>Resuelva nuevamente el ejercicio 43, pero sin aplicar el teorema de transformación, calculando primero <span class="math inline">\(F_Y\)</span> y luego <span class="math inline">\(f_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="45" type="1">
+<li>Repita el ejercicio 43, pero ahora <span class="math inline">\(X\)</span> tiene distribución exponencial con parámetro 2 y <span class="math inline">\(Y=2|X|\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="47" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=a|X|\)</span> para <span class="math inline">\(a&lt;0\)</span> (caso continuo).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria continua con función de distribución <span class="math inline">\(F_X\)</span> y densidad de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la función de distribución <span class="math inline">\(F_Y\)</span> y densidad de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=a|X|\)</span> para una constante <span class="math inline">\(a&lt;0\)</span>, encuentre <span class="math inline">\(f_Y\)</span> y <span class="math inline">\(F_Y\)</span> aplicando el teorema de transformación.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="48" type="1">
+<li>Resuelva nuevamente el ejercicio 47, pero sin aplicar el teorema de transformación, calculando primero <span class="math inline">\(F_Y\)</span> y luego <span class="math inline">\(f_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="49" type="1">
+<li>Repita el ejercicio 47, pero ahora <span class="math inline">\(X\)</span> tiene distribución exponencial con parámetro 2 y <span class="math inline">\(Y=-2|X|\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<ol start="50" type="1">
+<li><strong>Distribución de <span class="math inline">\(Y=\sqrt{|X|}\)</span> (caso continuo).</strong> Si <span class="math inline">\(X\)</span> es una variable aleatoria continua con función de distribución <span class="math inline">\(F_X\)</span> y densidad de probabilidad <span class="math inline">\(f_X\)</span>, entonces las siguientes funciones <span class="math inline">\(g:\mathbb{R}\to \mathbb{R}\)</span> definen las variables aleatorias <span class="math inline">\(Y=g(X)\)</span> con la función de distribución <span class="math inline">\(F_Y\)</span> y densidad de probabilidad <span class="math inline">\(f_Y\)</span>. Si <span class="math inline">\(Y=\sqrt{|X|}\)</span>, encuentre <span class="math inline">\(f_Y\)</span> y <span class="math inline">\(F_Y\)</span>.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-51" class="level3" data-number="3.0.21">
+<h3 data-number="3.0.21" class="anchored" data-anchor-id="ejercicio-51"><span class="header-section-number">3.0.21</span> Ejercicio 51</h3>
+<p>Un centro de servicios registra el tiempo que tarda en atender cada solicitud. Sea <span class="math inline">\(X\)</span> el tiempo de atención, medido en minutos. Al analizar los registros, se propone modelar el logaritmo natural del tiempo de atención, <span class="math inline">\(Y = \ln(X)\)</span>, mediante una distribución normal con media <span class="math inline">\(\mu\)</span> y varianza <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Demuestre que, bajo este supuesto, el tiempo de atención en la escala original, <span class="math inline">\(X = e^Y\)</span>, tiene una distribución lognormal con parámetros <span class="math inline">\(\mu\)</span> y <span class="math inline">\(\sigma^2\)</span>. Hágalo de dos maneras:</p>
+<ol type="a">
+<li><p>Aplicando el teorema de transformación <a href="#thm-teo-Bassler-5-31" class="quarto-xref">Theorem&nbsp;1</a>.</p></li>
+<li><p>Calculando directamente la función de distribución acumulada <span class="math inline">\(F_Y(y) = P(Y \leq y)\)</span>, sin aplicar el teorema.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+</section>
+<section id="ejercicio-52" class="level3" data-number="3.0.22">
+<h3 data-number="3.0.22" class="anchored" data-anchor-id="ejercicio-52"><span class="header-section-number">3.0.22</span> Ejercicio 52</h3>
+<p>Un centro de atención telefónica quiere simular el tiempo transcurrido entre dos llamadas consecutivas. Para ello, un programa genera un número aleatorio <span class="math inline">\(X\)</span> con distribución uniforme en <span class="math inline">\([0,1]\)</span> y lo transforma mediante</p>
+<p><span class="math display">\[
+Y = -\frac{1}{\beta}\ln(X),
+\qquad \beta &gt; 0,
+\]</span></p>
+<p>donde <span class="math inline">\(Y\)</span> representa el tiempo simulado entre llamadas, medido en minutos, y <span class="math inline">\(\beta\)</span> es la tasa del modelo, expresada en llamadas por minuto.</p>
+<p>Demuestre que <span class="math inline">\(Y\)</span> tiene una distribución exponencial con tasa <span class="math inline">\(\beta\)</span>. Hágalo de dos maneras:</p>
+<ol type="a">
+<li><p>Aplicando el teorema de transformación <a href="#thm-teo-Bassler-5-31" class="quarto-xref">Theorem&nbsp;1</a>.</p></li>
+<li><p>Calculando directamente la función de distribución acumulada <span class="math inline">\(F_Y(y) = P(Y \leq y)\)</span>, sin aplicar el teorema.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador-->
+</section>
+</section>
+<section id="anexos" class="level1 unnumbered">
+<h1 class="unnumbered">Anexos</h1>
+<div style="margin-left: 25px;">
+<p>A. Tablas estadísticas: <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/1.%20Estad%C3%ADstica%20b%C3%A1sica">Click derecho aquí</a>.</p>
+<p>B. Apéndice de tablas y diagramas: <a href="https://github.com/hllinas/NotasClase-Publicos/blob/main/6.%20Estadistica%20Math%20(MgStat.Aplic)/Apendice%20(diagrama-%20tabla).pdf">Click aquí</a>.</p>
+</div>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Separador-->
+</section>
+<section id="texto-guía" class="level1 unnumbered">
+<h1 class="unnumbered">Texto guía</h1>
+<ol type="1">
+<li>Llinás, H. (2014). <a href="https://editorial.uninorte.edu.co/gpd-introduccion-a-la-teoria-de-la-probabilidad.html">Introducción a la teoría de probabibilidad</a>. Barranquilla: Editorial Universidad del Norte.</li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- Capítulo Bibliografía-->
+</section>
+<section id="bibliografía-complementaria" class="level1 unnumbered">
+<h1 class="unnumbered">Bibliografía complementaria</h1>
+<ol start="2" type="1">
+<li><p>LLinás, H., Rojas, C. (2005). <a href="https://editorial.uninorte.edu.co/gpd-estadistica-descriptiva-y-distribuciones-de-probabilidad.html">Estadística descriptiva y distribuciones de probabilidad</a>. Barranquilla: Editorial Universidad del Norte.</p></li>
+<li><p>Consultar mis <a href="https://hllinas.github.io/toc/1-cursos/1-2-estadistica1/1.2.1.Est1_toc.html">Notas de clase en Estadística I</a>.</p></li>
+<li><p>Consultar mis <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/1.%20Estad%C3%ADstica%20b%C3%A1sica">Notas de clase</a>.</p></li>
+<li><p>Consultar mis <a href="https://github.com/hllinas/NotasClase-Publicos/tree/main/8.%20Teor%C3%ADa%20de%20probabilidad%20(Pregrado)">otras Notas de clase</a>.</p></li>
+<li><p>Consultar el documento <a href="https://hllinas.github.io/toc/0-tocvarios/0-3-enlace-material/0.3.2.Enlace_Material.html">Enlaces y materiales de ayuda</a>.</p></li>
+</ol>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<hr>
+<p><em>If you found any errors or have suggestions, please write to <a href="mailto:hllinas@uninorte.edu.co">hllinas@uninorte.edu.co</a>. Thank you.</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Department of Mathematics, Physics and Data Science · Universidad del Norte</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
