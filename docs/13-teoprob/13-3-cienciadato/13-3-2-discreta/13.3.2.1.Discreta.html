@@ -106,6 +106,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -261,7 +265,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">LAST UPDATED</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">28/10/2026</p>
+      <p class="date">25/11/2026</p>
     </div>
   </div>
   
@@ -275,7 +279,7 @@ window.Quarto = {
 
 <div class="academic-intro">
 <p><img src="hllinas2023.jpg" class="profile-photo img-fluid" alt="Fotografía del autor"></p>
-<p><strong><a href="https://rpubs.com/hllinas/Bio_Sketch">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
+<p><strong><a href="https://hllinas.github.io/toc/0-Tocs/0-8-Curriculum/0.8.1.BioSketch.html">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
 <p><strong>About these lecture notes.</strong> These notes introduce discrete random variables, probability mass functions, cumulative distribution functions, expectation, variance, and applications with R.</p>
 </div>
 <hr>
@@ -928,9 +932,35 @@ V(X) &amp;=&amp;  \sum\limits_k (k-E(X))^2 \cdot f(k)\\
 <li>Halle la varianza de <span class="math inline">\(X\)</span>.</li>
 </ol></li>
 </ol>
-<center>
-<img src="Grafico1Ex.png" class="img-fluid" width="450">
-</center>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="table table-bordered caption-top table-sm table-striped small">
+<caption>Distribución de probabilidad de X</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">Valor x de X</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">0</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">1</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">2</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">3</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">4</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; font-weight: bold; background-color: rgba(242, 245, 249, 1) !important;">f(x)</td>
+<td style="text-align: center;">0.20</td>
+<td style="text-align: center;">0.25</td>
+<td style="text-align: center;">0.10</td>
+<td style="text-align: center;">0.15</td>
+<td style="text-align: center;">0.09</td>
+<td style="text-align: center;">0.21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <ol start="7" type="1">
 <li><p>Considere la situación del ejercicio 6. Suponga que <span class="math inline">\(Y\)</span> representa la variable aleatoria que representa al número de líneas desocupadas en un momento específico.</p>
 <ol type="a">
@@ -949,9 +979,33 @@ V(X) &amp;=&amp;  \sum\limits_k (k-E(X))^2 \cdot f(k)\\
 <li>Halle la varianza de <span class="math inline">\(X\)</span>.</li>
 </ol></li>
 </ol>
-<center>
-<img src="Grafico2Ex.png" class="img-fluid" width="350">
-</center>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="table table-bordered caption-top table-sm table-striped small">
+<caption>Distribución de probabilidad de X</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">Valor x de X</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">0</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">1</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">2</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">3</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; background-color: rgba(220, 234, 247, 1) !important;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; font-weight: bold; background-color: rgba(242, 245, 249, 1) !important;">f(x)</td>
+<td style="text-align: center;">0.21</td>
+<td style="text-align: center;">0.28</td>
+<td style="text-align: center;">0.10</td>
+<td style="text-align: center;">0.,25</td>
+<td style="text-align: center;">0.16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <ol start="9" type="1">
 <li><p>Una fabricante de lapiceros tiene un programa de control de calidad que incluye la inspección de lapiceros recibidos para revisar que no tengan defectos. Supongamos que, en cierto día, él recibe lapiceros en lotes de cinco y se seleccionan dos lapiceros de un lote para inspeccionarlos. Podemos representar los posibles resultados del proceso de selección por pares. Por ejemplo, el par <span class="math inline">\((3,4)\)</span> representa la selección de los lapiceros 3 y 4 para inspeccionarlos.</p>
 <ol type="a">
