@@ -8,7 +8,7 @@
 
 <meta name="author" content="Dr.&nbsp;rer. nat. Humberto Llinás Solano">
 
-<title>INTRODUCCIÓN A LA PROBABILIDAD (con R) – Humberto Llinás Solano | Teaching and Research</title>
+<title>INTRODUCCIÓN A LA PROBABILIDAD – Humberto Llinás Solano | Teaching and Research</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -350,7 +350,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">INTRODUCCIÓN A LA PROBABILIDAD (con R)</h1>
+<h1 class="title">INTRODUCCIÓN A LA PROBABILIDAD</h1>
 <p class="subtitle lead">Probabilidad, probabilidad condicional e independencia</p>
 </div>
 
@@ -375,7 +375,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">LAST UPDATED</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">23/11/2026</p>
+      <p class="date">25/11/2026</p>
     </div>
   </div>
   
@@ -389,8 +389,8 @@ window.Quarto = {
 
 <div class="academic-intro">
 <p><img src="hllinas2023.jpg" class="profile-photo img-fluid" alt="Fotografía del autor"></p>
-<p><strong><a href="https://rpubs.com/hllinas/Bio_Sketch">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
-<p><strong>About these lecture notes.</strong> Estas notas presentan los fundamentos formales de la teoría de la probabilidad, desde los espacios muestrales y la formulación axiomática hasta sus propiedades y aplicaciones con R.</p>
+<p><strong><a href="https://hllinas.github.io/toc/0-Tocs/0-8-Curriculum/0.8.1.BioSketch.html">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
+<p><strong>About these lecture notes.</strong> These lecture notes present the formal foundations of probability theory, ranging from sample spaces and the axiomatic formulation of probability to its fundamental properties and applications using R.</p>
 </div>
 <hr>
 <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
@@ -2237,8 +2237,8 @@ P(A | B) &amp;= &amp;\frac{P(A\cap B)}{P(B)} = \frac{0.28}{0.34} = 0.8235
 <div style="text-align: center; margin-top: -20px; margin-bottom: -25px;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-dc1c60654644f407bb45" style="width:100%;height:325px;"></div>
-<script type="application/json" data-for="htmlwidget-dc1c60654644f407bb45">{"x":{"diagram":"\ndigraph prob_tree {\n\n  node [shape = box, style=filled, fontname = Helvetica, fontcolor=black]\n\n  root [label = \"Inicio\", fillcolor = \"#cccccc\"]\n\n  A [label = \"Recibe propaganda\\nP(A) = 0.7\", fillcolor = \"#a6cee3\"]\n  Ac [label = \"No recibe propaganda\\nP(A̅) = 0.3\", fillcolor = \"#b2df8a\"]\n\n  B1 [label = \"Usa libro\\nP(B|A) = 0.4\", fillcolor = \"#1f78b4\"]\n  B1c [label = \"No usa libro\\nP(B̅|A) = 0.6\", fillcolor = \"#a6cee3\"]\n\n  B2 [label = \"Usa libro\\nP(B|A̅) = 0.2\", fillcolor = \"#33a02c\"]\n  B2c [label = \"No usa libro\\nP(B̅|A̅) = 0.8\", fillcolor = \"#b2df8a\"]\n\n  root -> A\n  root -> Ac\n\n  A -> B1\n  A -> B1c\n\n  Ac -> B2\n  Ac -> B2c\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-4a5280861dcf6744cca9" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-4a5280861dcf6744cca9">{"x":{"diagram":"\ndigraph prob_tree {\n\n  node [shape = box, style=filled, fontname = Helvetica, fontcolor=black]\n\n  root [label = \"Inicio\", fillcolor = \"#cccccc\"]\n\n  A [label = \"Recibe propaganda\\nP(A) = 0.7\", fillcolor = \"#a6cee3\"]\n  Ac [label = \"No recibe propaganda\\nP(A̅) = 0.3\", fillcolor = \"#b2df8a\"]\n\n  B1 [label = \"Usa libro\\nP(B|A) = 0.4\", fillcolor = \"#1f78b4\"]\n  B1c [label = \"No usa libro\\nP(B̅|A) = 0.6\", fillcolor = \"#a6cee3\"]\n\n  B2 [label = \"Usa libro\\nP(B|A̅) = 0.2\", fillcolor = \"#33a02c\"]\n  B2c [label = \"No usa libro\\nP(B̅|A̅) = 0.8\", fillcolor = \"#b2df8a\"]\n\n  root -> A\n  root -> Ac\n\n  A -> B1\n  A -> B1c\n\n  Ac -> B2\n  Ac -> B2c\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
@@ -2264,8 +2264,8 @@ A \cap B,\quad A \cap \overline{B},\quad \overline{A} \cap B,\quad \overline{A} 
 <div style="text-align: center; margin: 12px 0 12px 0;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-0d085e95c02a354bc401" style="width:100%;height:371px;"></div>
-<script type="application/json" data-for="htmlwidget-0d085e95c02a354bc401">{"x":{"diagram":"\ndigraph prob_tree {\n\n  node [shape = box, style=filled, fontname = Helvetica, fontcolor=black]\n\n  root [label = \"Inicio\", fillcolor = \"#cccccc\"]\n\n  A [label = \"Recibe propaganda\\nP(A) = 0.7\", fillcolor = \"#a6cee3\"]\n  Ac [label = \"No recibe propaganda\\nP(A̅) = 0.3\", fillcolor = \"#b2df8a\"]\n\n  B1 [label = \"Usa libro\\nP(B|A) = 0.4\", fillcolor = \"#1f78b4\"]\n  B1c [label = \"No usa libro\\nP(B̅|A) = 0.6\", fillcolor = \"#a6cee3\"]\n\n  B2 [label = \"Usa libro\\nP(B|A̅) = 0.2\", fillcolor = \"#33a02c\"]\n  B2c [label = \"No usa libro\\nP(B̅|A̅) = 0.8\", fillcolor = \"#b2df8a\"]\n\n  I1 [label = \"P(A ∩ B) = 0.28\", fillcolor = \"#deebf7\"]\n  I2 [label = \"P(A ∩ B̅) = 0.42\", fillcolor = \"#deebf7\"]\n  I3 [label = \"P(A̅ ∩ B) = 0.06\", fillcolor = \"#e5f5e0\"]\n  I4 [label = \"P(A̅ ∩ B̅) = 0.24\", fillcolor = \"#e5f5e0\"]\n\n  root -> A\n  root -> Ac\n\n  A -> B1\n  A -> B1c\n\n  Ac -> B2\n  Ac -> B2c\n\n  B1 -> I1\n  B1c -> I2\n  B2 -> I3\n  B2c -> I4\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-e0c682f3ff8e2b1911f4" style="width:100%;height:371px;"></div>
+<script type="application/json" data-for="htmlwidget-e0c682f3ff8e2b1911f4">{"x":{"diagram":"\ndigraph prob_tree {\n\n  node [shape = box, style=filled, fontname = Helvetica, fontcolor=black]\n\n  root [label = \"Inicio\", fillcolor = \"#cccccc\"]\n\n  A [label = \"Recibe propaganda\\nP(A) = 0.7\", fillcolor = \"#a6cee3\"]\n  Ac [label = \"No recibe propaganda\\nP(A̅) = 0.3\", fillcolor = \"#b2df8a\"]\n\n  B1 [label = \"Usa libro\\nP(B|A) = 0.4\", fillcolor = \"#1f78b4\"]\n  B1c [label = \"No usa libro\\nP(B̅|A) = 0.6\", fillcolor = \"#a6cee3\"]\n\n  B2 [label = \"Usa libro\\nP(B|A̅) = 0.2\", fillcolor = \"#33a02c\"]\n  B2c [label = \"No usa libro\\nP(B̅|A̅) = 0.8\", fillcolor = \"#b2df8a\"]\n\n  I1 [label = \"P(A ∩ B) = 0.28\", fillcolor = \"#deebf7\"]\n  I2 [label = \"P(A ∩ B̅) = 0.42\", fillcolor = \"#deebf7\"]\n  I3 [label = \"P(A̅ ∩ B) = 0.06\", fillcolor = \"#e5f5e0\"]\n  I4 [label = \"P(A̅ ∩ B̅) = 0.24\", fillcolor = \"#e5f5e0\"]\n\n  root -> A\n  root -> Ac\n\n  A -> B1\n  A -> B1c\n\n  Ac -> B2\n  Ac -> B2c\n\n  B1 -> I1\n  B1c -> I2\n  B2 -> I3\n  B2c -> I4\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
