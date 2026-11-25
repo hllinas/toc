@@ -302,7 +302,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">LAST UPDATED</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">28/10/2026</p>
+      <p class="date">25/11/2026</p>
     </div>
   </div>
   
@@ -316,7 +316,7 @@ window.Quarto = {
 
 <div class="academic-intro">
 <p><img src="hllinas2023.JPG" class="profile-photo img-fluid" alt="Portrait of the author"></p>
-<p><strong><a href="https://rpubs.com/hllinas/Bio_Sketch">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
+<p><strong><a href="https://hllinas.github.io/toc/0-Tocs/0-8-Curriculum/0.8.1.BioSketch.html">Biographical sketch</a></strong> · <a href="mailto:hllinas@uninorte.edu.co">Contact</a></p>
 <p><strong>About these lecture notes.</strong> These notes present the foundations of probability theory, including sigma-algebras, measurable spaces, Kolmogorov’s axioms, and classical probability, with mathematical explanations and examples using R.</p>
 </div>
 <hr>
@@ -2192,8 +2192,20 @@ A_2 \cap A_3)=0.02
 </section>
 <section id="ejercicio-19" class="level3 unnumbered unlisted">
 <h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-19">Ejercicio 19</h3>
-<p>De un conjunto <span class="math display">\[B\;=\; \left\{x\in \mathbb{N} \; \Big/ \; \forall t\in \mathbb{R}: \;  \frac{1}{4}t^2-t + 7-x+ \sqrt{68-x^2}\, \geq \,0 \right\} \]</span></p>
-<p>se sacan tres números sin reemplazo. Calcule la probabilidad de que éstos formen un número menor que 368.</p>
+<p>Sea el conjunto</p>
+<p><span class="math display">\[
+B=\left\{x\in\mathbb{N}\ \middle|\
+68-x^2\geq 0 \; \text{ y }\;
+\frac{1}{4}t^2-t+7-x+\sqrt{68-x^2}\geq 0
+\; \text{ para todo }t\in\mathbb{R}
+\right\},
+\]</span></p>
+<p>donde <span class="math inline">\(\mathbb{N}=\{0,1,2,\ldots\}\)</span>. Se extraen al azar tres elementos de <span class="math inline">\(B\)</span>, uno a uno y sin reemplazo. En el orden de extracción, estos elementos ocupan las posiciones de las centenas, las decenas y las unidades.</p>
+<p><em>El cero en la posición de las centenas invalida el resultado</em>, porque el número formado tendría menos de tres cifras. Por ejemplo, escribir <span class="math inline">\(020\)</span> equivale a escribir <span class="math inline">\(20\)</span>. Un ejemplo con cifras distintas, acorde con la extracción sin reemplazo, es <span class="math inline">\(027\)</span>, que representa el número <span class="math inline">\(27\)</span>.</p>
+<ol type="a">
+<li><p>Determine los elementos de <span class="math inline">\(B\)</span>. Luego, aplique técnicas de conteo para calcular cuántos números válidos de tres cifras se pueden formar y cuántos de ellos son estrictamente menores que <span class="math inline">\(368\)</span>. Para este último conteo, organice los casos según la cifra de las centenas.</p></li>
+<li><p>Dado que se formó un número válido de tres cifras, calcule la probabilidad de que sea estrictamente menor que <span class="math inline">\(368\)</span>. Justifique por qué los números válidos son equiprobables.</p></li>
+</ol>
 <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 <!-- Capítulo Ejercicios -->
 </section>
@@ -2246,7 +2258,7 @@ A_2 \cap A_3)=0.02
 </section>
 <section id="ejercicio-25" class="level3 unnumbered unlisted">
 <h3 class="unnumbered unlisted anchored" data-anchor-id="ejercicio-25">Ejercicio 25</h3>
-<p>Por un canal de comunicaciones afectado por ruido se transmite uno de dos comandos de control en forma de palabras de código <code>11111</code> y <code>00000</code>. Esto se transmite con probabilidad a priori de 0.7 y 0.3 respectivamente. Por causa del ruido, la probabilidad de recepción correcta de cada uno de los símbolos disminuye a 0.6. Se supone que las pa-la-bras de código se dañan o distorsionan independientemente. En la salida del receptor se registra la palabra de código 10110. Determine qué comando fue transmitido.</p>
+<p>Por un canal de comunicaciones afectado por ruido se transmite uno de dos comandos de control en forma de palabras de código <code>11111</code> y <code>00000</code>. Esto se transmite con probabilidad a priori de 0.7 y 0.3 respectivamente. Por causa del ruido, la probabilidad de recepción correcta de cada uno de los símbolos disminuye a 0.6. Se supone que las palabras de código se dañan o distorsionan independientemente. En la salida del receptor se registra la palabra de código 10110. Determine qué comando fue transmitido.</p>
 <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 <!-- Capítulo Ejercicios -->
 </section>
